@@ -1,0 +1,46 @@
+[
+  {
+    "monthStart": "2025-11-01",
+    "visits": 750,
+    "charges": 424364.32,
+    "totalInsurancePayments": 184000,
+    "totalInsuranceAdjustments": 73000,
+    "totalPatientPayments": 28000,
+    "totalPayments": 212000,
+    "gcrPercent": 49.96,
+    "ncrPercent": 66.31
+  },
+  {
+    "monthStart": "2025-12-01",
+    "visits": 240,
+    "charges": 127112.53,
+    "totalInsurancePayments": 58000,
+    "totalInsuranceAdjustments": 21000,
+    "totalPatientPayments": 8200,
+    "totalPayments": 66200,
+    "gcrPercent": 52.08,
+    "ncrPercent": 69.15
+  },
+  {
+    "monthStart": "2026-01-01",
+    "visits": 286,
+    "charges": 220272.91,
+    "totalInsurancePayments": 92000,
+    "totalInsuranceAdjustments": 39000,
+    "totalPatientPayments": 11000,
+    "totalPayments": 103000,
+    "gcrPercent": 46.76,
+    "ncrPercent": 63.98
+  },
+  {
+    "monthStart": "2026-02-01",
+    "visits": 510,
+    "charges": 390222.22,
+    "totalInsurancePayments": 166000,
+    "totalInsuranceAdjustments": 62000,
+    "totalPatientPayments": 19000,
+    "totalPayments": 185000,
+    "gcrPercent": 47.41,
+    "ncrPercent": 61.64
+  }
+]

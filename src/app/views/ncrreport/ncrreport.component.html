@@ -1,0 +1,77 @@
+<div class="ncr-root">
+  <div *ngIf="isLoading" class="small text-muted">Loading GCR and NCR by DOS…</div>
+  <div *ngIf="error" class="alert alert-danger py-1 px-2 mb-2 small">{{ error }}</div>
+
+  <div *ngIf="!isLoading && !error" class="ncr-grid">
+    <!-- LEFT: TABLE -->
+    <div class="ncr-table-pane">
+      <div class="ncr-table-scroll">
+        <table class="table table-sm table-borderless align-middle mb-0 ncr-table">
+          <thead class="ncr-thead">
+            <tr>
+              <th>Month</th>
+              <th class="text-end"># Visits</th>
+              <th class="text-end">Charges</th>
+              <th class="text-end">Ins Payment</th>
+              <th class="text-end">Ins Adjust</th>
+              <th class="text-end">Pat Payment</th>
+              <th class="text-end">Total Payment</th>
+              <th class="text-end">GCR%</th>
+              <th class="text-end">NCR%</th>
+            </tr>
+          </thead>
+
+     <tbody>
+  <tr *ngFor="let r of rows">
+    <td>{{ monthLabel(r) }}</td>
+    <td class="text-end">{{ r.visits | number:'1.0-0' }}</td>
+    <td class="text-end">{{ r.charges | currency:'USD':'symbol':'1.0-0' }}</td>
+    <td class="text-end">{{ r.totalInsurancePayments | currency:'USD':'symbol':'1.0-0' }}</td>
+    <td class="text-end">{{ r.totalInsuranceAdjustments | currency:'USD':'symbol':'1.0-0' }}</td>
+    <td class="text-end">{{ r.totalPatientPayments | currency:'USD':'symbol':'1.0-0' }}</td>
+    <td class="text-end">{{ r.totalPayments | currency:'USD':'symbol':'1.0-0' }}</td>
+
+    <!-- GCR: keep asPercent (your backend value is ratio or you want this conversion) -->
+    <td class="text-end fw-semibold">{{ asPercent(r.gcrPercent) | number:'1.0-1' }}%</td>
+
+    <!-- NCR: DO NOT multiply again (backend already returns -181.3, not -1.813) -->
+    <td class="text-end fw-semibold">{{ r.ncrPercent | number:'1.0-1' }}%</td>
+  </tr>
+</tbody>
+
+<tfoot>
+  <tr class="ncr-total-row">
+    <td class="fw-semibold">Total</td>
+    <td class="text-end fw-semibold">{{ totals.visits | number:'1.0-0' }}</td>
+    <td class="text-end fw-semibold">{{ totals.charges | currency:'USD':'symbol':'1.0-0' }}</td>
+    <td class="text-end fw-semibold">{{ totals.insPay | currency:'USD':'symbol':'1.0-0' }}</td>
+    <td class="text-end fw-semibold">{{ totals.insAdj | currency:'USD':'symbol':'1.0-0' }}</td>
+    <td class="text-end fw-semibold">{{ totals.patPay | currency:'USD':'symbol':'1.0-0' }}</td>
+    <td class="text-end fw-semibold">{{ totals.totalPay | currency:'USD':'symbol':'1.0-0' }}</td>
+    <td class="text-end fw-semibold">{{ totals.gcrPct | number:'1.0-1' }}%</td>
+    <td class="text-end fw-semibold">{{ totals.ncrPct | number:'1.0-1' }}%</td>
+  </tr>
+</tfoot>
+        </table>
+      </div>
+    </div>
+
+    <!-- RIGHT: MULTI BAR CHART -->
+    <div class="ncr-chart-pane" *ngIf="showChart && chartOptions as co">
+      <apx-chart
+        class="ncr-apex"
+        [colors]="co.colors"
+        [legend]="co.legend"
+        [series]="co.series"
+        [chart]="co.chart"
+        [xaxis]="co.xaxis"
+        [yaxis]="co.yaxis"
+        [plotOptions]="co.plotOptions"
+        [stroke]="co.stroke"
+        [dataLabels]="co.dataLabels"
+        [grid]="co.grid"
+        [tooltip]="co.tooltip"
+      ></apx-chart>
+    </div>
+  </div>
+</div>

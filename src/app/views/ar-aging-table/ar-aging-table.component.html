@@ -1,0 +1,40 @@
+<!-- ar-aging-table.component.html -->
+
+<ng-container *ngIf="loaded; else loading">
+  <h5 class="section-title">{{ title }}</h5>
+  <div class="chart-table-container">
+    <div class="chart-section">
+      <apx-chart [series]="chartSeries" [chart]="chartOptions" [xaxis]="chartXAxis" [legend]="chartLegend"
+        [plotOptions]="chartPlotOptions" [dataLabels]="chartDataLabels" [colors]="chartColors">
+      </apx-chart>
+    </div>
+    <div class="table-section">
+      <table>
+        <thead>
+          <tr>
+            <th class="whitec">Range</th>
+            <th *ngFor="let lab of data.agingLabels; let i = index" [ngClass]="columnClass(i)">
+              {{ lab }}
+            </th>
+          </tr>
+        </thead>
+        <!-- … -->
+        <tbody>
+          <tr *ngFor="let range of data.amountLabels; let ri = index" [class.total-row]="range==='Total'">
+            <td class="whitec">{{ range }}</td>
+            <td *ngFor="let val of (data.data?.[ri] || []); let ci = index" [ngClass]="columnClass(ci)">
+              <a class="cell-link" href="javascript:void(0)" (click)="onCellClick(range, data.agingLabels[ci], val)">
+                {{ val }}
+              </a>
+            </td>
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #loading>
+  <p>Loading AR Aging data…</p>
+</ng-template>

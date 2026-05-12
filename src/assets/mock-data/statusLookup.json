@@ -1,0 +1,22 @@
+[
+  {
+    "statusId": 1,
+    "statusLabel": "Open"
+  },
+  {
+    "statusId": 2,
+    "statusLabel": "Needs Coding"
+  },
+  {
+    "statusId": 3,
+    "statusLabel": "Needs Charge Review"
+  },
+  {
+    "statusId": 4,
+    "statusLabel": "Payment Review"
+  },
+  {
+    "statusId": 5,
+    "statusLabel": "Closed"
+  }
+]

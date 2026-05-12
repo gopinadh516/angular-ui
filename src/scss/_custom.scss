@@ -1,0 +1,1471 @@
+// =========================================================
+// Custom — global component overrides
+// Premium Minimal B&W Theme — RevMax
+// =========================================================
+
+// Sub-module imports
+@use "charts";
+@use "scrollbar";
+
+// =========================================================
+// Typography baseline — force Plus Jakarta Sans everywhere
+// =========================================================
+
+// 1. Root: cascade font to every element that hasn't opted out
+html {
+  font-family: var(--rm-font) !important;
+}
+
+// 2. Body and layout wrappers
+body,
+.wrapper,
+.c-wrapper {
+  font-family: var(--rm-font) !important;
+  color: var(--rm-text);
+  background-color: var(--rm-bg);
+}
+
+// 3. Browsers do NOT inherit font-family for form/interactive elements —
+//    must be set explicitly
+button,
+input,
+optgroup,
+select,
+textarea,
+[type='button'],
+[type='reset'],
+[type='submit'] {
+  font-family: var(--rm-font) !important;
+}
+
+// 4. CoreUI and Bootstrap components that set their own font-family
+.nav-link,
+.nav-item,
+.navbar,
+.sidebar,
+.sidebar-nav,
+.sidebar-nav .nav-link,
+.sidebar-nav .nav-group-toggle,
+.sidebar-nav .nav-title,
+.dropdown-menu,
+.dropdown-item,
+.dropdown-header,
+.card,
+.card-header,
+.card-body,
+.card-footer,
+.modal,
+.modal-title,
+.toast,
+.alert,
+.badge,
+.btn,
+.form-control,
+.form-select,
+.form-label,
+.form-text,
+.form-check-label,
+.input-group-text,
+.list-group-item,
+.table,
+.pagination .page-link,
+.breadcrumb-item,
+c-sidebar,
+c-sidebar-nav,
+c-header,
+c-navbar {
+  font-family: var(--rm-font) !important;
+}
+
+h1, h2, h3 {
+  color: var(--rm-text);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+}
+
+h4, h5, h6 {
+  color: var(--rm-text);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+p, li, td, th, label, span {
+  color: inherit;
+}
+
+small, .small {
+  font-size: var(--rm-font-xs);
+  color: var(--rm-text-2);
+}
+
+.text-muted {
+  color: var(--rm-text-2) !important;
+}
+
+.text-medium-emphasis,
+.text-high-emphasis {
+  color: var(--rm-text) !important;
+  opacity: 1 !important;
+}
+
+// =========================================================
+// Header / sidebar alignment fix
+// =========================================================
+
+c-header,
+.header,
+.app-header {
+  border-bottom: 1px solid var(--rm-border) !important;
+  box-shadow: none !important;
+  box-sizing: border-box;
+}
+
+c-sidebar-header,
+c-header,
+.header,
+.app-header {
+  height: var(--rm-header-h, 64px);
+  min-height: var(--rm-header-h, 64px);
+  display: flex;
+  align-items: center;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  box-sizing: border-box;
+}
+
+// =========================================================
+// Sidebar hidden — full width content
+// =========================================================
+
+.wrapper.sidebar-hidden,
+.c-wrapper.sidebar-hidden {
+  --cui-sidebar-occupy-start: 0px !important;
+  --cui-sidebar-width: 0px !important;
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+  width: 100% !important;
+}
+
+.wrapper.sidebar-hidden .main,
+.c-wrapper.sidebar-hidden .main {
+  margin-left: 0 !important;
+  width: 100% !important;
+}
+
+// =========================================================
+// Cards
+// =========================================================
+
+.card,
+c-card {
+  background: var(--rm-surface);
+  border: 1px solid var(--rm-border, #eaecf0);
+  border-radius: var(--rm-radius-lg);
+  box-shadow: 0 1px 4px rgba(9, 9, 11, 0.06), 0 0 0 1px rgba(9, 9, 11, 0.03);
+}
+
+.card-header {
+  background: var(--rm-surface);
+  border-bottom: 1px solid var(--rm-divider);
+  font-size: var(--rm-font-lg);
+  font-weight: 600;
+  color: var(--rm-text);
+  padding: 0.875rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.card-title {
+  font-size: var(--rm-font-lg);
+  font-weight: 600;
+  color: var(--rm-text);
+  margin-bottom: 0.875rem;
+  letter-spacing: -0.01em;
+}
+
+.card-body {
+  padding: 1.25rem;
+}
+
+.card-footer {
+  background: var(--rm-surface-2);
+  border-top: 1px solid var(--rm-border);
+  padding: 0.75rem 1.125rem;
+  font-size: var(--rm-font-sm);
+  color: var(--rm-text-2);
+}
+
+// =========================================================
+// Buttons
+// =========================================================
+
+.btn {
+  font-family: var(--rm-font);
+  font-weight: 600;
+  color: var(--rm-text, #09090b);
+  --cui-btn-color: var(--rm-text, #09090b);
+  border-radius: 20px;
+  --cui-btn-border-radius: 20px;
+  --bs-btn-border-radius: 20px;
+  letter-spacing: 0;
+  box-shadow: none !important;
+  transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease, opacity 0.12s ease;
+
+  &:focus-visible {
+    outline: 2px solid var(--rm-focus-ring);
+    outline-offset: 2px;
+  }
+
+  &:disabled,
+  &.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: auto;
+  }
+}
+
+// Primary — near-black (must beat CoreUI's --cui-primary purple cascade)
+.btn-primary {
+  --cui-btn-bg:                  #09090b !important;
+  --cui-btn-border-color:        #09090b !important;
+  --cui-btn-color:               #ffffff !important;
+  --cui-btn-hover-bg:            #27272a !important;
+  --cui-btn-hover-border-color:  #27272a !important;
+  --cui-btn-hover-color:         #ffffff !important;
+  --cui-btn-active-bg:           #3f3f46 !important;
+  --cui-btn-active-border-color: #3f3f46 !important;
+  --cui-btn-active-color:        #ffffff !important;
+  background-color: #09090b !important;
+  border-color: #09090b !important;
+  color: #ffffff !important;
+
+  &:hover {
+    background-color: #27272a !important;
+    border-color: #27272a !important;
+    color: #ffffff !important;
+  }
+
+  &:active,
+  &.active,
+  &.show {
+    background-color: #3f3f46 !important;
+    border-color: #3f3f46 !important;
+    color: #ffffff !important;
+  }
+}
+
+// Secondary — outlined gray
+.btn-secondary {
+  --cui-btn-bg:                  transparent !important;
+  --cui-btn-border-color:        var(--rm-border) !important;
+  --cui-btn-color:               var(--rm-text) !important;
+  --cui-btn-hover-bg:            var(--rm-hover) !important;
+  --cui-btn-hover-border-color:  var(--rm-border-strong) !important;
+  --cui-btn-hover-color:         var(--rm-text) !important;
+  background-color: transparent !important;
+  border-color: var(--rm-border) !important;
+  color: var(--rm-text) !important;
+
+  &:hover {
+    background-color: var(--rm-hover) !important;
+    border-color: var(--rm-border-strong) !important;
+    color: var(--rm-text) !important;
+  }
+
+  &:active,
+  &.active {
+    background-color: var(--rm-active) !important;
+    border-color: var(--rm-border-strong) !important;
+    color: var(--rm-text) !important;
+  }
+}
+
+// Outline-light — outlined gray (used in modals/dark headers)
+.btn-outline-light {
+  background-color: transparent !important;
+  border-color: var(--rm-border) !important;
+  color: var(--rm-text) !important;
+
+  &:hover {
+    background-color: var(--rm-hover) !important;
+    border-color: var(--rm-border-strong) !important;
+    color: var(--rm-text) !important;
+  }
+}
+
+// Danger
+.btn-danger {
+  --cui-btn-bg:           var(--rm-danger) !important;
+  --cui-btn-border-color: var(--rm-danger) !important;
+  --cui-btn-color:        #ffffff !important;
+  background-color: var(--rm-danger) !important;
+  border-color: var(--rm-danger) !important;
+  color: #ffffff !important;
+
+  &:hover {
+    background-color: #b91c1c !important;
+    border-color: #b91c1c !important;
+    color: #ffffff !important;
+  }
+}
+
+// Success
+.btn-success {
+  --cui-btn-bg:           var(--rm-success) !important;
+  --cui-btn-border-color: var(--rm-success) !important;
+  --cui-btn-color:        #ffffff !important;
+  background-color: var(--rm-success) !important;
+  border-color: var(--rm-success) !important;
+  color: #ffffff !important;
+
+  &:hover {
+    background-color: #047857 !important;
+    border-color: #047857 !important;
+    color: #ffffff !important;
+  }
+}
+
+// Warning
+.btn-warning {
+  --cui-btn-bg:           var(--rm-warning) !important;
+  --cui-btn-border-color: var(--rm-warning) !important;
+  --cui-btn-color:        #ffffff !important;
+  background-color: var(--rm-warning) !important;
+  border-color: var(--rm-warning) !important;
+  color: #ffffff !important;
+
+  &:hover {
+    background-color: #b45309 !important;
+    border-color: #b45309 !important;
+    color: #ffffff !important;
+  }
+}
+
+// Info
+.btn-info {
+  --cui-btn-bg:           var(--rm-info) !important;
+  --cui-btn-border-color: var(--rm-info) !important;
+  --cui-btn-color:        #ffffff !important;
+  background-color: var(--rm-info) !important;
+  border-color: var(--rm-info) !important;
+  color: #ffffff !important;
+
+  &:hover {
+    background-color: #4338ca !important;
+    border-color: #4338ca !important;
+    color: #ffffff !important;
+  }
+}
+
+// Ghost / link style
+.btn-link {
+  color: var(--rm-text);
+  text-decoration: none;
+  padding-left: 0;
+  padding-right: 0;
+
+  &:hover {
+    color: var(--rm-text-2);
+    text-decoration: underline;
+  }
+}
+
+// Outline variants — ALL follow gray-border minimal pattern (no colored outlines)
+.btn-outline-primary,
+.btn-outline-secondary,
+.btn-outline-success,
+.btn-outline-info,
+.btn-outline-warning {
+  --cui-btn-bg:                  transparent !important;
+  --cui-btn-border-color:        var(--rm-border) !important;
+  --cui-btn-color:               var(--rm-text) !important;
+  --cui-btn-hover-bg:            var(--rm-hover) !important;
+  --cui-btn-hover-border-color:  var(--rm-border-strong) !important;
+  --cui-btn-hover-color:         var(--rm-text) !important;
+  --cui-btn-active-bg:           var(--rm-active) !important;
+  --cui-btn-active-border-color: var(--rm-border-strong) !important;
+  --cui-btn-active-color:        var(--rm-text) !important;
+  border-color: var(--rm-border) !important;
+  color: var(--rm-text) !important;
+  background: transparent !important;
+
+  &:hover {
+    background: var(--rm-hover) !important;
+    border-color: var(--rm-border-strong) !important;
+    color: var(--rm-text) !important;
+  }
+
+  &:active,
+  &.active {
+    background: var(--rm-active) !important;
+    border-color: var(--rm-border-strong) !important;
+    color: var(--rm-text) !important;
+  }
+}
+
+// Outline danger — keeps red color (destructive action indicator)
+.btn-outline-danger {
+  --cui-btn-border-color:       var(--rm-danger) !important;
+  --cui-btn-color:              var(--rm-danger) !important;
+  --cui-btn-hover-bg:           var(--rm-danger-bg) !important;
+  --cui-btn-hover-border-color: var(--rm-danger) !important;
+  --cui-btn-hover-color:        var(--rm-danger-text) !important;
+  border-color: var(--rm-danger) !important;
+  color: var(--rm-danger) !important;
+  background: transparent !important;
+
+  &:hover {
+    background: var(--rm-danger-bg) !important;
+    color: var(--rm-danger-text) !important;
+    border-color: var(--rm-danger) !important;
+  }
+}
+
+// Button group & btn-check radio toggles (e.g. Day/Month/Year period selector)
+// CoreUI c-button-group uses .btn-check inputs + label[cButton] pattern
+.btn-group > .btn.active,
+.btn-group > .btn:not(.btn-primary).active,
+.btn-group > .btn-check:checked + .btn,
+.btn-group > .btn-check:active + .btn {
+  background-color: var(--rm-text) !important;
+  border-color: var(--rm-text) !important;
+  color: var(--rm-text-inverse) !important;
+  font-weight: 600 !important;
+  z-index: 1;
+}
+
+// Standalone btn-check (radio/checkbox hidden input) + sibling label used as toggle
+.btn-check:checked + label,
+.btn-check:active + label {
+  background-color: var(--rm-text) !important;
+  border-color: var(--rm-text) !important;
+  color: var(--rm-text-inverse) !important;
+  font-weight: 600 !important;
+}
+
+// Period selector (text-only tabs like "12m 30d 7d 24h Custom")
+// These are often nav-pills or btn-group with ghost buttons
+.period-selector,
+.time-filter,
+.date-range-tabs {
+  .nav-link,
+  .btn {
+    font-size: var(--rm-font-sm);
+    font-weight: 500;
+    color: var(--rm-text-2);
+    background: transparent;
+    border: none;
+    padding: 0.3rem 0.6rem;
+    border-radius: var(--rm-radius-sm);
+
+    &:hover {
+      color: var(--rm-text);
+      background: var(--rm-hover);
+    }
+
+    &.active,
+    &.selected {
+      color: var(--rm-text);
+      font-weight: 600;
+      background: var(--rm-active);
+    }
+  }
+}
+
+// Sizes — match reference button proportions
+.btn-sm {
+  font-size: var(--rm-font-xs);
+  padding: 0.35rem 0.75rem;
+  line-height: 1.4;
+  border-radius: 20px !important;
+  --cui-btn-border-radius-sm: 20px;
+  --bs-btn-border-radius-sm:  20px;
+}
+
+.btn {
+  font-size: var(--rm-font-sm);
+  padding: 0.45rem 0.9rem;
+  line-height: 1.4;
+}
+
+.btn-lg {
+  font-size: var(--rm-font-md);
+  padding: 0.6rem 1.25rem;
+  line-height: 1.4;
+  border-radius: 20px;
+}
+
+// =========================================================
+// Badges
+// =========================================================
+
+.badge {
+  font-size: var(--rm-font-xs);
+  font-weight: 500;
+  border-radius: var(--rm-radius-pill);
+  padding: 0.2em 0.65em;
+  letter-spacing: 0;
+}
+
+.badge-success,
+.bg-success {
+  background-color: var(--rm-success-bg) !important;
+  color: var(--rm-success-text) !important;
+}
+
+.badge-warning,
+.bg-warning {
+  background-color: var(--rm-warning-bg) !important;
+  color: var(--rm-warning-text) !important;
+}
+
+.badge-danger,
+.bg-danger {
+  background-color: var(--rm-danger-bg) !important;
+  color: var(--rm-danger-text) !important;
+}
+
+.badge-info,
+.bg-info {
+  background-color: var(--rm-info-bg) !important;
+  color: var(--rm-info-text) !important;
+}
+
+.badge-secondary,
+.bg-secondary {
+  background-color: var(--rm-neutral-bg) !important;
+  color: var(--rm-neutral) !important;
+}
+
+.badge-primary,
+.bg-primary {
+  background-color: var(--rm-active) !important;
+  color: var(--rm-text) !important;
+}
+
+// Status dot pill — colored dot + text, ultra-light tinted bg (Untitled UI pattern)
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.2rem 0.65rem 0.2rem 0.5rem;
+  border-radius: var(--rm-radius-pill);
+  background: var(--rm-surface-3);
+  border: 1px solid transparent;
+  font-size: var(--rm-font-xs);
+  font-weight: 500;
+  color: var(--rm-text-2);
+  white-space: nowrap;
+
+  &::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  &.status-pill--success {
+    background: #ecfdf3;
+    color: #027a48;
+    &::before { background-color: #12b76a; }
+  }
+  &.status-pill--warning {
+    background: #fffaeb;
+    color: #b54708;
+    &::before { background-color: var(--rm-warning); }
+  }
+  &.status-pill--danger {
+    background: #fef3f2;
+    color: #b42318;
+    &::before { background-color: var(--rm-danger); }
+  }
+  &.status-pill--info {
+    background: #eff4ff;
+    color: #3538cd;
+    &::before { background-color: var(--rm-info); }
+  }
+  &.status-pill--neutral {
+    background: var(--rm-surface-3);
+    color: var(--rm-text-2);
+    &::before { background-color: var(--rm-text-3); }
+  }
+}
+
+// =========================================================
+// Tables
+// =========================================================
+
+.table {
+  color: var(--rm-text);
+  font-size: var(--rm-font-md);
+  border-color: var(--rm-border);
+
+  thead th,
+  thead td {
+    background: var(--rm-surface);
+    color: var(--rm-text-2);
+    font-size: var(--rm-font-xs);
+    font-weight: 500;
+    border-bottom: 1px solid var(--rm-border);
+    padding: 0.65rem 0.75rem;
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+
+  tbody td {
+    padding: 0.75rem 0.75rem;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--rm-divider);
+    color: var(--rm-text);
+  }
+
+  tbody tr:hover td {
+    background: var(--rm-hover);
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  &.table-striped tbody tr:nth-of-type(odd) td {
+    background-color: transparent;
+  }
+
+  &.table-hover tbody tr:hover td {
+    background: var(--rm-hover);
+  }
+
+  // Dense variant — for data-heavy grids (AR aging, compact reports)
+  &.table-sm thead th,
+  &.table-sm thead td {
+    padding: 0.45rem 0.6rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--rm-text-3);
+  }
+
+  &.table-sm tbody td {
+    padding: 0.35rem 0.6rem;
+  }
+}
+
+// Progress bars — slim 6px, solid near-black fill (Untitled UI)
+.progress {
+  height: 6px;
+  background-color: var(--rm-border);
+  border-radius: var(--rm-radius-pill);
+  overflow: hidden;
+
+  .progress-bar {
+    border-radius: var(--rm-radius-pill);
+    background-color: var(--rm-text);
+  }
+
+  .progress-bar.bg-success { background-color: var(--rm-success) !important; }
+  .progress-bar.bg-warning { background-color: var(--rm-warning) !important; }
+  .progress-bar.bg-danger  { background-color: var(--rm-danger) !important; }
+  .progress-bar.bg-info    { background-color: var(--rm-info) !important; }
+}
+
+// =========================================================
+// Forms
+// =========================================================
+
+.form-control,
+.form-select {
+  font-family: var(--rm-font);
+  font-size: var(--rm-font-md);
+  color: var(--rm-text);
+  background-color: var(--rm-surface);
+  border: 1px solid var(--rm-border);
+  border-radius: var(--rm-radius-md);
+  box-shadow: none;
+  transition: border-color 0.12s ease;
+
+  &::placeholder {
+    color: var(--rm-text-3);
+  }
+
+  &:hover {
+    border-color: var(--rm-border-strong);
+  }
+
+  &:focus {
+    border-color: var(--rm-text);
+    box-shadow: none;
+    outline: none;
+    background-color: var(--rm-surface);
+    color: var(--rm-text);
+  }
+
+  &:disabled,
+  &[readonly] {
+    background-color: var(--rm-surface-2);
+    color: var(--rm-text-2);
+    border-color: var(--rm-border);
+    cursor: not-allowed;
+  }
+}
+
+.form-label {
+  font-size: var(--rm-font-sm);
+  font-weight: 500;
+  color: var(--rm-text);
+  margin-bottom: 0.35rem;
+}
+
+// Small form controls — precise match to reference height/padding
+.form-control-sm,
+.form-select-sm {
+  padding: 0.3rem 0.6rem;
+  font-size: var(--rm-font-sm);
+  min-height: 30px;
+  border-radius: var(--rm-radius-md);
+}
+
+// Standard form controls
+.form-control,
+.form-select {
+  min-height: 38px;
+}
+
+.form-text {
+  font-size: var(--rm-font-xs);
+  color: var(--rm-text-2);
+}
+
+.invalid-feedback {
+  font-size: var(--rm-font-xs);
+  color: var(--rm-danger);
+}
+
+.form-control.is-invalid,
+.form-select.is-invalid {
+  border-color: var(--rm-danger);
+  background-image: none;
+
+  &:focus {
+    border-color: var(--rm-danger);
+    box-shadow: none;
+  }
+}
+
+// Input groups
+.input-group {
+  .input-group-text {
+    background: var(--rm-surface-2);
+    border-color: var(--rm-border);
+    color: var(--rm-text-2);
+    font-size: var(--rm-font-md);
+    border-radius: var(--rm-radius-md);
+  }
+}
+
+// Checkboxes and radio — light border, near-black checked fill
+.form-check-input {
+  width: 1rem;
+  height: 1rem;
+  border: 1px solid var(--rm-border);
+  background-color: var(--rm-surface);
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:checked {
+    background-color: var(--rm-text);
+    border-color: var(--rm-text);
+  }
+
+  &:focus {
+    border-color: var(--rm-text);
+    box-shadow: none;
+  }
+
+  &:indeterminate {
+    background-color: var(--rm-text);
+    border-color: var(--rm-text);
+  }
+}
+
+// Toggle switch — gray track unchecked, near-black track checked
+.form-switch .form-check-input {
+  width: 2.25rem;
+  height: 1.25rem;
+  border-radius: var(--rm-radius-pill);
+  border: 1px solid var(--rm-border);
+  background-color: var(--rm-border);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e");
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+  cursor: pointer;
+
+  &:checked {
+    background-color: var(--rm-text);
+    border-color: var(--rm-text);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e");
+  }
+
+  &:focus {
+    border-color: var(--rm-border-strong);
+    box-shadow: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e");
+  }
+}
+
+.form-switch .form-check-label {
+  cursor: pointer;
+}
+
+// =========================================================
+// Modals
+// =========================================================
+
+.modal-backdrop {
+  background-color: rgba(9, 9, 11, 0.5);
+}
+
+.modal-content {
+  background: var(--rm-surface);
+  border: 1px solid var(--rm-border);
+  border-radius: var(--rm-radius-xl);
+  box-shadow: 0 8px 32px rgba(9, 9, 11, 0.12);
+}
+
+.modal-header {
+  border-bottom: 1px solid var(--rm-border);
+  padding: 1rem 1.25rem;
+  background: var(--rm-surface);
+  border-radius: var(--rm-radius-xl) var(--rm-radius-xl) 0 0;
+
+  .modal-title {
+    font-size: var(--rm-font-lg);
+    font-weight: 600;
+    color: var(--rm-text);
+  }
+
+  .btn-close {
+    opacity: 0.5;
+    transition: opacity 0.12s ease;
+
+    &:hover { opacity: 1; }
+    &:focus { box-shadow: none; }
+  }
+}
+
+.modal-body {
+  padding: 1.25rem;
+  color: var(--rm-text);
+  font-size: var(--rm-font-md);
+}
+
+.modal-footer {
+  border-top: 1px solid var(--rm-border);
+  padding: 0.875rem 1.25rem;
+  background: var(--rm-surface-2);
+  border-radius: 0 0 var(--rm-radius-xl) var(--rm-radius-xl);
+  gap: 0.5rem;
+}
+
+// =========================================================
+// Alerts / Toasts
+// =========================================================
+
+.alert {
+  border-radius: var(--rm-radius-lg);
+  border: 1px solid var(--rm-border);
+  font-size: var(--rm-font-md);
+  padding: 0.875rem 1.125rem;
+  border-left-width: 3px;
+  background: var(--rm-surface);
+  color: var(--rm-text);
+
+  &.alert-success {
+    border-left-color: var(--rm-success);
+    background: var(--rm-success-bg);
+    color: var(--rm-success-text);
+    border-color: var(--rm-success-bg);
+    border-left-color: var(--rm-success);
+  }
+
+  &.alert-warning {
+    border-left-color: var(--rm-warning);
+    background: var(--rm-warning-bg);
+    color: var(--rm-warning-text);
+    border-color: var(--rm-warning-bg);
+    border-left-color: var(--rm-warning);
+  }
+
+  &.alert-danger {
+    border-left-color: var(--rm-danger);
+    background: var(--rm-danger-bg);
+    color: var(--rm-danger-text);
+    border-color: var(--rm-danger-bg);
+    border-left-color: var(--rm-danger);
+  }
+
+  &.alert-info {
+    border-left-color: var(--rm-info);
+    background: var(--rm-info-bg);
+    color: var(--rm-info-text);
+    border-color: var(--rm-info-bg);
+    border-left-color: var(--rm-info);
+  }
+}
+
+// Toast notifications
+.toast {
+  background: var(--rm-surface);
+  border: 1px solid var(--rm-border);
+  border-radius: var(--rm-radius-lg);
+  box-shadow: 0 4px 16px rgba(9, 9, 11, 0.08);
+  font-size: var(--rm-font-md);
+  color: var(--rm-text);
+
+  .toast-header {
+    background: var(--rm-surface);
+    border-bottom: 1px solid var(--rm-border);
+    color: var(--rm-text);
+    font-weight: 500;
+    font-size: var(--rm-font-sm);
+    border-radius: var(--rm-radius-lg) var(--rm-radius-lg) 0 0;
+  }
+}
+
+// =========================================================
+// Dropdowns
+// =========================================================
+
+.dropdown-menu {
+  background: var(--rm-surface);
+  border: 1px solid var(--rm-border);
+  border-radius: var(--rm-radius-lg);
+  box-shadow: 0 4px 16px rgba(9, 9, 11, 0.08);
+  padding: 0.25rem;
+  font-size: var(--rm-font-md);
+
+  .dropdown-item {
+    color: var(--rm-text);
+    border-radius: var(--rm-radius-sm);
+    padding: 0.45rem 0.75rem;
+    font-size: var(--rm-font-sm);
+    transition: background 0.1s ease;
+
+    &:hover,
+    &:focus {
+      background: var(--rm-hover);
+      color: var(--rm-text);
+    }
+
+    &.active,
+    &:active {
+      background: var(--rm-active);
+      color: var(--rm-text);
+      font-weight: 500;
+    }
+
+    &:disabled {
+      color: var(--rm-text-3);
+      pointer-events: none;
+    }
+  }
+
+  .dropdown-divider {
+    border-color: var(--rm-border);
+    margin: 0.25rem 0;
+  }
+
+  .dropdown-header {
+    font-size: var(--rm-font-xs);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--rm-text-3);
+    padding: 0.5rem 0.75rem 0.25rem;
+  }
+}
+
+// =========================================================
+// Tooltips
+// =========================================================
+
+.tooltip .tooltip-inner {
+  background: #18181b;
+  color: #ffffff;
+  font-size: var(--rm-font-xs);
+  font-family: var(--rm-font);
+  border-radius: var(--rm-radius-sm);
+  padding: 0.3rem 0.65rem;
+  box-shadow: 0 2px 8px rgba(9, 9, 11, 0.15);
+}
+
+.tooltip .tooltip-arrow::before {
+  border-top-color: #18181b;
+}
+
+// =========================================================
+// Pagination
+// =========================================================
+
+.pagination {
+  gap: 2px;
+
+  .page-item .page-link {
+    color: var(--rm-text-2);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--rm-radius-sm);
+    font-size: var(--rm-font-sm);
+    padding: 0.35rem 0.65rem;
+    min-width: 32px;
+    text-align: center;
+    transition: background 0.1s ease, color 0.1s ease;
+
+    &:hover {
+      background: var(--rm-hover);
+      color: var(--rm-text);
+      border-color: transparent;
+    }
+
+    &:focus {
+      box-shadow: none;
+      outline: 2px solid var(--rm-focus-ring);
+    }
+  }
+
+  .page-item.active .page-link {
+    background: var(--rm-text);
+    border-color: var(--rm-text);
+    color: var(--rm-text-inverse);
+    font-weight: 600;
+  }
+
+  .page-item.disabled .page-link {
+    color: var(--rm-text-3);
+    background: transparent;
+    cursor: not-allowed;
+  }
+}
+
+// =========================================================
+// Tabs / Nav
+// =========================================================
+
+.nav-tabs {
+  border-bottom: 1px solid var(--rm-border);
+  gap: 0;
+
+  .nav-link {
+    color: var(--rm-text-2);
+    font-size: var(--rm-font-sm);
+    font-weight: 500;
+    border: none;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    padding: 0.6rem 1rem;
+    background: transparent;
+    transition: color 0.12s ease, border-color 0.12s ease;
+    margin-bottom: -1px;
+
+    &:hover {
+      color: var(--rm-text);
+      border-bottom-color: var(--rm-border-strong);
+      background: transparent;
+    }
+
+    &.active {
+      color: var(--rm-text);
+      border-bottom-color: var(--rm-text);
+      font-weight: 600;
+      background: transparent;
+    }
+  }
+}
+
+.nav-pills {
+  gap: 4px;
+
+  .nav-link {
+    color: var(--rm-text-2);
+    font-size: var(--rm-font-sm);
+    font-weight: 500;
+    border-radius: var(--rm-radius-sm);
+    padding: 0.4rem 0.85rem;
+    transition: background 0.1s ease, color 0.1s ease;
+
+    &:hover {
+      background: var(--rm-hover);
+      color: var(--rm-text);
+    }
+
+    &.active {
+      background: var(--rm-active) !important;
+      color: var(--rm-text) !important;
+      font-weight: 600;
+    }
+  }
+}
+
+// CoreUI / Bootstrap active nav-pill kills purple via CSS variable override
+:root {
+  --cui-nav-pills-link-active-bg:    var(--rm-active);
+  --cui-nav-pills-link-active-color: var(--rm-text);
+  --bs-nav-pills-link-active-bg:     var(--rm-active);
+  --bs-nav-pills-link-active-color:  var(--rm-text);
+}
+
+// =========================================================
+// Notification badge on nav icons
+// =========================================================
+
+.badge-notification {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  background: var(--rm-text);
+  color: var(--rm-text-inverse);
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: var(--rm-radius-pill);
+}
+
+// =========================================================
+// KPI Widget tiles (c-widget-stat-a) — white card, dark text
+// The actual rendered DOM has .card.bg-{color} on the inner div
+// =========================================================
+
+// Strip ALL colored card backgrounds — the widget renders
+// as <div class="card bg-primary text-white"> internally
+.card.bg-primary,
+.card.bg-secondary,
+.card.bg-success,
+.card.bg-info,
+.card.bg-warning,
+.card.bg-danger,
+.card.bg-dark,
+.card.bg-light {
+  background-color: var(--rm-surface) !important;
+  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+  box-shadow: var(--rm-shadow-sm) !important;
+  color: var(--rm-text) !important;
+}
+
+// All text-white inside a colored card → near-black
+.card.bg-primary .text-white,
+.card.bg-info .text-white,
+.card.bg-warning .text-white,
+.card.bg-danger .text-white,
+.card.bg-success .text-white,
+.card.bg-dark .text-white {
+  color: var(--rm-text) !important;
+}
+
+// Options/action button (three-dot) inside widget
+.card.bg-primary button.text-white,
+.card.bg-info button.text-white,
+.card.bg-warning button.text-white,
+.card.bg-danger button.text-white {
+  color: var(--rm-text-3) !important;
+  &:hover { color: var(--rm-text) !important; }
+}
+
+// KPI metric value: 30px bold (fs-4 = 1.5rem by Bootstrap default)
+.card.bg-primary .fs-4,
+.card.bg-info .fs-4,
+.card.bg-warning .fs-4,
+.card.bg-danger .fs-4 {
+  font-size: 1.875rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em;
+  color: var(--rm-text) !important;
+  line-height: 1.1;
+}
+
+// Delta text (small % change next to metric value)
+.card.bg-primary .fw-normal,
+.card.bg-info .fw-normal,
+.card.bg-warning .fw-normal,
+.card.bg-danger .fw-normal {
+  font-size: 0.8125rem !important;
+  color: var(--rm-text-2) !important;
+  font-weight: 400 !important;
+}
+
+// Widget card title (shown below the big number)
+.card.bg-primary .text-body-secondary,
+.card.bg-info .text-body-secondary,
+.card.bg-warning .text-body-secondary,
+.card.bg-danger .text-body-secondary {
+  font-size: var(--rm-font-xs) !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  color: var(--rm-text-2) !important;
+}
+
+// Widget chart area — transparent bg so card bg shows through
+.card.bg-primary .chart-wrapper,
+.card.bg-info .chart-wrapper,
+.card.bg-warning .chart-wrapper,
+.card.bg-danger .chart-wrapper {
+  background: transparent !important;
+}
+
+// Also neutralize via the component element selector (belt+suspenders)
+c-widget-stat-a,
+.widget-stat-a {
+  background-color: var(--rm-surface) !important;
+  color: var(--rm-text) !important;
+}
+
+// =========================================================
+// Loading skeleton
+// =========================================================
+
+@keyframes rm-skeleton-pulse {
+  0%   { opacity: 1; }
+  50%  { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+
+.skeleton {
+  background: var(--rm-surface-3);
+  border-radius: var(--rm-radius-sm);
+  animation: rm-skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+// =========================================================
+// Calendar
+// =========================================================
+
+.calendar-cell.today {
+  --cui-calendar-cell-today-color: var(--rm-info) !important;
+}
+
+.select-week .calendar-row.current {
+  cursor: pointer;
+}
+
+// =========================================================
+// Accordion
+// =========================================================
+
+.accordion {
+  --cui-accordion-bg: var(--rm-surface);
+  --cui-accordion-border-color: var(--rm-border);
+  --cui-accordion-btn-color: var(--rm-text);
+  --cui-accordion-btn-bg: var(--rm-surface);
+  --cui-accordion-btn-focus-box-shadow: none;
+  --cui-accordion-active-color: var(--rm-text);
+  --cui-accordion-active-bg: var(--rm-surface-2);
+
+  .accordion-button {
+    font-size: var(--rm-font-md);
+    font-weight: 500;
+
+    &::after {
+      filter: none;
+    }
+
+    &:not(.collapsed) {
+      box-shadow: none;
+    }
+  }
+
+  .accordion-item {
+    border-color: var(--rm-border);
+    border-radius: var(--rm-radius-lg) !important;
+    overflow: hidden;
+    margin-bottom: 4px;
+  }
+}
+
+// =========================================================
+// List groups
+// =========================================================
+
+.list-group-item {
+  background: var(--rm-surface);
+  border-color: var(--rm-border);
+  color: var(--rm-text);
+  font-size: var(--rm-font-md);
+  transition: background 0.1s ease;
+
+  &:hover {
+    background: var(--rm-hover);
+  }
+
+  &.active {
+    background: var(--rm-active);
+    border-color: var(--rm-border);
+    color: var(--rm-text);
+  }
+}
+
+// =========================================================
+// Spinners / loading
+// =========================================================
+
+.spinner-border,
+.spinner-grow {
+  color: var(--rm-text);
+}
+
+// =========================================================
+// Page-level title — matches "Reporting overview" in reference
+// =========================================================
+
+.page-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--rm-text);
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.page-subtitle {
+  font-size: var(--rm-font-sm);
+  color: var(--rm-text-2);
+  font-weight: 400;
+  margin-top: 2px;
+}
+
+// =========================================================
+// CoreUI c-card-header — override via CSS custom properties
+// c-card-header renders as a div with class .card-header
+// The .card-header block above handles the visual; these vars
+// handle CoreUI's internal variable cascade.
+// =========================================================
+
+:root {
+  --cui-card-cap-bg:           var(--rm-surface);
+  --cui-card-cap-color:        var(--rm-text);
+  --cui-card-cap-padding-y:    1rem;
+  --cui-card-cap-padding-x:    1.25rem;
+  --cui-btn-border-radius:     20px;
+  --cui-btn-border-radius-sm:  20px;
+  --cui-btn-border-radius-lg:  20px;
+  --bs-btn-border-radius:      20px;
+  --bs-btn-border-radius-sm:   20px;
+  --bs-btn-border-radius-lg:   20px;
+}
+
+// =========================================================
+// Colored bg utility classes — scope to ONLY non-card uses
+// (badges, dots, indicators keep their colors)
+// Make sure .bg-* on .card always strips color
+// =========================================================
+
+// Double-specificity to win over Bootstrap's own .bg-primary etc.
+html body .card.bg-primary,
+html body .card.bg-info,
+html body .card.bg-warning,
+html body .card.bg-danger,
+html body .card.bg-success,
+html body .card.bg-secondary,
+html body .card.bg-dark {
+  background-color: var(--rm-surface) !important;
+  color: var(--rm-text) !important;
+}
+
+// =========================================================
+// Table — ensure no stray colored backgrounds on thead rows
+// =========================================================
+
+.table thead tr {
+  background-color: var(--rm-surface) !important;
+}
+
+// =========================================================
+// Section divider label (used in some report headers)
+// =========================================================
+
+.section-label {
+  font-size: var(--rm-font-xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--rm-text-2);
+  margin-bottom: 0.75rem;
+}
+
+// =========================================================
+// Misc utilities
+// =========================================================
+
+// Focus ring — global
+:focus-visible {
+  outline: 2px solid var(--rm-focus-ring);
+  outline-offset: 2px;
+}
+
+// HR dividers
+hr {
+  border-color: var(--rm-border);
+  opacity: 1;
+}
+
+// Link defaults
+a {
+  color: var(--rm-text);
+  text-decoration-color: var(--rm-border-strong);
+  transition: color 0.12s ease;
+
+  &:hover {
+    color: var(--rm-text-2);
+  }
+}
+
+// Scrollbar hide for tables that overflow horizontally
+.table-responsive {
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--rm-surface-2);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--rm-border-strong);
+    border-radius: var(--rm-radius-pill);
+  }
+}
+.sidebar-nav .nav-link {
+  color: var(--rm-text, #09090b) !important;
+  font-weight: 600 !important;
+  svg {
+    fill: var(--rm-text, #09090b) !important;
+    color: var(--rm-text, #09090b);
+  }
+}
+.header-nav .show > .nav-link, .header-nav .nav-link.active {
+  color: var(--rm-text, #09090b) !important;
+  font-weight: 600 !important;
+  svg {
+    fill: var(--rm-text, #09090b) !important;
+    color: var(--rm-text, #09090b);
+  }
+}
+.header-nav[role="navigation"]:not(.ms-auto) .nav-link {
+    padding: 0px !important;
+    margin: 10px;
+    line-height: 30px;
+  &.nav-link.active{
+    border-bottom: 3px solid var(--rm-text, #09090b) !important;
+  }
+}
+.pareto-panel-header{
+  .form-check-label {
+        line-height: 27px;
+    padding-left: 10px;
+  }
+}

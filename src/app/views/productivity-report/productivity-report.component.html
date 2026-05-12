@@ -1,0 +1,69 @@
+<div class="container-fluid productivity-report-page py-0 px-0">
+  <div class="report-card">
+    <div class="report-body">
+      <div class="report-header">
+        <h4 class="report-heading mb-0">Collector Productivity Report</h4>
+      </div>
+
+<div class="collector-toolbar mb-3">
+  <label class="form-label toolbar-label mb-0" for="collectorSelect">Collector</label>
+
+  <select id="collectorSelect" class="form-select collector-select" [(ngModel)]="collectorName">
+    <option value="">All Collectors</option>
+    <option *ngFor="let option of collectorOptions()" [value]="option.value ?? ''">
+      {{ option.label || option.value }}
+    </option>
+  </select>
+
+  <div class="report-action-group">
+    <button class="btn btn-primary run-report-btn" (click)="onSearchClick()" [disabled]="loadingFacts()">
+      {{ loadingFacts() ? 'Loading...' : 'Run Report' }}
+    </button>
+
+    <button
+      class="btn btn-outline-secondary reset-btn"
+      (click)="onResetClick()"
+      [disabled]="loadingFacts() || loadingCollectors()"
+    >
+      Reset
+    </button>
+  </div>
+</div>
+
+      <div *ngIf="errorMessage()" class="alert alert-danger py-2 mb-3">
+        {{ errorMessage() }}
+      </div>
+
+      <div *ngIf="!loadingFacts() && rows().length === 0" class="empty-state text-center py-5 text-body-secondary">
+        No productivity rows found for the selected filters.
+      </div>
+
+      <ng-container *ngIf="rows().length > 0">
+        <div *ngFor="let section of sectionGroups(); trackBy: trackBySection" class="section-block mb-4">
+          <div class="section-title">{{ section.sectionName }}</div>
+
+          <div class="table-responsive report-table-wrap">
+            <table class="table report-table mb-0">
+              <thead>
+                <tr>
+                  <th>Period</th>
+                  <th class="text-end">Touches</th>
+                  <th class="text-end">Unique Claims</th>
+                  <th class="text-end">AR Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of section.rows; trackBy: trackByRow">
+                  <td>{{ row.period || '-' }}</td>
+                  <td class="text-end">{{ formatNumber(row.touches) }}</td>
+                  <td class="text-end">{{ formatNumber(row.uniqueClaims) }}</td>
+                  <td class="text-end">{{ formatCurrency(row.arValue) }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

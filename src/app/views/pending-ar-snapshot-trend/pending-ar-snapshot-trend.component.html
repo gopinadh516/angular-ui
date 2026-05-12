@@ -1,0 +1,93 @@
+<div class="pending-ar-snapshot-page">
+  <div class="filter-top-row">
+    <div class="date-row">
+      <div class="filter-field inline-field">
+        <label class="form-label">From Date</label>
+        <input
+          type="date"
+          class="form-control form-control-sm"
+          [(ngModel)]="fromDate"
+          (change)="onDateChange()" />
+      </div>
+
+      <div class="filter-field inline-field">
+        <label class="form-label">To Date</label>
+        <input
+          type="date"
+          class="form-control form-control-sm"
+          [(ngModel)]="toDate"
+          (change)="onDateChange()" />
+      </div>
+    </div>
+
+    <div class="action-block">
+      <button
+        cButton
+        color="primary"
+        size="sm"
+        type="button"
+        [disabled]="isLoading"
+        (click)="loadReport()">
+        {{ isLoading ? 'Loading...' : 'Load Report' }}
+      </button>
+
+      <button
+        cButton
+        color="secondary"
+        variant="outline"
+        size="sm"
+        type="button"
+        [disabled]="isLoading"
+        (click)="resetFilters()">
+        Reset
+      </button>
+    </div>
+  </div>
+
+  <div class="summary-grid" *ngIf="latestRow">
+    <div class="summary-card">
+      <div class="summary-label">Latest Snapshot Date</div>
+      <div class="summary-value">{{ latestRow.snapshotDate }}</div>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-label">Number of Claims</div>
+      <div class="summary-value">{{ latestRow.rowCount | number }}</div>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-label">Insurance Pending AR</div>
+      <div class="summary-value">{{ formatCurrency(latestRow.insurancePendingAr) }}</div>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-label">Patient Pending AR</div>
+      <div class="summary-value">{{ formatCurrency(latestRow.patientPendingAr) }}</div>
+    </div>
+
+    <div class="summary-card total-card">
+      <div class="summary-label">Total Pending AR</div>
+      <div class="summary-value">{{ formatCurrency(latestRow.totalPendingAr) }}</div>
+    </div>
+  </div>
+
+  <div class="alert alert-danger py-2" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+
+  <div class="empty-state" *ngIf="isLoading">
+    Loading Pending AR Snapshot Trend...
+  </div>
+
+  <div class="empty-state" *ngIf="!isLoading && !errorMessage && rows.length === 0">
+    No pending AR snapshot trend data found.
+  </div>
+
+  <div class="chart-wrap" *ngIf="chartReady && rows.length > 0">
+    <c-chart
+      [type]="chart.type"
+      [data]="chart.data"
+      [options]="chart.options">
+    </c-chart>
+  </div>
+</div>

@@ -1,0 +1,178 @@
+:host {
+  display: block;
+}
+
+// ── Dashboard container ───────────────────────────────
+// Parent (app-content-container) already has px-4 px-lg-5 pt-4
+// So add NO extra side padding here — just vertical breathing room
+.dashboard-container {
+  padding: 0 0 4rem;
+}
+
+// ── Section spacing ───────────────────────────────────
+.dash-section {
+  margin-top: 1.75rem;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+// ── Dashboard card ────────────────────────────────────
+.dash-card {
+  width: 100%;
+  height: 100%;
+
+  c-card-header,
+  ::ng-deep c-card-header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--rm-divider, #f2f4f7);
+  }
+}
+
+// ── Card title / subtitle ─────────────────────────────
+.dash-card-title {
+  font-size: var(--rm-font-md, 0.875rem);
+  font-weight: 600;
+  color: var(--rm-text, #09090b);
+  letter-spacing: -0.01em;
+}
+
+.dash-card-subtitle {
+  font-size: var(--rm-font-xs, 0.75rem);
+  color: var(--rm-text-2, #71717a);
+  font-weight: 400;
+  margin-left: auto;
+}
+
+// ── Page header (mirrors reference "Reporting overview" bar) ─────
+.dash-page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--rm-divider, #f2f4f7);
+  margin-bottom: 1.75rem;
+}
+
+.dash-page-header__left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dash-page-title {
+  font-size: 1.625rem;
+  font-weight: 700;
+  color: var(--rm-text, #09090b);
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.dash-page-desc {
+  font-size: var(--rm-font-sm, 0.8125rem);
+  color: var(--rm-text-2, #71717a);
+  margin: 0;
+  font-weight: 400;
+}
+
+// ── Procedure code table ──────────────────────────────
+.proc-table-wrap {
+  max-height: 320px;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--rm-surface-2, #f9fafb);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--rm-border, #eaecf0);
+    border-radius: 999px;
+  }
+}
+
+.dash-table {
+  font-size: 0.8rem;
+  width: 100%;
+
+  thead th {
+    background: var(--rm-surface, #ffffff);
+    color: var(--rm-text-2, #71717a);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--rm-border, #eaecf0);
+    padding: 0.6rem 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+
+  tbody td {
+    padding: 0.55rem 1rem;
+    border-bottom: 1px solid var(--rm-divider, #f2f4f7);
+    vertical-align: middle;
+    color: var(--rm-text, #09090b);
+    font-size: 0.8125rem;
+    line-height: 1.45;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  tbody tr:hover td {
+    background: var(--rm-hover, #fafafa);
+  }
+}
+
+.code-cell {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.75rem;
+  color: var(--rm-text-2, #71717a);
+  white-space: nowrap;
+  width: 140px;
+}
+
+// ── Denial details ────────────────────────────────────
+.denial-details-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.denial-detail-box {
+  background-color: var(--rm-surface-2, #f9fafb);
+  border: 1px solid var(--rm-border, #eaecf0);
+  border-left: 3px solid var(--rm-text, #09090b);
+  padding: 10px 12px;
+  border-radius: var(--rm-radius-md, 8px);
+  font-size: 0.8125rem;
+
+  .denial-code {
+    font-weight: 600;
+    margin-bottom: 3px;
+    color: var(--rm-text, #09090b);
+  }
+
+  .denial-description,
+  .denial-remediation {
+    margin-bottom: 3px;
+    color: var(--rm-text-2, #71717a);
+    line-height: 1.4;
+  }
+}
+
+apx-chart {
+  width: 100%;
+}

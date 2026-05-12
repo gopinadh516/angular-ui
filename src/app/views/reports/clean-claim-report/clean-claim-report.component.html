@@ -1,0 +1,212 @@
+<div class="card dash-tile clean-claim-report-card">
+  <div class="card-body">
+    <ng-container *ngIf="reportExpanded">
+      <form class="filter-card" [formGroup]="filterForm" (submit)="$event.preventDefault()">
+        <div class="filter-top-row">
+          <div class="date-row">
+            <div class="filter-field month-field">
+              <label class="filter-label" for="cleanClaimMonth">Month</label>
+              <select
+                id="cleanClaimMonth"
+                class="form-select form-select-sm"
+                formControlName="monthKey"
+                (change)="onMonthChange()"
+              >
+                <option value="">Custom range</option>
+                <option *ngFor="let option of monthOptions" [value]="option.key">
+                  {{ option.label }}
+                </option>
+              </select>
+            </div>
+
+            <div class="filter-field date-field">
+              <label class="filter-label" for="cleanClaimFromDate">From</label>
+              <input
+                id="cleanClaimFromDate"
+                type="date"
+                class="form-control form-control-sm"
+                formControlName="fromDate"
+                (change)="onDateRangeChange()"
+              />
+            </div>
+
+            <div class="filter-field date-field">
+              <label class="filter-label" for="cleanClaimToDate">To</label>
+              <input
+                id="cleanClaimToDate"
+                type="date"
+                class="form-control form-control-sm"
+                formControlName="toDate"
+                (change)="onDateRangeChange()"
+              />
+            </div>
+          </div>
+
+          <div class="action-block">
+            <button
+              type="button"
+              class="btn btn-sm btn-primary"
+              (click)="loadReport()"
+              [disabled]="loadingSummary || loadingDetail"
+            >
+              {{ loadingSummary ? 'Loading...' : 'Load Report' }}
+            </button>
+
+            <button
+              type="button"
+              class="btn btn-sm btn-outline-secondary"
+              (click)="resetFilters()"
+              [disabled]="loadingSummary || loadingDetail"
+            >
+              Reset
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <div class="totals-grid" *ngIf="summaryRows.length">
+        <div class="total-card">
+          <div class="total-label">Eligible First Attempt</div>
+          <div class="total-value">{{ totals.eligibleFirstAttemptSubmittedClaims }}</div>
+        </div>
+        <div class="total-card">
+          <div class="total-label">First Pass Claims</div>
+          <div class="total-value">{{ totals.firstPassClaims }}</div>
+        </div>
+        <div class="total-card">
+          <div class="total-label">Clean Claims</div>
+          <div class="total-value">{{ totals.cleanClaims }}</div>
+        </div>
+        <div class="total-card">
+          <div class="total-label">Submitted Charges</div>
+          <div class="total-value">{{ formatCurrency(totals.submittedCharges) }}</div>
+        </div>
+        <div class="total-card">
+          <div class="total-label">Clean Claim Charges</div>
+          <div class="total-value">{{ formatCurrency(totals.cleanClaimCharges) }}</div>
+        </div>
+        <div class="total-card">
+          <div class="total-label">First Pass Rate</div>
+          <div class="total-value">{{ formatPercent(totals.firstPassRatePct) }}</div>
+        </div>
+        <div class="total-card">
+          <div class="total-label">Clean Claim Rate</div>
+          <div class="total-value">{{ formatPercent(totals.cleanClaimRatePct) }}</div>
+        </div>
+      </div>
+
+      <div class="empty-state" *ngIf="!loading && errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <div class="empty-state" *ngIf="!loading && !errorMessage && !summaryRows.length">
+        No summary data found for the selected filter.
+      </div>
+
+      <div class="report-section" *ngIf="summaryRows.length">
+        <div class="section-title">Consolidated Summary</div>
+        <div class="table-wrap summary-table-wrap">
+          <table class="table table-sm table-hover align-middle report-table">
+            <thead>
+              <tr>
+                <th>Month</th>
+                <th class="text-end">Eligible</th>
+                <th class="text-end">Rejected</th>
+                <th class="text-end">First Pass</th>
+                <th class="text-end">Paid First Attempt</th>
+                <th class="text-end">Clean Claims</th>
+                <th class="text-end">Submitted Charges</th>
+                <th class="text-end">Clean Claim Charges</th>
+                <th class="text-end">First Pass Rate</th>
+                <th class="text-end">Clean Claim Rate</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of summaryRows; trackBy: trackSummary">
+                <td>{{ row.month }}</td>
+                <td class="text-end">{{ row.eligibleFirstAttemptSubmittedClaims }}</td>
+                <td class="text-end">{{ row.clearinghouseRejectedClaims }}</td>
+                <td class="text-end">{{ row.firstPassClaims }}</td>
+                <td class="text-end">{{ row.paidFirstAttemptClaims }}</td>
+                <td class="text-end">{{ row.cleanClaims }}</td>
+                <td class="text-end">{{ formatCurrency(row.submittedCharges) }}</td>
+                <td class="text-end">{{ formatCurrency(row.cleanClaimCharges) }}</td>
+  <td class="text-end">{{ formatPercent(row.firstPassRatePercent) }}</td>
+<td class="text-end">{{ formatPercent(row.cleanClaimRatePercent) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="report-section" *ngIf="summaryRows.length">
+        <div class="detail-title-row">
+          <div class="section-title mb-0">Detailed Claims</div>
+
+          <button
+            type="button"
+            class="btn btn-sm btn-outline-primary"
+            (click)="onDetailButtonClick($event)"
+            [disabled]="loadingDetail || !summaryRows.length || !canLoadDetail"
+            [title]="canLoadDetail ? 'View claim-level detail' : 'Detail is available only for 6 months or less'"
+          >
+            {{ detailExpanded ? 'Collapse Details' : 'Expand Details' }}
+          </button>
+        </div>
+
+        <div class="detail-placeholder" *ngIf="summaryRows.length && !canLoadDetail">
+          Detailed Claims can be viewed only for a date range of 6 months or less.
+        </div>
+
+        <div class="detail-placeholder" *ngIf="!detailExpanded || loadingDetail">
+          {{ detailPlaceholderText }}
+        </div>
+
+        <div class="table-wrap detail-table-wrap" *ngIf="detailExpanded && !loadingDetail && filteredDetailRows.length">
+          <table class="table table-sm table-hover align-middle report-table detail-table">
+            <thead>
+              <tr>
+                <th>Month</th>
+                <th>Charge Entry</th>
+                <th>First Submitted</th>
+                <th>First Paid</th>
+                <th>Visit FID</th>
+                <th>Claim ID</th>
+                <th>Carrier</th>
+                <th>Status</th>
+                <th class="text-end">Charges</th>
+                <th class="text-end">Pre-Sub Edits</th>
+                <th class="text-center">First Pass</th>
+                <th class="text-center">Paid 1st Attempt</th>
+                <th class="text-center">Clean</th>
+                <th class="text-end">Clean Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of filteredDetailRows; trackBy: trackDetail">
+                <td>{{ row.month }}</td>
+                <td>{{ formatDate(row.chargeEntryDate) }}</td>
+                <td>{{ formatDateTime(row.firstSubmittedDateTime) }}</td>
+                <td>{{ formatDateTime(row.firstPaidDateTime) }}</td>
+                <td>{{ row.visitFID }}</td>
+                <td [title]="row.claimId || ''">{{ row.claimId || '-' }}</td>
+                <td [title]="row.carrierName || ''">{{ row.carrierName || '-' }}</td>
+                <td [title]="row.firstAttemptStatus || ''">{{ row.firstAttemptStatus || '-' }}</td>
+                <td class="text-end">{{ formatCurrency(row.charges) }}</td>
+                <td class="text-end" [title]="row.editMessages || ''">{{ row.preSubmissionEditCount }}</td>
+                <td class="text-center">{{ toBoolean(row.isFirstPass) ? 'Yes' : 'No' }}</td>
+                <td class="text-center">{{ toBoolean(row.isPaidOnFirstAttempt) ? 'Yes' : 'No' }}</td>
+                <td class="text-center">{{ toBoolean(row.isCleanClaim) ? 'Yes' : 'No' }}</td>
+                <td class="text-end">{{ formatCurrency(row.cleanClaimAmount) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="empty-state" *ngIf="detailExpanded && !loadingDetail && !filteredDetailRows.length">
+          No detail rows found for the selected filter.
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

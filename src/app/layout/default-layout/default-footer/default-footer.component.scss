@@ -1,0 +1,32 @@
+// =========================================================
+// Default Footer — flat, hairline border, minimal
+// =========================================================
+
+:host {
+  display: flex;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.app-footer-content {
+  width: 100%;
+  min-height: var(--rm-footer-h, 48px);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0 1.5rem;
+  border-top: 1px solid var(--rm-border, #e4e4e7);
+  background: var(--rm-surface, #ffffff);
+  font-size: 0.8125rem;
+  color: var(--rm-text-2, #71717a);
+
+  a {
+    color: var(--rm-text-2, #71717a);
+    text-decoration: none;
+    transition: color 0.12s ease;
+
+    &:hover {
+      color: var(--rm-text, #09090b);
+    }
+  }
+}

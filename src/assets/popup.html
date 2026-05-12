@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Claim Details</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 1rem;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+    }
+
+    #output {
+      white-space: pre-wrap; /* wrap long lines */
+      font-family: Consolas, "Courier New", monospace;
+    }
+  </style>
+</head>
+<body>
+  <pre id="output">Loading claim details...</pre>
+
+<script>
+(function () {
+  const origin = window.location.origin;
+
+  // Tell opener we're ready
+  if (window.opener) {
+    window.opener.postMessage({ type: "POPUP_READY" }, origin);
+  }
+
+  window.addEventListener("message", (event) => {
+    if (event.origin !== origin) return;
+
+    const msg = event.data || {};
+    if (msg.type === "POPUP_RESULT") {
+      document.getElementById("output").innerHTML = msg.html || "(empty)";
+      return;
+    }
+    if (msg.type === "POPUP_ERROR") {
+      document.getElementById("output").textContent = "Error: " + (msg.error || "Unknown");
+      return;
+    }
+  });
+})();
+</script>
+</body>
+</html>

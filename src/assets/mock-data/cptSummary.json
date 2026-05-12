@@ -1,0 +1,26 @@
+[
+  {
+    "rowLabel": "99213",
+    "chargeValue": 245,
+    "paymentReceived": 160,
+    "grandTotal": false
+  },
+  {
+    "rowLabel": "99214",
+    "chargeValue": 285,
+    "paymentReceived": 190,
+    "grandTotal": false
+  },
+  {
+    "rowLabel": "93000",
+    "chargeValue": 180,
+    "paymentReceived": 0,
+    "grandTotal": false
+  },
+  {
+    "rowLabel": "Grand Total",
+    "chargeValue": 710,
+    "paymentReceived": 350,
+    "grandTotal": true
+  }
+]

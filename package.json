@@ -1,0 +1,86 @@
+{
+  "name": "SureScripts",
+  "version": "5.4.3",
+  "copyright": "Copyright 2024 SureScripts Murthy Mantha",
+  "license": "PRIVATE",
+  "author": "The SureScripts Team and Murthy Mantha",
+  "homepage": "https://surescripts.com",
+  "config": {
+    "theme": "default",
+    "coreui_library_short_version": "5.4",
+    "coreui_library_docs_url": "https://surescripts.com"
+  },
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve -o",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test",
+    "start:backend": "ng serve -o --proxy-config proxy.conf.json",
+    "start:mock": "ng serve -o"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/animations": "^19.2.14",
+    "@angular/cdk": "^19.2.1",
+    "@angular/common": "^19.2.14",
+    "@angular/compiler": "^19.2.14",
+    "@angular/core": "^19.2.14",
+    "@angular/forms": "^19.2.14",
+    "@angular/language-service": "^19.2.14",
+    "@angular/platform-browser": "^19.2.14",
+    "@angular/platform-browser-dynamic": "^19.2.14",
+    "@angular/router": "^19.2.14",
+    "@coreui/angular": "~5.4.3",
+    "@coreui/angular-chartjs": "^5.4.12",
+    "@coreui/chartjs": "^4.1.0",
+    "@coreui/coreui": "~5.3.1",
+    "@coreui/icons": "^3.0.1",
+    "@coreui/icons-angular": "~5.4.3",
+    "@coreui/utils": "^2.0.2",
+    "apexcharts": "^4.5.0",
+    "bootstrap": "^5.3.3",
+    "bootstrap-icons": "^1.13.1",
+    "chart.js": "^4.4.9",
+    "chartjs-adapter-date-fns": "^3.0.0",
+    "chartjs-plugin-datalabels": "^2.2.0",
+    "date-fns": "^4.1.0",
+    "lodash-es": "^4.17.21",
+    "ng-apexcharts": "^1.15.0",
+    "ng2-charts": "^8.0.0",
+    "ngx-scrollbar": "^13.0.3",
+    "rxjs": "~7.8.2",
+    "tslib": "^2.8.1",
+    "zone.js": "~0.15.0"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^19.2.15",
+    "@angular/cli": "^19.2.15",
+    "@angular/compiler-cli": "^19.2.14",
+    "@angular/localize": "^19.2.14",
+    "@babel/runtime": "^7.26.10",
+    "@types/jasmine": "^5.1.7",
+    "@types/lodash-es": "^4.17.12",
+    "@types/node": "^22.13.5",
+    "http-proxy-middleware": "^3.0.5",
+    "jasmine-core": "^5.6.0",
+    "karma": "^6.4.4",
+    "karma-chrome-launcher": "^3.2.0",
+    "karma-coverage": "^2.2.1",
+    "karma-jasmine": "^5.1.0",
+    "karma-jasmine-html-reporter": "^2.1.0",
+    "typescript": "~5.8.2",
+    "webpack-dev-server": "^5.2.1"
+  },
+  "engines": {
+    "node": "^18.19.1 || ^20.11.1 || ^22.0.0",
+    "npm": ">= 9"
+  },
+  "bugs": {
+    "url": "https://surescripts.com/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://surescripts.com/git"
+  }
+}

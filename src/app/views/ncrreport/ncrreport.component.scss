@@ -1,0 +1,109 @@
+.ncr-root {
+  width: 100%;
+  background: #fff; /* keep everything white */
+}
+
+.ncr-grid {
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+  background: #fff; /* gap area stays white */
+}
+
+/* 50/50 layout + white background like DOE */
+.ncr-table-pane,
+.ncr-chart-pane {
+  flex: 0 0 50%;
+  max-width: 50%;
+  min-width: 420px;
+  background: #fff;
+}
+
+/* Chart pane layout */
+.ncr-chart-pane {
+  display: flex;
+  flex-direction: column;
+}
+
+.ncr-chart-title {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #4b5563;
+}
+
+/* Table styling (same as DOE) */
+.ncr-table {
+  font-size: 13px;
+  background: #fff;
+
+  th,
+  td {
+    padding: 0.22rem 0.35rem;
+    white-space: nowrap;
+  }
+}
+
+/* header line */
+.ncr-thead th {
+  border-bottom: 2px solid rgba(0, 0, 0, 0.35);
+}
+
+/* table area height */
+.ncr-table-scroll {
+  max-height: 420px;
+  overflow: auto;
+  background: #fff;
+}
+
+/* total row separator */
+.ncr-total-row td {
+  border-top: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+/* chart area: white + same height as table */
+.ncr-apex {
+  width: 100%;
+  height: 420px;
+  background: #fff;
+}
+
+/* ensure apex chart fills container */
+.ncr-apex apx-chart {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.ncr-table tbody tr {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.ncr-table tbody tr:last-child {
+  border-bottom: none;
+}
+.ncr-total-row td {
+  border-top: 2px solid rgba(0, 0, 0, 0.1);
+}
+/* responsive: stack on smaller screens */
+@media (max-width: 992px) {
+  .ncr-grid {
+    flex-direction: column;
+  }
+
+  .ncr-table-pane,
+  .ncr-chart-pane {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .ncr-apex {
+    height: 420px;
+  }
+}
+.ncr-total-row {
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  border-top: 1px solid rgba(0,0,0,.08);
+  z-index: 2;
+}

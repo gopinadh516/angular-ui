@@ -1,0 +1,72 @@
+{
+  "1": [
+    {
+      "actId": 10,
+      "actionLabel": "Call Payer",
+      "responsibleParty": "Payer",
+      "category": "AR Follow-up"
+    },
+    {
+      "actId": 11,
+      "actionLabel": "Check Portal",
+      "responsibleParty": "Payer",
+      "category": "AR Follow-up"
+    },
+    {
+      "actId": 12,
+      "actionLabel": "Set Reminder",
+      "responsibleParty": "Internal",
+      "category": "AR Follow-up"
+    }
+  ],
+  "2": [
+    {
+      "actId": 21,
+      "actionLabel": "Review ICD/CPT",
+      "responsibleParty": "Coding",
+      "category": "Coding Assistance"
+    },
+    {
+      "actId": 22,
+      "actionLabel": "Request Chart Note",
+      "responsibleParty": "Provider",
+      "category": "Coding Assistance"
+    }
+  ],
+  "3": [
+    {
+      "actId": 40,
+      "actionLabel": "Verify Charge",
+      "responsibleParty": "Charge",
+      "category": "Charge Assistance"
+    },
+    {
+      "actId": 41,
+      "actionLabel": "Correct Fee Schedule",
+      "responsibleParty": "Charge",
+      "category": "Charge Assistance"
+    }
+  ],
+  "4": [
+    {
+      "actId": 30,
+      "actionLabel": "Validate EOB",
+      "responsibleParty": "Payment",
+      "category": "Payment Assistance"
+    },
+    {
+      "actId": 31,
+      "actionLabel": "Post Payment",
+      "responsibleParty": "Payment",
+      "category": "Payment Assistance"
+    }
+  ],
+  "5": [
+    {
+      "actId": 99,
+      "actionLabel": "No Further Action",
+      "responsibleParty": "Internal",
+      "category": "Closed"
+    }
+  ]
+}

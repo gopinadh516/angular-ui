@@ -1,0 +1,135 @@
+@use "@coreui/coreui/scss/mixins/transition" as *;
+@use "@coreui/coreui/scss/mixins/color-mode" as *;
+
+// =========================================================
+// Layout structure — wrapper, header, sidebar, footer sizing
+// Token values are defined in _tokens.scss
+// =========================================================
+
+body {
+  background-color: var(--rm-bg);
+  font-family: var(--rm-font);
+  font-size: var(--rm-font-md);
+  color: var(--rm-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.wrapper {
+  width: 100%;
+  padding-inline: var(--cui-sidebar-occupy-start, 0) var(--cui-sidebar-occupy-end, 0);
+  will-change: auto;
+  @include transition(padding .15s);
+}
+
+.header > .container-fluid,
+.sidebar-header {
+  min-height: var(--rm-header-h);
+}
+
+.sidebar-brand-full {
+  margin-left: 3px;
+}
+
+.sidebar-header {
+  .nav-underline-border {
+    --cui-nav-underline-border-link-padding-x: 1rem;
+    --cui-nav-underline-border-gap: 0;
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    min-height: var(--rm-header-h);
+  }
+}
+
+.sidebar-toggler {
+  margin-inline-start: auto;
+}
+
+.sidebar-narrow,
+.sidebar-narrow-unfoldable:not(:hover) {
+  .sidebar-toggler {
+    margin-inline-end: auto;
+  }
+}
+
+.header > .container-fluid + .container-fluid {
+  min-height: 3rem;
+}
+
+.footer {
+  min-height: var(--rm-footer-h);
+}
+
+// Sidebar border — replace default shadow with clean right border
+.sidebar {
+  border-right: 1px solid var(--rm-border) !important;
+  box-shadow: none !important;
+}
+
+// Active nav item — left-border indicator instead of pill fill
+.sidebar-nav .nav-link {
+  border-left: 2px solid transparent;
+  border-radius: 0 !important;
+  transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+
+}
+
+.sidebar-nav .nav-link:hover {
+  border-left-color: var(--rm-border-strong);
+}
+
+.sidebar-nav .nav-link.active,
+.sidebar-nav .nav-link.router-link-active {
+  border-left-color: var(--rm-active-border) !important;
+  background: var(--rm-active) !important;
+  color: var(--rm-text) !important;
+  font-weight: 600;
+}
+
+// Nav group titles
+.sidebar-nav .nav-title {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--rm-text-3) !important;
+  padding: 1rem 1rem 0.35rem;
+}
+
+// Header — flat, hairline border only
+.header {
+  background: var(--rm-surface) !important;
+  border-bottom: 1px solid var(--rm-border) !important;
+  box-shadow: none !important;
+}
+
+// Footer — flat, hairline border only
+.footer {
+  background: var(--rm-surface) !important;
+  border-top: 1px solid var(--rm-border) !important;
+  box-shadow: none !important;
+  color: var(--rm-text-2) !important;
+  font-size: var(--rm-font-sm);
+}
+
+@include color-mode(dark) {
+  body {
+    background-color: var(--rm-bg);
+  }
+
+  .sidebar {
+    border-right-color: var(--rm-border) !important;
+  }
+
+  .sidebar-nav .nav-link.active,
+  .sidebar-nav .nav-link.router-link-active {
+    border-left-color: var(--rm-active-border) !important;
+  }
+
+  .footer {
+    --cui-footer-bg: var(--cui-body-bg);
+  }
+}

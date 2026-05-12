@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Claim Status Guide (Labels Only)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #0b1020;
+      --card: #121833;
+      --ink: #e8ecff;
+      --muted: #9aa4bf;
+      --accent: #5b8cff;
+      --ok: #17c964;
+      --warn: #f5a524;
+      --err: #f31260;
+      --pill: #243158;
+      --rule: #1f2a4a;
+    }
+    html,body { background: var(--bg); color: var(--ink); font: 14px/1.55 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans"; margin:0; }
+    .wrap { max-width: 1100px; margin: 32px auto; padding: 0 16px; }
+    h1 { font-size: 28px; margin: 0 0 8px; }
+    .lead { color: var(--muted); margin: 0 0 24px; }
+    .toc { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 8px; margin: 16px 0 24px; }
+    .toc a { display:block; padding:10px 12px; background: var(--card); border: 1px solid var(--rule); border-radius: 12px; color: var(--ink); text-decoration: none; }
+    .toc a:hover { border-color: var(--accent); }
+    section { background: var(--card); border: 1px solid var(--rule); border-radius: 16px; padding: 16px; margin: 18px 0 26px; }
+    section > h2 { font-size: 18px; margin: 0 0 12px; letter-spacing: .2px; }
+    table { width: 100%; border-collapse: collapse; }
+    thead th { text-align: left; font-weight: 600; color: var(--muted); padding: 10px 8px; border-bottom: 1px solid var(--rule); }
+    tbody td { vertical-align: top; padding: 10px 8px; border-top: 1px dashed var(--rule); }
+    .badge { display:inline-block; padding: 2px 10px; border-radius: 999px; background: var(--pill); font-size: 12px; }
+    .ok { background: color-mix(in oklab, var(--ok) 25%, var(--pill)); }
+    .warn { background: color-mix(in oklab, var(--warn) 25%, var(--pill)); }
+    .err { background: color-mix(in oklab, var(--err) 25%, var(--pill)); }
+    .signals { color: var(--muted); font-size: 12px; margin-top: 6px; }
+    .note { color: var(--muted); font-size: 12px; }
+    a.anchor { color: inherit; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Claim Status Guide</h1>
+    <p class="lead">
+      What each <strong>status label</strong> means and when it appears, using signals from
+      <abbr title="Health Care Claim">837</abbr>, <abbr title="Implementation Acknowledgment">999</abbr>,
+      <abbr title="Claim Acknowledgment">277CA</abbr>, and <abbr title="Remittance Advice">835</abbr>.
+    </p>
+
+    <div class="toc">
+      <a href="#submission">Submission & Acknowledgments</a>
+      <a href="#clearinghouse">Clearinghouse / 277CA</a>
+      <a href="#prepay">Pre-Payment Payer Queue</a>
+      <a href="#primary">Primary Payment Outcomes (835)</a>
+      <a href="#secondary">Secondary / COB Flow</a>
+      <a href="#corrected">Corrected / Void Claims</a>
+      <a href="#pr">Patient Responsibility</a>
+      <a href="#appeals">Appeals & Audits</a>
+      <a href="#closure">Closure</a>
+    </div>
+
+    <!-- Submission & Acks -->
+    <section id="submission">
+      <h2><a class="anchor" href="#submission">Submission &amp; Acknowledgments</a></h2>
+      <table>
+        <thead>
+          <tr><th style="width:22%">Status</th><th style="width:48%">Meaning / When You See It</th><th style="width:30%">Typical Signals</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge">837 Submitted</span></td>
+            <td>Claim file generated and sent; awaiting acknowledgments.</td>
+            <td class="signals">Outbound 837 logged; no 999/277 yet.</td>
+          </tr>
+          <tr>
+            <td><span class="badge err">999 Rejected</span></td>
+            <td>Envelope/transaction failed X12 syntax/structure edits.</td>
+            <td class="signals">999 AK9/IK5 = R (reject) or E (errors → reject).</td>
+          </tr>
+          <tr>
+            <td><span class="badge warn">Pending Acknowledgement</span></td>
+            <td>837 sent but no 999/277 received within SLA window.</td>
+            <td class="signals">Time-based monitor; aging since submission.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Clearinghouse / 277CA -->
+    <section id="clearinghouse">
+      <h2><a class="anchor" href="#clearinghouse">Clearinghouse / 277CA</a></h2>
+      <table>
+        <thead>
+          <tr><th>Status</th><th>Meaning / When You See It</th><th>Typical Signals</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge err">277 Rejected</span></td>
+            <td>Claim received but rejected at pre-adjudication business edits.</td>
+            <td class="signals">277CA STC indicates reject (e.g., A3 with details).</td>
+          </tr>
+          <tr>
+            <td><span class="badge ok">277 Accepted</span></td>
+            <td>Accepted and forwarded for adjudication.</td>
+            <td class="signals">277CA acceptance (e.g., A2).</td>
+          </tr>
+          <tr>
+            <td><span class="badge warn">277 Pended</span></td>
+            <td>Claim acknowledged but put on hold (eligibility/provider setup/other checks).</td>
+            <td class="signals">277CA pending/pended STC (A6/A7-style messages).</td>
+          </tr>
+          <tr>
+            <td><span class="badge err">277 Not Accepted</span></td>
+            <td>Not accepted for processing (e.g., member/provider not on file).</td>
+            <td class="signals">277CA “not accepted” STC with reason text/codes.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Pre-Payment Payer Queue -->
+    <section id="prepay">
+      <h2><a class="anchor" href="#prepay">Pre-Payment Payer Queue</a></h2>
+      <table>
+        <thead>
+          <tr><th>Status</th><th>Meaning / When You See It</th><th>Typical Signals</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge warn">Pending Adjudication</span></td>
+            <td>Payer accepted; claim is in processing queue.</td>
+            <td class="signals">Prior 277 accepted; no 835 yet; portal shows “in process”.</td>
+          </tr>
+          <tr>
+            <td><span class="badge warn">Medical Records Requested</span></td>
+            <td>Payer asks for charts/notes pre- or post-pay.</td>
+            <td class="signals">Letter/portal; sometimes X12 275 attachment request.</td>
+          </tr>
+          <tr>
+            <td><span class="badge warn">COB Required</span></td>
+            <td>Other insurance info required or send to primary first.</td>
+            <td class="signals">277 remark/portal; later 835 may show CO-96/PI-109 w/ RARCs.</td>
+          </tr>
+          <tr>
+            <td><span class="badge">Repricing</span></td>
+            <td>Sent to network/repricer for rate determination before payment.</td>
+            <td class="signals">277 narrative/portal; 835 shows network adjustments.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Primary Payment Outcomes -->
+    <section id="primary">
+      <h2><a class="anchor" href="#primary">Primary Payment Outcomes (835)</a></h2>
+      <table>
+        <thead>
+          <tr><th>Status</th><th>Meaning / When You See It</th><th>Typical Signals</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge ok">Paid in Full</span></td>
+            <td>Allowed amount fully paid; no remaining payer/PR balance.</td>
+            <td class="signals">835 paid ≈ allowed; minimal/zero CAS.</td>
+          </tr>
+          <tr>
+            <td><span class="badge warn">Underpaid</span></td>
+            <td>Paid less than expected/contract; not a full denial.</td>
+            <td class="signals">835 paid &lt; expected; CAS CO/PI reduce allowed.</td>
+          </tr>
+          <tr>
+            <td><span class="badge warn">Partially Denied</span></td>
+            <td>Some service lines paid, some denied.</td>
+            <td class="signals">835 shows mixed SVC lines with denial CARCs.</td>
+          </tr>
+          <tr>
+            <td><span class="badge warn">Zero Paid</span></td>
+            <td>$0 payment without “full denial” (e.g., deductible/capitation).</td>
+            <td class="signals">835 CLP04 = 0.00 with CAS PR-1/2/3 or CO-45, etc.</td>
+          </tr>
+          <tr>
+            <td><span class="badge err">Denied</span></td>
+            <td>Claim/line not payable.</td>
+            <td class="signals">835 CLP02 = 4, or line-level denial CAS (CO-50, PI-204).</td>
+          </tr>
+          <tr>
+            <td><span class="badge">Bundled</span></td>
+            <td>Service bundled into another code; no additional pay.</td>
+            <td class="signals">835 CAS CO-97 (or similar) + RARC notes (NCCI).</td>
+          </tr>
+          <tr>
+            <td><span class="badge err">Reversed</span></td>
+            <td>Prior payment voided/reversed.</td>
+            <td class="signals">835 CLP02 = 22 and/or negative amounts tied to prior remit.</td>
+          </tr>
+          <tr>
+            <td><span class="badge err">Overpaid / Recoup</span></td>
+            <td>Payer recoups earlier overpayment.</td>
+            <td class="signals">835 PLB recoup (WO/L6) or negative claim-level amounts.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Secondary / COB -->
+    <section id="secondary">
+      <h2><a class="anchor" href="#secondary">Secondary / COB Flow</a></h2>
+      <table>
+        <thead>
+          <tr><th>Status</th><th>Meaning / When You See It</th><th>Typical Signals</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge">Sent to Secondary</span></td>
+            <td>Secondary claim created/sent (by you or auto-forwarded).</td>
+            <td class="signals">Secondary 837 generated or payer forwarding flag.</td>
+          </tr>
+          <tr>
+            <td><span class="badge warn">Pending Secondary</span></td>
+            <td>Secondary acknowledged; waiting adjudication.</td>
+            <td class="signals">Secondary 277 accepted; no secondary 835 yet.</td>
+          </tr>
+          <tr>
+            <td><span class="badge ok">Secondary Paid</span></td>
+            <td>Secondary payer issued payment.</td>
+            <td class="signals">Secondary 835 with positive paid amount.</td>
+          </tr>
+          <tr>
+            <td><span class="badge err">Secondary Denied</span></td>
+            <td>Secondary refused payment (coordination/benefit issues).</td>
+            <td class="signals">Secondary 835 denial CARCs.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Corrected / Void -->
+    <section id="corrected">
+      <h2><a class="anchor" href="#corrected">Corrected / Void Claims</a></h2>
+      <table>
+        <thead>
+          <tr><th>Status</th><th>Meaning / When You See It</th><th>Typical Signals</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge">Corrected Submitted</span></td>
+            <td>Replacement claim sent.</td>
+            <td class="signals">837 with CLM05-3 = 7 referencing original.</td>
+          </tr>
+          <tr>
+            <td><span class="badge ok">Corrected Accepted</span></td>
+            <td>Replacement accepted by clearinghouse/payer.</td>
+            <td class="signals">999/277 acceptance for corrected claim.</td>
+          </tr>
+          <tr>
+            <td><span class="badge err">Corrected Rejected</span></td>
+            <td>Replacement failed edits.</td>
+            <td class="signals">999/277 rejection for corrected claim.</td>
+          </tr>
+          <tr>
+            <td><span class="badge">Void Submitted</span></td>
+            <td>Void/cancel request sent.</td>
+            <td class="signals">837 with CLM05-3 = 8 referencing prior claim.</td>
+          </tr>
+          <tr>
+            <td><span class="badge ok">Void Accepted</span></td>
+            <td>Void accepted; original claim/payment will be nullified.</td>
+            <td class="signals">999/277 accept; later 835 may show reversal if paid.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Patient Responsibility -->
+    <section id="pr">
+      <h2><a class="anchor" href="#pr">Patient Responsibility</a></h2>
+      <table>
+        <thead>
+          <tr><th>Status</th><th>Meaning / When You See It</th><th>Typical Signals</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge">PR Created</span></td>
+            <td>Patient responsibility established (deductible/coinsurance/copay or non-covered).</td>
+            <td class="signals">835 CAS PR* creates PR balance in system.</td>
+          </tr>
+          <tr>
+            <td><span class="badge">PR Billed</span></td>
+            <td>Statement sent to patient.</td>
+            <td class="signals">Statement batch/job log shows dispatch.</td>
+          </tr>
+          <tr>
+            <td><span class="badge warn">PR Payment Plan</span></td>
+            <td>Patient enrolled in installments.</td>
+            <td class="signals">Internal AR payment-plan record.</td>
+          </tr>
+          <tr>
+            <td><span class="badge ok">PR Paid in Full</span></td>
+            <td>Patient balance settled.</td>
+            <td class="signals">Cash posting clears PR to zero.</td>
+          </tr>
+          <tr>
+            <td><span class="badge warn">Small Balance WO</span></td>
+            <td>Residual balance written off under threshold policy.</td>
+            <td class="signals">Write-off batch applied; zero remaining AR.</td>
+          </tr>
+          <tr>
+            <td><span class="badge err">Collections</span></td>
+            <td>Unpaid PR placed with collections agency.</td>
+            <td class="signals">Placement record / agency export.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Appeals & Audits -->
+    <section id="appeals">
+      <h2><a class="anchor" href="#appeals">Appeals &amp; Audits</a></h2>
+      <table>
+        <thead>
+          <tr><th>Status</th><th>Meaning / When You See It</th><th>Typical Signals</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge">Appeal Submitted</span></td>
+            <td>Formal appeal filed against denial/underpay.</td>
+            <td class="signals">Appeal record; payer case ID/confirmation.</td>
+          </tr>
+          <tr>
+            <td><span class="badge err">Appeal Upheld</span></td>
+            <td>Payer maintained original decision/denial.</td>
+            <td class="signals">Decision letter/portal; no corrective 835.</td>
+          </tr>
+          <tr>
+            <td><span class="badge ok">Appeal Overturned</span></td>
+            <td>Payer reversed its decision; payment expected/issued.</td>
+            <td class="signals">Decision letter; corrective 835 (new pay/reissue).</td>
+          </tr>
+          <tr>
+            <td><span class="badge warn">Audit / Post-Payment Review</span></td>
+            <td>Claim selected for audit (pre- or post-pay).</td>
+            <td class="signals">Audit request; may lead to PLB recoup or additional pay.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Closure -->
+    <section id="closure">
+      <h2><a class="anchor" href="#closure">Closure</a></h2>
+      <table>
+        <thead>
+          <tr><th>Status</th><th>Meaning / When You See It</th><th>Typical Signals</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge ok">Closed — Paid</span></td>
+            <td>No remaining payer or patient balance; lifecycle complete.</td>
+            <td class="signals">Net zero AR; no open tasks/follow-ups.</td>
+          </tr>
+          <tr>
+            <td><span class="badge err">Closed — Denied (No Appeal)</span></td>
+            <td>Final denial with no appeal filed (or window expired).</td>
+            <td class="signals">Policy-based closure; follow-ups cleared.</td>
+          </tr>
+          <tr>
+            <td><span class="badge warn">Closed — Write-off</span></td>
+            <td>Balance closed via contractual/admin write-off.</td>
+            <td class="signals">Write-off entries; AR zeroed out.</td>
+          </tr>
+          <tr>
+            <td><span class="badge err">Closed — Recouped</span></td>
+            <td>Entire amount recovered by payer; cycle finished.</td>
+            <td class="signals">835 PLB/negative postings reconcile to zero.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+   
+  </div>
+</body>
+</html>

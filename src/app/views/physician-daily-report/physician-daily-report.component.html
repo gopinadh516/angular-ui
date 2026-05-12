@@ -1,0 +1,223 @@
+<div class="physician-report-page">
+  <div class="report-title-bar">
+    <h4 class="page-title mb-0">Visit Summary Report</h4>
+    <div class="filter-actions">
+      <button class="btn btn-sm btn-primary px-4" (click)="onSearch()" [disabled]="loading">
+        {{ loading ? 'Loading...' : 'Run Report' }}
+      </button>
+      <button class="btn btn-sm btn-outline-secondary px-3" (click)="onReset()">Reset</button>
+    </div>
+  </div>
+
+  <div class="filter-bar">
+    <div class="filter-item date-item">
+      <label for="fromDate">From Date</label>
+      <input id="fromDate" type="date" class="form-control form-control-sm date-control" [(ngModel)]="fromDate" />
+    </div>
+
+    <div class="filter-item date-item">
+      <label for="toDate">To Date</label>
+      <input id="toDate" type="date" class="form-control form-control-sm date-control" [(ngModel)]="toDate" />
+    </div>
+
+    <div class="filter-item physician-item">
+      <label for="physicianSelect">Physician</label>
+      <select id="physicianSelect" class="form-select form-select-sm physician-control" [(ngModel)]="selectedPhysicianProfileFid">
+        <option [ngValue]="null">All</option>
+        <option *ngFor="let p of physicians" [ngValue]="p.physicianProfileFid">
+          {{ p.physicianName }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger py-2 mb-2">
+    {{ errorMessage }}
+  </div>
+
+  <div class="report-table-wrap">
+    <table class="table align-middle report-table mb-0">
+      <thead>
+        <tr>
+          <th class="text-center exp-col" title="Expand or collapse daily visit details"></th>
+          <th title="Appointment Date">Visit Date</th>
+          <th class="text-end" title="Scheduled appointments">Sch</th>
+          <th class="text-end" title="Deleted appointments">Del</th>
+          <th class="text-end" title="No Show / Cancelled">No Show</th>
+          <th class="text-end" title="No Action">No Action</th>
+          <th class="text-end" title="Arrived">Arr</th>
+          <th class="text-end" title="Seen">Seen</th>
+          <th class="text-end" title="Charts Not Signed">Unsigned</th>
+          <th class="text-end" title="Charts Signed">Signed</th>
+          <th class="text-end" title="Coding Completed">Coded</th>
+          <th class="text-end" title="Coding Pending">C Pend</th>
+          <th class="text-end" title="Charge Entry Completed">CE Comp</th>
+          <th class="text-end" title="Charge Entry Pending">CE Pending</th>
+          <th class="text-end" title="Claims Not Transmitted">Not Trans</th>
+          <th class="text-end" title="Patient Paid Visits">Pat Paid</th>
+          <th class="text-end" title="Claims Transmitted">Transmitted</th>
+          <th class="text-end" title="Transmitted Value in Dollars">Transmitted $</th>
+          <th class="text-end" title="Clearing House Accepted">Clr Accpt</th>
+          <th class="text-end" title="Clearing House Rejected">Clr Rej</th>
+          <th
+            class="text-center"
+            title="R1: Coding = Charge Entry | R2: Charge Entry = Not Transmitted + Patient Paid + Transmitted | R3: Transmitted = Clearing House Accepted + Rejected">
+            Rules
+          </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <ng-container *ngFor="let row of summaryRows; trackBy: trackBySummary">
+          <tr [class.row-error]="row.highlightColor === 'RED'">
+            <td class="text-center exp-col">
+              <button
+                class="expand-btn"
+                type="button"
+                (click)="toggleRow(row)"
+                [attr.aria-label]="row.expanded ? 'Collapse row' : 'Expand row'">
+                {{ row.expanded ? '−' : '+' }}
+              </button>
+            </td>
+            <td class="fw-semibold">{{ row.apptDate }}</td>
+            <td class="text-end">{{ row.appointmentsScheduled }}</td>
+            <td class="text-end">{{ row.deleted }}</td>
+            <td class="text-end">{{ row.noShowCancelled }}</td>
+            <td class="text-end">{{ row.noAction }}</td>
+            <td class="text-end">{{ row.arrived }}</td>
+            <td class="text-end">{{ row.seen }}</td>
+            <td class="text-end">{{ row.chartsNotSigned }}</td>
+            <td class="text-end">{{ row.chartsSigned }}</td>
+            <td class="text-end">{{ row.codingCompleted }}</td>
+            <td class="text-end">{{ row.codingPending }}</td>
+            <td class="text-end">{{ row.chargeEntryCompleted }}</td>
+            <td class="text-end">{{ row.chargeEntryPending }}</td>
+            <td class="text-end">{{ row.claimsNotTransmitted }}</td>
+            <td class="text-end">{{ row.patientPaidVisits }}</td>
+            <td class="text-end">{{ row.claimsTransmitted }}</td>
+            <td class="text-end">{{ row.transmittedValueInDollar | currency:'USD':'symbol':'1.2-2' }}</td>
+            <td class="text-end">{{ row.clearingHouseAccepted }}</td>
+            <td class="text-end">{{ row.clearingHouseRejected }}</td>
+            <td class="text-center">
+              <span
+                class="badge rule-badge me-1"
+                [ngClass]="getBadgeClass(row.ruleAOk)"
+                title="Rule 1: Coding total must equal Charge Entry total">
+                R1
+              </span>
+
+              <span
+                class="badge rule-badge me-1"
+                [ngClass]="getBadgeClass(row.ruleBOk)"
+                title="Rule 2: Charge Entry total must equal NTx + PtPd + Tx">
+                R2
+              </span>
+
+              <span
+                class="badge rule-badge"
+                [ngClass]="getBadgeClass(row.ruleCOk)"
+                title="Rule 3: Transmitted claims must equal CHA + CHR">
+                R3
+              </span>
+            </td>
+          </tr>
+
+          <tr *ngIf="row.expanded">
+            <td colspan="21" class="detail-cell">
+              <div class="detail-card">
+                <div class="detail-title">
+                  Visit Details for {{ row.apptDate }}
+                </div>
+
+                <div class="table-responsive">
+                  <table class="table table-sm table-striped table-bordered detail-table mb-0">
+                    <thead class="table-secondary">
+                      <tr>
+                        <th title="Appointment Time">Appt Time</th>
+                        <th title="Appointment Unique ID">Appointment UID</th>
+                        <th title="Patient FID">Patient FID</th>
+                        <th title="Physician Name">Physician</th>
+                        <th title="Status Bucket">Bucket</th>
+                        <th title="Chart Signed">Chart Signed</th>
+                        <th title="Chart Signed Source">Signed Source</th>
+                        <th title="Coding Status">Coding</th>
+                        <th title="Charge Entry Status">Charge Entry</th>
+                        <th title="Patient Paid Visit">Patient Paid</th>
+                        <th title="Claim Transmitted">Claim Transmitted</th>
+                        <th title="Claim Not Transmitted">Claim Not Transmitted</th>
+                        <th title="Clearing House Status">CH Status</th>
+                        <th title="Carrier Billed Date">Carrier Billed Date</th>
+                        <th class="text-end" title="Transmitted Value in Dollars">Transmitted Value</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let detail of row.details; trackBy: trackByDetail">
+                        <td>{{ detail.apptTime }}</td>
+                        <td>{{ detail.appointmentUid }}</td>
+                        <td>{{ detail.patientFid }}</td>
+                        <td>{{ detail.physicianName }}</td>
+                        <td>{{ detail.bucket }}</td>
+                        <td>{{ detail.isChartSigned ? 'Yes' : 'No' }}</td>
+                        <td>{{ detail.chartSignedSource || '-' }}</td>
+                        <td>{{ detail.isCodingCompleted ? 'Completed' : (detail.isCodingPending ? 'Pending' : '-') }}</td>
+                        <td>{{ detail.isChargeEntryCompleted ? 'Completed' : (detail.isChargeEntryPending ? 'Pending' : '-') }}</td>
+                        <td>{{ detail.isPatientPaidVisit ? 'Yes' : 'No' }}</td>
+                        <td>{{ detail.isClaimTransmitted ? 'Yes' : 'No' }}</td>
+                        <td>{{ detail.isClaimNotTransmitted ? 'Yes' : 'No' }}</td>
+                        <td>
+                          <span [class]="getStatusClass(detail.currentChStatus)">
+                            {{ detail.currentChStatus || '-' }}
+                          </span>
+                        </td>
+                        <td>{{ detail.carrierBilledDate ? (detail.carrierBilledDate | date:'MM/dd/yyyy hh:mm a') : '-' }}</td>
+                        <td class="text-end">{{ (detail.transmittedValueInDollar || 0) | currency:'USD':'symbol':'1.2-2' }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+
+        <tr *ngIf="!loading && summaryRows.length === 0">
+          <td colspan="21" class="text-center py-4 text-body-secondary">
+            No data found for the selected filters.
+          </td>
+        </tr>
+      </tbody>
+
+      <tfoot *ngIf="!loading && summaryRows.length > 0">
+        <tr class="report-footer-row">
+          <td class="text-center exp-col"></td>
+          <td class="fw-bold">Total</td>
+          <td class="text-end fw-bold">{{ footerTotals.appointmentsScheduled }}</td>
+          <td class="text-end fw-bold">{{ footerTotals.deleted }}</td>
+          <td class="text-end fw-bold">{{ footerTotals.noShowCancelled }}</td>
+          <td class="text-end fw-bold">{{ footerTotals.noAction }}</td>
+          <td class="text-end fw-bold">{{ footerTotals.arrived }}</td>
+          <td class="text-end fw-bold">{{ footerTotals.seen }}</td>
+          <td class="text-end fw-bold">{{ footerTotals.chartsNotSigned }}</td>
+          <td class="text-end fw-bold">{{ footerTotals.chartsSigned }}</td>
+          <td class="text-end fw-bold">{{ footerTotals.codingCompleted }}</td>
+          <td class="text-end fw-bold">{{ footerTotals.codingPending }}</td>
+          <td class="text-end fw-bold">{{ footerTotals.chargeEntryCompleted }}</td>
+          <td class="text-end fw-bold">{{ footerTotals.chargeEntryPending }}</td>
+          <td class="text-end fw-bold">{{ footerTotals.claimsNotTransmitted }}</td>
+          <td class="text-end fw-bold">{{ footerTotals.patientPaidVisits }}</td>
+          <td class="text-end fw-bold">{{ footerTotals.claimsTransmitted }}</td>
+          <td class="text-end fw-bold">
+            {{ footerTotals.transmittedValueInDollar | currency:'USD':'symbol':'1.2-2' }}
+          </td>
+          <td class="text-end fw-bold">{{ footerTotals.clearingHouseAccepted }}</td>
+          <td class="text-end fw-bold">{{ footerTotals.clearingHouseRejected }}</td>
+          <td
+            class="text-center fw-bold"
+            title="Rule pass counts across visible dates. Format: R1/R2/R3">
+            {{ footerTotals.ruleAOkCount }}/{{ footerTotals.ruleBOkCount }}/{{ footerTotals.ruleCOkCount }}
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>

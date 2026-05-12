@@ -1,0 +1,34 @@
+// =========================================================
+// Scrollbar — ultra-thin, minimal
+// =========================================================
+
+@supports (scrollbar-width: thin) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--rm-border-strong, #d1d5db) transparent;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--rm-border-strong, #d1d5db);
+  border-radius: 999px;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--rm-text-3, #a1a1aa);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}

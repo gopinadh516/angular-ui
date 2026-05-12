@@ -1,0 +1,44 @@
+[
+  {
+    "month": "Nov-25",
+    "value": 92,
+    "rate": 92,
+    "firstPassRate": 92,
+    "cleanPassRate": 81
+  },
+  {
+    "month": "Dec-25",
+    "value": 90,
+    "rate": 90,
+    "firstPassRate": 90,
+    "cleanPassRate": 79
+  },
+  {
+    "month": "Jan-26",
+    "value": 94,
+    "rate": 94,
+    "firstPassRate": 94,
+    "cleanPassRate": 83
+  },
+  {
+    "month": "Feb-26",
+    "value": 91,
+    "rate": 91,
+    "firstPassRate": 91,
+    "cleanPassRate": 78
+  },
+  {
+    "month": "Mar-26",
+    "value": 93,
+    "rate": 93,
+    "firstPassRate": 93,
+    "cleanPassRate": 82
+  },
+  {
+    "month": "Apr-26",
+    "value": 95,
+    "rate": 95,
+    "firstPassRate": 95,
+    "cleanPassRate": 84
+  }
+]

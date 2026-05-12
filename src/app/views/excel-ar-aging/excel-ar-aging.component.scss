@@ -1,0 +1,122 @@
+/* ✅ Layout Container */
+.chart-table-container {
+  display: flex;
+  flex-direction: column; /* Stacks rows on top of each other */
+  width: 100%;
+}
+
+/* ✅ Each Row: Contains a Chart and a Table */
+.chart-table-row {
+  display: flex;
+  justify-content: space-between; /* Space between chart and table */
+  align-items: flex-start;
+  width: 100%;
+  margin-bottom: 20px; /* Space between claim and dollar sections */
+}
+
+/* ✅ Chart Section */
+.chart-section {
+  flex: 1;
+  margin-right: 15px; /* Space between chart and table */
+}
+
+/* ✅ Table Section */
+.table-section {
+  flex: 1;
+  max-width: 90%;
+  padding: 10px;
+}
+
+/* ✅ Separator between claim count and dollar value tables */
+.table-separator {
+  height: 15px;
+  width: 100%;
+  display: block;
+}
+
+/* ✅ Responsive Adjustments */
+@media (max-width: 768px) {
+  .chart-table-row {
+    flex-direction: column;
+  }
+
+  .chart-section,
+  .table-section {
+    margin-right: 0;
+    margin-bottom: 15px; /* Reduce space between stacked sections */
+  }
+}
+
+/* ✅ Table Styling */
+table {
+  width: 100%;
+  font-size: 12px; /* Reduce text size */
+  border-collapse: collapse; /* Remove spacing */
+}
+
+th, td {
+  padding: 5px; /* Reduce padding */
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+/* ✅ Column Headers Styling */
+.table-dark th {
+  font-weight: bold;
+  font-size: 14px;
+  color: black;
+}
+
+/* ✅ Total Row Styling */
+.total-row {
+  font-weight: bold;
+  background-color: #f2f2f2;
+}
+
+/* ✅ Ensure first column in total row remains white */
+.total-row td:first-child {
+  font-weight: bold;
+  color: black;
+  background-color: white;
+}
+
+/* ✅ Alternating Row Colors */
+tr:nth-child(even) {
+  background-color: transparent;
+}
+
+tr:hover {
+  background-color: var(--rm-hover, #fafafa);
+}
+
+/* ✅ Subtotal Row Styling */
+.subtotal-row td {
+  background-color: #f7f5f5 !important; /* Lighter grey background */
+  color: #020202 !important; /* Darker text for better contrast */
+  font-weight: normal;
+  padding: 6px !important;
+  line-height: 1 !important;
+}
+
+.subtotal-row {
+  height: 75% !important;
+}
+
+/* ✅ File Information Styling */
+.file-info {
+  font-size: 14px;
+  font-weight: normal;
+  color: gray;
+  margin-left: 10px;
+}
+
+/* Color bands — ultra-subtle tints */
+.greenc     { background-color: rgba(5, 150, 105, 0.08); color: #065f46; }
+.amberc     { background-color: rgba(217, 119, 6, 0.09); color: #92400e; }
+.light-redc { background-color: rgba(220, 38, 38, 0.06); color: #991b1b; }
+.mid-redc   { background-color: rgba(220, 38, 38, 0.10); color: #991b1b; }
+.redc       { background-color: rgba(220, 38, 38, 0.15); color: #7f1d1d; }
+.maroonc    { background-color: rgba(220, 38, 38, 0.12); color: #991b1b; }
+.greyc      { background-color: var(--rm-surface-2, #fafafa); color: var(--rm-text-2, #71717a); }
+.bluec      { background-color: rgba(99, 102, 241, 0.07); color: #3730a3; }
+.whitec     { background-color: transparent; color: inherit; }

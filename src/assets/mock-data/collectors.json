@@ -1,0 +1,14 @@
+[
+  {
+    "value": "ar.agent@surescripts.local",
+    "label": "Anita AR Agent"
+  },
+  {
+    "value": "code.agent@surescripts.local",
+    "label": "Cody Coding Agent"
+  },
+  {
+    "value": "pay.agent@surescripts.local",
+    "label": "Priya Payment Agent"
+  }
+]

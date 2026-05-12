@@ -1,0 +1,108 @@
+<div class="card upload-container">
+
+  <!-- Header (Light Indigo) -->
+  <div class="card-header upload-top">
+    <div class="upload-top-title">
+      Upload Center
+      <span class="upload-top-subtitle-inline">(Select client + data type, then upload)</span>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <!-- Controls -->
+    <div class="controls">
+      <div class="control">
+        <label class="control-label">Select Client</label>
+        <div class="select-wrap">
+          <select class="form-select control-select" [(ngModel)]="selectedClient">
+            <option *ngFor="let c of clients" [value]="c">{{ c }}</option>
+          </select>
+          <i class="cil-chevron-bottom select-icon"></i>
+        </div>
+      </div>
+
+      <div class="control">
+        <label class="control-label">Select Dataset</label>
+        <div class="select-wrap">
+          <select class="form-select control-select"
+                  [(ngModel)]="selectedDataFor"
+                  (ngModelChange)="onDataForChange()">
+            <option *ngFor="let d of dataForOptions" [value]="d.value">{{ d.label }}</option>
+          </select>
+          <i class="cil-chevron-bottom select-icon"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Drag and Drop Area -->
+    <div class="drop-zone text-center"
+         [ngClass]="{'dragover': isDragOver}"
+         (dragover)="onDragOver($event)"
+         (dragleave)="onDragLeave($event)"
+         (drop)="onDrop($event)">
+
+      <i class="cil-cloud-upload icon-lg"></i>
+
+      <p *ngIf="!selectedFile" class="hint">
+        Drag & Drop your file here or
+      </p>
+
+      <p *ngIf="selectedFile" class="file-line">
+        <span class="file-strong">Selected:</span>
+        <span class="file-name">{{ selectedFile.name }}</span>
+      </p>
+
+      <!-- Allowed: show all + current selection -->
+      <div class="allowed">
+        Allowed:
+        <span class="mono">.xlsx, .xls, .csv</span>
+        <span class="allowed-note">
+          (Current selection expects <span class="mono">{{ fileAccept }}</span>)
+        </span>
+      </div>
+
+      <!-- Choose File button -->
+      <label class="btn btn-indigo-soft choose-file-btn mt-2">
+        <i class="cil-folder-open"></i> Choose File
+        <input type="file"
+               [attr.accept]="fileAccept"
+               (change)="onFileSelected($event)"
+               hidden />
+      </label>
+    </div>
+
+    <!-- Upload Button -->
+    <div class="text-center mt-4">
+      <button class="btn btn-indigo-soft btn-lg rounded-pill px-4"
+              (click)="uploadFile()"
+              [disabled]="!selectedFile || isUploading">
+        <i class="cil-cloud-upload"></i> {{ isUploading ? 'Uploading...' : 'Upload' }}
+      </button>
+    </div>
+
+    <!-- Show Upload Progress -->
+    <div *ngIf="uploadProgress > 0" class="mt-4">
+      <div class="progress-meta">
+        <span class="progress-label">Progress</span>
+        <span class="progress-pct">{{ uploadProgress }}%</span>
+      </div>
+      <div class="progress">
+        <div class="progress-bar progress-bar-striped progress-bar-animated bg-indigo"
+             role="progressbar"
+             [style.width.%]="uploadProgress"
+             [attr.aria-valuenow]="uploadProgress"
+             aria-valuemin="0"
+             aria-valuemax="100">
+        </div>
+      </div>
+    </div>
+
+    <!-- Show Upload Message -->
+    <div class="alert mt-4 text-center fw-bold"
+         [ngClass]="isUploadSuccessful ? 'alert-success' : 'alert-danger'"
+         *ngIf="uploadMessage">
+      {{ uploadMessage }}
+    </div>
+
+  </div>
+</div>

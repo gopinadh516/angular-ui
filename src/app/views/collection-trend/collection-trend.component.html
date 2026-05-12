@@ -1,0 +1,87 @@
+<c-card class="my-4">
+  <c-card-body>
+    <c-row>
+      <c-col sm="5">
+        <h5 class="section-title mb-0">Claim Collection Trend</h5>
+        <div class="small text-body-secondary">
+  <ng-container *ngIf="period==='Day'">
+    {{ rangeStart | date:'MMM d' }} – {{ rangeEnd | date:'MMM d, yyyy' }}
+  </ng-container>
+  <ng-container *ngIf="period==='Month'">
+    {{ rangeStart | date:'MMM yyyy' }} – {{ rangeEnd | date:'MMM yyyy' }}
+  </ng-container>
+  <ng-container *ngIf="period==='Year'">
+    {{ rangeStart | date:'yyyy' }} – {{ rangeEnd | date:'yyyy' }}
+  </ng-container>
+</div>
+      </c-col>
+      <c-col class="d-none d-md-block" sm="7">
+        <form>
+          <c-button-group class="float-end me-3" role="group">
+            <input
+              class="btn-check"
+              type="radio"
+              id="dayRadio"
+              value="Day"
+              [checked]="period==='Day'"
+              (click)="changePeriod('Day')"
+            />
+            <label
+              cButton
+              cFormCheckLabel
+              for="dayRadio"
+              class="radio-btn"
+              [class.active]="period==='Day'"
+            >
+              Day
+            </label>
+
+            <input
+              class="btn-check"
+              type="radio"
+              id="monthRadio"
+              value="Month"
+              [checked]="period==='Month'"
+              (click)="changePeriod('Month')"
+            />
+            <label
+              cButton
+              cFormCheckLabel
+              for="monthRadio"
+              class="radio-btn"
+              [class.active]="period==='Month'"
+            >
+              Month
+            </label>
+
+            <input
+              class="btn-check"
+              type="radio"
+              id="yearRadio"
+              value="Year"
+              [checked]="period==='Year'"
+              (click)="changePeriod('Year')"
+            />
+            <label
+              cButton
+              cFormCheckLabel
+              for="yearRadio"
+              class="radio-btn"
+              [class.active]="period==='Year'"
+            >
+              Year
+            </label>
+          </c-button-group>
+        </form>
+      </c-col>
+    </c-row>
+
+    <c-chart
+      [type]="chart.type"
+      [data]="chart.data"
+      [options]="chart.options"
+      [height]="280"
+      [ngStyle]="{ 'marginTop.px': 16 }"
+    ></c-chart>
+  </c-card-body>
+</c-card>

@@ -1,0 +1,12 @@
+/* revenue-distribution.component.css */
+.pie-chart-wrapper {
+  position: relative;
+  width: 100%;
+  height: 400px;               /* adjust as needed for your pie size */
+  margin: 0 auto;
+  overflow: visible;           /* allow legend overflow */
+  border: 1px solid #e0e0e0;   /* light gray border around the pie */
+  border-radius: 8px;
+  padding: 16px;               /* inner padding so chart isn’t flush to the edge */
+  background-color: #fff;      /* white background */
+}

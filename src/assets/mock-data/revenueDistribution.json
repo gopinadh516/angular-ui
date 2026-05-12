@@ -1,0 +1,22 @@
+[
+  {
+    "payer": "Commercial",
+    "amount": 280000,
+    "percentage": 55
+  },
+  {
+    "payer": "Medicare",
+    "amount": 120000,
+    "percentage": 24
+  },
+  {
+    "payer": "Medicaid",
+    "amount": 56000,
+    "percentage": 11
+  },
+  {
+    "payer": "Patient",
+    "amount": 50000,
+    "percentage": 10
+  }
+]

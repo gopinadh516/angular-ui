@@ -1,0 +1,184 @@
+<div class="cpt-report-page">
+  <div class="filter-card">
+    <form [formGroup]="filterForm" class="filter-grid" (ngSubmit)="loadReport()">
+
+      <div class="filter-top-row">
+        <div class="date-row">
+          <div class="field-block month-block">
+            <label for="reportMonth">Month</label>
+            <select
+              id="reportMonth"
+              formControlName="reportMonth"
+              class="form-select"
+              (change)="onMonthChange()">
+              <option value="">Select Month</option>
+              <option *ngFor="let month of monthOptions" [value]="month.value">
+                {{ month.label }}
+              </option>
+            </select>
+          </div>
+
+          <div class="field-block">
+            <label for="fromDate">From Date</label>
+            <input
+              id="fromDate"
+              type="date"
+              formControlName="fromDate"
+              class="form-control"
+              (change)="onDateRangeChange()" />
+          </div>
+
+          <div class="field-block">
+            <label for="toDate">To Date</label>
+            <input
+              id="toDate"
+              type="date"
+              formControlName="toDate"
+              class="form-control"
+              (change)="onDateRangeChange()" />
+          </div>
+
+          <div class="field-block top-cpt-block">
+            <label for="topCptCount">Top CPT Codes</label>
+            <select
+              id="topCptCount"
+              formControlName="topCptCount"
+              class="form-select"
+              (change)="onTopCptChange()">
+              <option value="">All</option>
+              <option *ngFor="let n of topCptOptions" [value]="n">{{ n }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="action-block">
+          <button type="submit" class="btn btn-primary" [disabled]="loading()">
+            {{ loading() ? 'Loading...' : 'Load Report' }}
+          </button>
+          <button type="button" class="btn btn-outline-secondary" (click)="resetFilters()" [disabled]="loading()">
+            Reset
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+  <div *ngIf="errorMessage()" class="alert alert-danger mt-3">
+    {{ errorMessage() }}
+  </div>
+
+  <ng-container *ngIf="report() as reportData">
+    <div class="totals-grid mt-3">
+      <div class="total-card">
+        <div class="total-label">Total Charges</div>
+        <div class="total-value">{{ filteredTotalCharge() | currency }}</div>
+      </div>
+      <div class="total-card">
+        <div class="total-label">Total Payment</div>
+        <div class="total-value">{{ filteredTotalPayment() | currency }}</div>
+      </div>
+      <div class="total-card">
+        <div class="total-label">Total Adjustment</div>
+        <div class="total-value">{{ filteredTotalVariance() | currency }}</div>
+      </div>
+      <div class="total-card">
+        <div class="total-label">Total Rows</div>
+        <div class="total-value">{{ filteredDetailRows().length | number }}</div>
+      </div>
+    </div>
+
+    <div class="table-card mt-3">
+      <div class="card-title-row">
+        <h4>Summary by CPT</h4>
+      </div>
+      <div class="table-wrap summary-wrap">
+        <table class="report-table">
+          <thead>
+            <tr>
+              <th>CPT</th>
+              <th class="text-end">Charge Value</th>
+              <th class="text-end">Payment Received</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of filteredSummaryRows(); trackBy: trackSummary">
+              <td>{{ row.rowLabel || '-' }}</td>
+              <td class="text-end">{{ (row.chargeValue ?? 0) | currency }}</td>
+              <td class="text-end">{{ (row.paymentReceived ?? 0) | currency }}</td>
+            </tr>
+          </tbody>
+          <tfoot *ngIf="filteredGrandTotalRow() as totalRow">
+            <tr>
+              <th>{{ totalRow.rowLabel || 'Grand Total' }}</th>
+              <th class="text-end">{{ (totalRow.chargeValue ?? 0) | currency }}</th>
+              <th class="text-end">{{ (totalRow.paymentReceived ?? 0) | currency }}</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <div class="table-card mt-3">
+      <div class="card-title-row">
+        <h4>Detail View</h4>
+        <button type="button" class="btn btn-sm btn-outline-primary" (click)="toggleExpanded()">
+          {{ expanded() ? 'Collapse' : 'Expand' }} Details
+        </button>
+      </div>
+
+      <ng-container *ngIf="expanded(); else detailsHidden">
+        <div class="table-wrap detail-wrap">
+          <table class="report-table detail-table">
+            <thead>
+              <tr>
+                <th>DOS</th>
+                <th>CPT</th>
+                <th>Description</th>
+                <th class="text-end">Units</th>
+                <th class="text-end">Fee/Unit</th>
+                <th class="text-end">Charge</th>
+                <th class="text-end">Payment</th>
+                <th class="text-end">Insurance</th>
+                <th class="text-end">Patient</th>
+                <th class="text-end">Allowed</th>
+                <th class="text-end">Expected</th>
+                <th class="text-end">Ins Bal</th>
+                <th class="text-end">Pat Bal</th>
+                <th>1st Pay</th>
+                <th>Last Pay</th>
+                <th>Charge Detail UID</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of filteredDetailRows(); trackBy: trackDetail">
+                <td>{{ row.dosDate || '-' }}</td>
+                <td>{{ row.cptCode || '-' }}</td>
+                <td class="description-col" [title]="row.cptDescription || ''">{{ row.cptDescription || '-' }}</td>
+                <td class="text-end">{{ row.units ?? 0 | number:'1.0-2' }}</td>
+                <td class="text-end">{{ (row.feePerUnit ?? 0) | currency }}</td>
+                <td class="text-end">{{ (row.chargeValue ?? 0) | currency }}</td>
+                <td class="text-end">{{ (row.paymentReceivedTotal ?? 0) | currency }}</td>
+                <td class="text-end">{{ (row.paymentReceivedInsurance ?? 0) | currency }}</td>
+                <td class="text-end">{{ (row.paymentReceivedPatient ?? 0) | currency }}</td>
+                <td class="text-end">{{ (row.allowedAmount ?? 0) | currency }}</td>
+                <td class="text-end">{{ (row.expectedAmount ?? 0) | currency }}</td>
+                <td class="text-end">{{ (row.insuranceBalance ?? 0) | currency }}</td>
+                <td class="text-end">{{ (row.patientBalance ?? 0) | currency }}</td>
+                <td>{{ row.firstPaymentDate || '-' }}</td>
+                <td>{{ row.lastPaymentDate || '-' }}</td>
+                <td>{{ row.chargeDetailUid || '-' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </ng-container>
+
+      <ng-template #detailsHidden>
+        <div class="details-placeholder">
+          Click <strong>Expand Details</strong> to view the full table.
+        </div>
+      </ng-template>
+    </div>
+  </ng-container>
+</div>

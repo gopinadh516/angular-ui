@@ -1,0 +1,58 @@
+[
+  {
+    "snapshotDate": "2026-05-01",
+    "pendingClaimCount": 1220,
+    "totalPendingAr": 420000,
+    "insurancePending": 360000,
+    "patientPendingAr": 60000
+  },
+  {
+    "snapshotDate": "2026-05-02",
+    "pendingClaimCount": 1214,
+    "totalPendingAr": 414000,
+    "insurancePending": 355000,
+    "patientPendingAr": 59000
+  },
+  {
+    "snapshotDate": "2026-05-03",
+    "pendingClaimCount": 1231,
+    "totalPendingAr": 428500,
+    "insurancePending": 366000,
+    "patientPendingAr": 62500
+  },
+  {
+    "snapshotDate": "2026-05-04",
+    "pendingClaimCount": 1201,
+    "totalPendingAr": 401200,
+    "insurancePending": 344000,
+    "patientPendingAr": 57200
+  },
+  {
+    "snapshotDate": "2026-05-05",
+    "pendingClaimCount": 1192,
+    "totalPendingAr": 394800,
+    "insurancePending": 338000,
+    "patientPendingAr": 56800
+  },
+  {
+    "snapshotDate": "2026-05-06",
+    "pendingClaimCount": 1188,
+    "totalPendingAr": 389100,
+    "insurancePending": 333000,
+    "patientPendingAr": 56100
+  },
+  {
+    "snapshotDate": "2026-05-07",
+    "pendingClaimCount": 1208,
+    "totalPendingAr": 407500,
+    "insurancePending": 348000,
+    "patientPendingAr": 59500
+  },
+  {
+    "snapshotDate": "2026-05-08",
+    "pendingClaimCount": 1175,
+    "totalPendingAr": 381700,
+    "insurancePending": 326000,
+    "patientPendingAr": 55700
+  }
+]

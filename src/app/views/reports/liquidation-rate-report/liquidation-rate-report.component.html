@@ -1,0 +1,115 @@
+<div class="card dash-tile liquidation-rate-page">
+  <div class="card-body">
+
+
+    <div *ngIf="expanded">
+      <div class="filter-top-row">
+        <div class="filter-grid">
+          <div class="filter-item filter-item-sm">
+            <label class="form-label">Report By</label>
+            <select class="form-select form-select-sm" [(ngModel)]="monthBasis">
+              <option value="DOE">DOE</option>
+              <option value="DOS">DOS</option>
+            </select>
+          </div>
+
+          <div class="filter-item filter-item-md">
+            <label class="form-label">From Month</label>
+            <input type="month" class="form-control form-control-sm" [(ngModel)]="fromMonth" />
+          </div>
+
+          <div class="filter-item filter-item-md">
+            <label class="form-label">To Month</label>
+            <input type="month" class="form-control form-control-sm" [(ngModel)]="toMonth" />
+          </div>
+
+          <div class="filter-item filter-item-sm">
+            <label class="form-label">Lag Months</label>
+            <select class="form-select form-select-sm" [(ngModel)]="maxLagMonths">
+              <option [ngValue]="1">1</option>
+              <option [ngValue]="2">2</option>
+              <option [ngValue]="3">3</option>
+              <option [ngValue]="4">4</option>
+              <option [ngValue]="5">5</option>
+              <option [ngValue]="6">6</option>
+            </select>
+          </div>
+
+        
+
+        
+        </div>
+
+        <div class="action-block">
+          <button type="button" class="btn btn-sm btn-primary" (click)="loadReport()" [disabled]="loading">
+            {{ loading ? 'Loading...' : 'Load Report' }}
+          </button>
+          <button type="button" class="btn btn-sm btn-outline-secondary" (click)="resetFilters()" [disabled]="loading">
+            Reset
+          </button>
+        </div>
+      </div>
+
+      <div class="summary-grid">
+        <div class="summary-card">
+          <div class="summary-label">Month Range</div>
+          <div class="summary-value">{{ summary.cohortCount || 0 }}</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-label">Total Charges</div>
+          <div class="summary-value">{{ summary.totalCharges || 0 | currency }}</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-label">Total Liquidated</div>
+          <div class="summary-value">{{ summary.totalLiquidated || 0 | currency }}</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-label">Ending Balance</div>
+          <div class="summary-value">{{ summary.endingBalance || 0 | currency }}</div>
+        </div>
+      </div>
+
+      <div *ngIf="errorMessage" class="alert alert-danger py-2 px-3 mt-2 mb-2">
+        {{ errorMessage }}
+      </div>
+
+      <div *ngIf="!loading && !rows.length && !errorMessage" class="empty-state">
+        No liquidation data available for the selected filters.
+      </div>
+
+      <div *ngIf="rows.length" class="report-table-wrap">
+        <table class="table table-sm table-bordered align-middle report-table">
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th class="text-end">Charges</th>
+              <th>Payment Month</th>
+              <th class="text-end">Ins Payment</th>
+              <th class="text-end">Ins Adjust</th>
+              <th class="text-end">Patient Payment</th>
+              <th class="text-end">Liquidated</th>
+              <th class="text-end">Balance</th>
+              <th>Bucket</th>
+              <th class="text-end">Liquidation %</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of rows; let i = index; trackBy: trackRow">
+              <td>{{ isFirstRowOfCohort(i) ? row.monthLabel : '' }}</td>
+              <td class="text-end">{{ isFirstRowOfCohort(i) ? (row.charges || 0 | number:'1.2-2') : '' }}</td>
+              <td>{{ row.paymentMonthLabel }}</td>
+              <td class="text-end">{{ row.insPayment || 0 | number:'1.2-2' }}</td>
+              <td class="text-end">{{ row.insAdjust || 0 | number:'1.2-2' }}</td>
+              <td class="text-end">{{ row.patientPayment || 0 | number:'1.2-2' }}</td>
+              <td class="text-end">{{ row.liquidatedAmount || 0 | number:'1.2-2' }}</td>
+              <td class="text-end">{{ row.balance || 0 | number:'1.2-2' }}</td>
+              <td>{{ row.liquidationBucket }}</td>
+              <td class="text-end">{{ row.liquidationPct || 0 | number:'1.2-2' }}%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>

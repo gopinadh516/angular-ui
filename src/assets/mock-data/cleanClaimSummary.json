@@ -1,0 +1,47 @@
+[
+  {
+    "month": "Nov-25",
+    "eligibleFirstAttemptSubmittedClaims": 750,
+    "clearinghouseRejectedClaims": 8,
+    "firstPassClaims": 742,
+    "paidFirstAttemptClaims": 695,
+    "cleanClaims": 104,
+    "submittedCharges": 424364.32,
+    "rejectedCharges": 3900,
+    "firstPassCharges": 420464.32,
+    "paidFirstAttemptCharges": 386000,
+    "cleanClaimCharges": 72941.78,
+    "firstPassRatePercent": 98.93,
+    "cleanClaimRatePercent": 14.02
+  },
+  {
+    "month": "Dec-25",
+    "eligibleFirstAttemptSubmittedClaims": 240,
+    "clearinghouseRejectedClaims": 5,
+    "firstPassClaims": 235,
+    "paidFirstAttemptClaims": 135,
+    "cleanClaims": 19,
+    "submittedCharges": 127112.53,
+    "rejectedCharges": 2400,
+    "firstPassCharges": 124712.53,
+    "paidFirstAttemptCharges": 67000,
+    "cleanClaimCharges": 11729.97,
+    "firstPassRatePercent": 97.92,
+    "cleanClaimRatePercent": 8.09
+  },
+  {
+    "month": "Jan-26",
+    "eligibleFirstAttemptSubmittedClaims": 286,
+    "clearinghouseRejectedClaims": 6,
+    "firstPassClaims": 280,
+    "paidFirstAttemptClaims": 60,
+    "cleanClaims": 5,
+    "submittedCharges": 220272.91,
+    "rejectedCharges": 5100,
+    "firstPassCharges": 215172.91,
+    "paidFirstAttemptCharges": 42000,
+    "cleanClaimCharges": 3975.34,
+    "firstPassRatePercent": 97.9,
+    "cleanClaimRatePercent": 1.79
+  }
+]

@@ -1,0 +1,124 @@
+// =========================================================
+// Charts — minimal tooltip + consistent color tokens
+// =========================================================
+
+// Chart.js tooltip body padding fix
+.chartjs-tooltip-body-item > td {
+  padding: 0 !important;
+  font-size: smaller;
+}
+
+// Custom tooltip shell (used by CoreUI ChartJS wrapper)
+.chartjs-tooltip {
+  background: var(--rm-surface, #ffffff) !important;
+  border: 1px solid var(--rm-border, #e4e4e7) !important;
+  border-radius: var(--rm-radius-lg, 10px) !important;
+  box-shadow: 0 4px 16px rgba(9, 9, 11, 0.08) !important;
+  color: var(--rm-text, #09090b) !important;
+  font-family: var(--rm-font, 'Plus Jakarta Sans', system-ui, sans-serif) !important;
+  font-size: 0.75rem !important;
+  padding: 0.5rem 0.75rem !important;
+  pointer-events: none;
+
+  table {
+    border: none;
+    background: transparent;
+
+    thead tr th {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      color: var(--rm-text-2, #71717a);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      border: none;
+      padding-bottom: 4px;
+    }
+
+    tbody tr td {
+      border: none;
+      padding: 2px 0;
+      color: var(--rm-text, #09090b);
+      font-size: 0.75rem;
+    }
+  }
+}
+
+// ApexCharts — minimal grid and axis styling
+.apexcharts-canvas {
+  .apexcharts-gridline {
+    stroke: var(--rm-divider, #f4f4f5);
+    stroke-width: 1;
+  }
+
+  .apexcharts-grid-borders line,
+  .apexcharts-inner .apexcharts-xaxis-tick {
+    stroke: var(--rm-border, #eaecf0);
+  }
+
+  .apexcharts-xaxis-label text,
+  .apexcharts-yaxis-label text,
+  .apexcharts-xaxis-label,
+  .apexcharts-yaxis-label {
+    fill: var(--rm-text-2, #71717a) !important;
+    font-family: var(--rm-font, 'Plus Jakarta Sans', system-ui, sans-serif) !important;
+    font-size: 11px !important;
+  }
+
+  .apexcharts-xaxis line,
+  .apexcharts-yaxis line {
+    stroke: var(--rm-border, #eaecf0);
+  }
+
+  // Bar chart bars — use minimal palette via data- attribute selectors
+  // (actual colors set in TS; we can only style shape)
+  .apexcharts-bar-series .apexcharts-series path {
+    rx: 3;
+    ry: 3;
+  }
+
+  .apexcharts-tooltip {
+    background: var(--rm-surface, #ffffff);
+    border: 1px solid var(--rm-border, #e4e4e7);
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(9, 9, 11, 0.08);
+    font-family: var(--rm-font, 'Plus Jakarta Sans', system-ui, sans-serif);
+    color: var(--rm-text, #09090b);
+
+    .apexcharts-tooltip-title {
+      background: var(--rm-surface-2, #fafafa);
+      border-bottom: 1px solid var(--rm-border, #e4e4e7);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--rm-text-2, #71717a);
+      padding: 0.4rem 0.6rem;
+    }
+
+    .apexcharts-tooltip-series-group {
+      padding: 0.25rem 0.6rem;
+    }
+
+    .apexcharts-tooltip-text-y-value {
+      font-weight: 600;
+      color: var(--rm-text, #09090b);
+    }
+
+    .apexcharts-tooltip-text-y-label {
+      color: var(--rm-text-2, #71717a);
+      font-size: 0.75rem;
+    }
+  }
+
+  .apexcharts-legend-text {
+    color: var(--rm-text-2, #71717a) !important;
+    font-family: var(--rm-font, 'Plus Jakarta Sans', system-ui, sans-serif) !important;
+    font-size: 12px !important;
+  }
+
+  .apexcharts-toolbar svg {
+    fill: #09090b;
+  }
+
+  .apexcharts-zeroLine {
+    stroke: var(--rm-border-strong, #d1d5db);
+  }
+}

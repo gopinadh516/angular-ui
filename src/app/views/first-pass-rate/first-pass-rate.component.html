@@ -1,0 +1,8 @@
+<div class="first-pass-chart-wrapper" *ngIf="isChartReady">
+  <c-chart
+    type="bar"
+    [data]="chartData"
+    [options]="chartOptions"
+    [plugins]="chartPlugins">
+  </c-chart>
+</div>

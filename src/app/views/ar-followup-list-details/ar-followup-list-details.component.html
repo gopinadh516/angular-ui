@@ -1,0 +1,32 @@
+<div class="container-fluid mt-3 px-0">
+  <div *ngIf="isLoading" class="alert alert-info py-2 mb-2">
+  {{ isAssignedMode ? 'Loading assigned claims…' : 'Loading saved AR List…' }}
+</div>
+
+<div *ngIf="rows.length === 0" class="alert alert-warning py-2">
+  {{ isAssignedMode ? 'No assigned claims found.' : 'No rows found for this saved list.' }}
+</div>
+
+  <!-- IMPORTANT:
+       Render Claimstatus ONLY after loading is done,
+       so it will NOT auto-fetch /claim-status/all.
+  -->
+  <ng-container *ngIf="!isLoading && !errorMessage">
+    <div *ngIf="rows.length === 0" class="alert alert-warning py-2">
+      No rows found for this saved list.
+    </div>
+
+<app-claimstatus
+  *ngIf="rows.length > 0"
+  [claimStatuses]="rows"
+  [listName]="listName"
+  [listNumber]="listNumber"
+  [isArFollowupListView]="true"
+  [isAssignedMode]="isAssignedMode"
+  (listChanged)="refreshListDetailsSilently()">
+</app-claimstatus>
+
+
+    
+  </ng-container>
+</div>

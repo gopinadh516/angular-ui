@@ -1,0 +1,185 @@
+<p>excel-ar-aging works!</p>
+<div class="chart-table-container">
+  <!-- ✅ Row 1: Chart & Table for Claim Count -->
+  <div class="chart-table-row">
+    <!-- ✅ Chart for Claim Count -->
+    <div class="chart-section">
+      <apx-chart
+        *ngIf="claimData"
+        [series]="chartSeriesClaims"
+        [chart]="chartDetails"
+        [xaxis]="chartXAxisClaims"
+        [legend]="chartLegend"
+        [plotOptions]="chartPlotOptions"
+        [dataLabels]="chartDataLabels"
+        [colors]="chartColors">
+      </apx-chart>
+    </div>
+
+    <!-- ✅ Table for Claim Count -->
+    <div class="table-section">
+      <h6 class="text-center table-title">
+        AR Aging (Number of Claims)
+        <span class="file-info" *ngIf="claimData?.fileDate && claimData?.fileTime">
+          ({{ claimData?.fileDate || 'N/A' }} {{ claimData?.fileTime || 'N/A' }})
+        </span>
+      </h6>
+
+      <table class="table table-striped table-bordered table-hover text-center" *ngIf="claimData?.amountLabels?.length">
+        <thead class="table-dark">
+          <tr>
+            <th class="whitec">Range</th>
+            <th class="whitec" *ngFor="let label of claimData?.agingLabels">{{ label }}</th>
+            <th class="whitec">R.Total</th>
+            <th class="whitec greyc">Total</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <!-- ✅ Main Data Rows (Skipping 0-50$ row) -->
+          <ng-container *ngFor="let row of claimData?.data; let i = index; trackBy: trackByFunction">
+            <tr *ngIf="i !== 4">
+              <td class="whitec">{{ claimData?.amountLabels?.[i] ?? 'N/A' }}</td>
+              <td class="greenc">{{ row?.[0] ?? 0 }}</td>
+              <td class="amberc">{{ row?.[1] ?? 0 }}</td>
+              <td class="light-redc">{{ row?.[2] ?? 0 }}</td>
+              <td class="mid-redc">{{ row?.[3] ?? 0 }}</td>
+              <td class="redc">{{ row?.[4] ?? 0 }}</td>
+              <td class="maroonc"><b>{{ rTotalsClaims?.[i] ?? 0 }}</b></td>
+              <td class="greyc"><b>{{ rowTotalsClaims?.[i] ?? 0 }}</b></td>
+            </tr>
+          </ng-container>
+
+          <!-- ✅ Subtotal Row (Above 0-50$ Row) -->
+          <tr class="subtotal-row">
+            <td><b>Subtotal</b></td>
+            <td>{{ subtotalRowClaims?.[0] ?? 0 }}</td>
+            <td>{{ subtotalRowClaims?.[1] ?? 0 }}</td>
+            <td>{{ subtotalRowClaims?.[2] ?? 0 }}</td>
+            <td>{{ subtotalRowClaims?.[3] ?? 0 }}</td>
+            <td>{{ subtotalRowClaims?.[4] ?? 0 }}</td>
+            <td><b>{{ rSubtotalClaims ?? 0 }}</b></td>
+            <td><b>{{ getSubtotalSum('claim') }}</b></td>
+          </tr>
+
+          <!-- ✅ 0-50$ Row -->
+          <tr>
+            <td class="whitec">{{ claimData?.amountLabels?.[4] ?? 'N/A' }}</td>
+            <td class="greenc">{{ claimData?.data?.[4]?.[0] ?? 0 }}</td>
+            <td class="amberc">{{ claimData?.data?.[4]?.[1] ?? 0 }}</td>
+            <td class="light-redc">{{ claimData?.data?.[4]?.[2] ?? 0 }}</td>
+            <td class="mid-redc">{{ claimData?.data?.[4]?.[3] ?? 0 }}</td>
+            <td class="redc">{{ claimData?.data?.[4]?.[4] ?? 0 }}</td>
+            <td class="maroonc"><b>{{ rTotalsClaims?.[4] ?? 0 }}</b></td>
+            <td class="greyc"><b>{{ rowTotalsClaims?.[4] ?? 0 }}</b></td>
+          </tr>
+
+          <!-- ✅ Final Total Row -->
+          <tr class="total-row">
+            <td class="table-dark"><b>Total</b></td>
+            <td class="greenc">{{ columnTotalsClaims?.[0] ?? 0 }}</td>
+            <td class="amberc">{{ columnTotalsClaims?.[1] ?? 0 }}</td>
+            <td class="light-redc">{{ columnTotalsClaims?.[2] ?? 0 }}</td>
+            <td class="mid-redc">{{ columnTotalsClaims?.[3] ?? 0 }}</td>
+            <td class="redc">{{ columnTotalsClaims?.[4] ?? 0 }}</td>
+            <td class="maroonc"><b>{{ getMaroonTotalClaims() }}</b></td>
+            <td class="greyc"><b>{{ grandTotalClaims ?? 0 }}</b></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ✅ Separator -->
+  <div class="table-separator"></div>
+
+  <!-- ✅ Row 2: Chart & Table for Dollar Value -->
+  <div class="chart-table-row">
+    <!-- ✅ Chart for Dollar Value -->
+    <div class="chart-section">
+      <apx-chart
+        *ngIf="dollarData"
+        [series]="chartSeriesDollar"
+        [chart]="chartDetails"
+        [xaxis]="chartXAxisDollar"
+        [legend]="chartLegend"
+        [plotOptions]="chartPlotOptions"
+        [dataLabels]="chartDataLabels"
+        [colors]="chartColors">
+      </apx-chart>
+    </div>
+
+    <!-- ✅ Table for Dollar Value -->
+    <div class="table-section">
+      <h6 class="text-center table-title">
+        AR Aging (Dollar Value)
+        <span class="file-info" *ngIf="dollarData?.fileDate && dollarData?.fileTime">
+          ({{ dollarData?.fileDate || 'N/A' }} {{ dollarData?.fileTime || 'N/A' }})
+        </span>
+      </h6>
+
+      <table class="table table-striped table-bordered table-hover text-center" *ngIf="dollarData?.amountLabels?.length">
+        <thead class="table-dark">
+          <tr>
+            <th class="whitec">Range</th>
+            <th class="whitec" *ngFor="let label of dollarData?.agingLabels">{{ label }}</th>
+            <th class="whitec">R.Total</th>
+            <th class="whitec greyc">Total</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <!-- ✅ Main Data Rows (Skipping 0-50$ row) -->
+          <ng-container *ngFor="let row of dollarData?.data; let i = index; trackBy: trackByFunction">
+            <tr *ngIf="i !== 4">
+              <td class="whitec">{{ dollarData?.amountLabels?.[i] ?? 'N/A' }}</td>
+              <td class="greenc">{{ row?.[0] ?? 0 }}</td>
+              <td class="amberc">{{ row?.[1] ?? 0 }}</td>
+              <td class="light-redc">{{ row?.[2] ?? 0 }}</td>
+              <td class="mid-redc">{{ row?.[3] ?? 0 }}</td>
+              <td class="redc">{{ row?.[4] ?? 0 }}</td>
+              <td class="maroonc"><b>{{ rTotalsDollar?.[i] ?? 0 }}</b></td>
+              <td class="greyc"><b>{{ rowTotalsDollar?.[i] ?? 0 }}</b></td>
+            </tr>
+          </ng-container>
+
+          <!-- ✅ Subtotal Row -->
+          <tr class="subtotal-row">
+            <td><b>Subtotal</b></td>
+            <td>{{ subtotalRowDollar?.[0] ?? 0 }}</td>
+            <td>{{ subtotalRowDollar?.[1] ?? 0 }}</td>
+            <td>{{ subtotalRowDollar?.[2] ?? 0 }}</td>
+            <td>{{ subtotalRowDollar?.[3] ?? 0 }}</td>
+            <td>{{ subtotalRowDollar?.[4] ?? 0 }}</td>
+            <td><b>{{ rSubtotalDollar ?? 0 }}</b></td>
+            <td><b>{{ getSubtotalSum('dollar') }}</b></td>
+          </tr>
+
+          <!-- ✅ 0-50$ Row -->
+          <tr>
+            <td class="whitec">{{ dollarData?.amountLabels?.[4] ?? 'N/A' }}</td>
+            <td class="greenc">{{ dollarData?.data?.[4]?.[0] ?? 0 }}</td>
+            <td class="amberc">{{ dollarData?.data?.[4]?.[1] ?? 0 }}</td>
+            <td class="light-redc">{{ dollarData?.data?.[4]?.[2] ?? 0 }}</td>
+            <td class="mid-redc">{{ dollarData?.data?.[4]?.[3] ?? 0 }}</td>
+            <td class="redc">{{ dollarData?.data?.[4]?.[4] ?? 0 }}</td>
+            <td class="maroonc"><b>{{ rTotalsDollar?.[4] ?? 0 }}</b></td>
+            <td class="greyc"><b>{{ rowTotalsDollar?.[4] ?? 0 }}</b></td>
+          </tr>
+
+          <!-- ✅ Final Total Row -->
+          <tr class="total-row">
+            <td class="table-dark"><b>Total</b></td>
+            <td class="greenc">{{ columnTotalsDollar?.[0] ?? 0 }}</td>
+            <td class="amberc">{{ columnTotalsDollar?.[1] ?? 0 }}</td>
+            <td class="light-redc">{{ columnTotalsDollar?.[2] ?? 0 }}</td>
+            <td class="mid-redc">{{ columnTotalsDollar?.[3] ?? 0 }}</td>
+            <td class="redc">{{ columnTotalsDollar?.[4] ?? 0 }}</td>
+            <td class="maroonc"><b>{{ getMaroonTotalDollar() }}</b></td>
+            <td class="greyc"><b>{{ grandTotalDollar ?? 0 }}</b></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

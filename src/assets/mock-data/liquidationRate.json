@@ -1,0 +1,67 @@
+{
+  "summary": {
+    "cohortCount": 3,
+    "rowCount": 6,
+    "totalCharges": 710000,
+    "totalLiquidated": 422000,
+    "endingBalance": 288000
+  },
+  "rows": [
+    {
+      "cohortMonth": "2026-01",
+      "monthLabel": "Jan-26",
+      "charges": 220000,
+      "paymentMonth": "2026-01",
+      "paymentMonthLabel": "M0",
+      "insPayment": 85000,
+      "insAdjust": 35000,
+      "patientPayment": 8000,
+      "liquidatedAmount": 128000,
+      "balance": 92000,
+      "liquidationBucket": "M0",
+      "liquidationPct": 58.18
+    },
+    {
+      "cohortMonth": "2026-01",
+      "monthLabel": "Jan-26",
+      "charges": 220000,
+      "paymentMonth": "2026-02",
+      "paymentMonthLabel": "M1",
+      "insPayment": 24000,
+      "insAdjust": 10000,
+      "patientPayment": 4000,
+      "liquidatedAmount": 38000,
+      "balance": 54000,
+      "liquidationBucket": "M1",
+      "liquidationPct": 75.45
+    },
+    {
+      "cohortMonth": "2026-02",
+      "monthLabel": "Feb-26",
+      "charges": 245000,
+      "paymentMonth": "2026-02",
+      "paymentMonthLabel": "M0",
+      "insPayment": 94000,
+      "insAdjust": 41000,
+      "patientPayment": 9000,
+      "liquidatedAmount": 144000,
+      "balance": 101000,
+      "liquidationBucket": "M0",
+      "liquidationPct": 58.78
+    },
+    {
+      "cohortMonth": "2026-03",
+      "monthLabel": "Mar-26",
+      "charges": 245000,
+      "paymentMonth": "2026-03",
+      "paymentMonthLabel": "M0",
+      "insPayment": 78000,
+      "insAdjust": 27000,
+      "patientPayment": 7000,
+      "liquidatedAmount": 112000,
+      "balance": 133000,
+      "liquidationBucket": "M0",
+      "liquidationPct": 45.71
+    }
+  ]
+}

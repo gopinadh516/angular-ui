@@ -1,0 +1,38 @@
+[
+  {
+    "sectionSort": 1,
+    "rowSort": 1,
+    "sectionName": "AR Follow-up",
+    "period": "Today",
+    "touches": 24,
+    "uniqueClaims": 21,
+    "arValue": 12850
+  },
+  {
+    "sectionSort": 1,
+    "rowSort": 2,
+    "sectionName": "AR Follow-up",
+    "period": "Last 7 Days",
+    "touches": 138,
+    "uniqueClaims": 119,
+    "arValue": 76200
+  },
+  {
+    "sectionSort": 2,
+    "rowSort": 1,
+    "sectionName": "Coding Assistance",
+    "period": "Today",
+    "touches": 8,
+    "uniqueClaims": 8,
+    "arValue": 4200
+  },
+  {
+    "sectionSort": 3,
+    "rowSort": 1,
+    "sectionName": "Payment Assistance",
+    "period": "Today",
+    "touches": 11,
+    "uniqueClaims": 10,
+    "arValue": 8300
+  }
+]

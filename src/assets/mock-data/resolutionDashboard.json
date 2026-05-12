@@ -1,0 +1,66 @@
+{
+  "summary": [
+    {
+      "userName": "Anita AR Agent",
+      "workedArDollars": 76200,
+      "resolvedDollars": 31500,
+      "paymentsPosted": 18400,
+      "touchCount": 138
+    },
+    {
+      "userName": "Priya Payment Agent",
+      "workedArDollars": 38100,
+      "resolvedDollars": 24900,
+      "paymentsPosted": 24900,
+      "touchCount": 64
+    }
+  ],
+  "details": [
+    {
+      "userName": "Anita AR Agent",
+      "userLogin": "ar.agent@surescripts.local",
+      "visitId": 10001,
+      "claimId": "13084550",
+      "claimSuffix": "A",
+      "carrierCode": "BCBS",
+      "patientName": "Aarav Sharma",
+      "firstDos": "2026-04-01",
+      "lastDos": "2026-04-01",
+      "touchNumber": 1,
+      "touchDateTime": "2026-05-06T10:15:00",
+      "nextTouchDateTime": "2026-05-08T10:15:00",
+      "windowEndDateTime": "2026-05-08T10:15:00",
+      "daysInWindow": 2,
+      "touchAction": "Call Payer",
+      "touchNote": "Payer confirmed claim in process.",
+      "workedArBase": 245,
+      "resolvedDollars": 0,
+      "paymentsPosted": 0,
+      "insuranceWriteoffs": 0,
+      "pendingArAtNextTouch": 245
+    },
+    {
+      "userName": "Priya Payment Agent",
+      "userLogin": "pay.agent@surescripts.local",
+      "visitId": 10003,
+      "claimId": "13084552",
+      "claimSuffix": "A",
+      "carrierCode": "UHC",
+      "patientName": "Rohan Reddy",
+      "firstDos": "2026-02-28",
+      "lastDos": "2026-02-28",
+      "touchNumber": 2,
+      "touchDateTime": "2026-05-03T09:00:00",
+      "nextTouchDateTime": null,
+      "windowEndDateTime": "2026-05-09T00:00:00",
+      "daysInWindow": 6,
+      "touchAction": "Validate EOB",
+      "touchNote": "Partial payment posted.",
+      "workedArBase": 320,
+      "resolvedDollars": 220,
+      "paymentsPosted": 220,
+      "insuranceWriteoffs": 80,
+      "pendingArAtNextTouch": 20
+    }
+  ]
+}

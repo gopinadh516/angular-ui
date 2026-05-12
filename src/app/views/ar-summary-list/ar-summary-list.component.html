@@ -1,0 +1,181 @@
+<div class="ar-summary-container">
+<div class="header-row d-flex align-items-center justify-content-between">
+  <h4 class="page-title mb-0">AR Follow-Up Lists</h4>
+
+  <a
+    class="btn btn-sm btn-primary"
+    routerLink="/predicted-payer-followup-list">
+    View Predicted Payer Follow-up List
+  </a>
+</div>
+
+  <div *ngIf="isLoading" class="alert alert-info mb-0">
+    Loading AR lists...
+  </div>
+
+  <div *ngIf="!isLoading && errorMessage" class="alert alert-danger mb-0">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="!isLoading && !errorMessage && arLists.length === 0" class="alert alert-warning mb-0">
+    No AR Lists found for this user.
+  </div>
+
+  <div *ngIf="!isLoading && !errorMessage && arLists.length > 0" class="table-responsive ar-table-wrap">
+    <table class="table table-sm table-hover ar-table align-middle">
+      <thead>
+        <tr>
+          <th class="col-list" (click)="sortTable('listName')">
+            <span class="th-wrap">List Name</span>
+            <span *ngIf="sortKey === 'listName'">{{ sortAsc ? ' ▲' : ' ▼' }}</span>
+          </th>
+
+          <th class="col-owner" (click)="sortTable('currentOwner')">
+            <span class="th-wrap">Owner</span>
+            <span *ngIf="sortKey === 'currentOwner'">{{ sortAsc ? ' ▲' : ' ▼' }}</span>
+          </th>
+
+          <th class="col-assigned" (click)="sortTable('assignedTo')">
+            <span class="th-wrap">Assigned To</span>
+            <span *ngIf="sortKey === 'assignedTo'">{{ sortAsc ? ' ▲' : ' ▼' }}</span>
+          </th>
+
+          <th class="col-action text-center">
+            <span>Delete</span>
+          </th>
+
+          <th class="col-action">
+            <span class="th-wrap">Action</span>
+          </th>
+
+          <th class="text-end col-count" (click)="sortTable('totalClaimCount')">
+            <span class="th-wrap">Assigned</span>
+            <span *ngIf="sortKey === 'totalClaimCount'">{{ sortAsc ? ' ▲' : ' ▼' }}</span>
+          </th>
+
+          <th class="text-end col-count" (click)="sortTable('untouchedCount')">
+            <span class="th-wrap">Untouched</span>
+            <span *ngIf="sortKey === 'untouchedCount'">{{ sortAsc ? ' ▲' : ' ▼' }}</span>
+          </th>
+<th class="text-end col-count" (click)="sortTable('workedCount')">
+  <span class="th-wrap">Worked</span>
+  <span *ngIf="sortKey === 'workedCount'">{{ sortAsc ? ' ▲' : ' ▼' }}</span>
+</th>
+          <th class="text-end col-count" (click)="sortTable('arFollowupCount')">
+            <span class="th-wrap">For Followup</span>
+            <span *ngIf="sortKey === 'arFollowupCount'">{{ sortAsc ? ' ▲' : ' ▼' }}</span>
+          </th>
+
+          <th class="text-end col-count" (click)="sortTable('codingAssistanceCount')">
+            <span class="th-wrap">Coding Asst</span>
+            <span *ngIf="sortKey === 'codingAssistanceCount'">{{ sortAsc ? ' ▲' : ' ▼' }}</span>
+          </th>
+
+          <th class="text-end col-count" (click)="sortTable('paymentAssistanceCount')">
+            <span class="th-wrap">Payment Asst</span>
+            <span *ngIf="sortKey === 'paymentAssistanceCount'">{{ sortAsc ? ' ▲' : ' ▼' }}</span>
+          </th>
+
+          <th class="text-end col-count" (click)="sortTable('chargeAssistanceCount')">
+            <span class="th-wrap">Charge Asst</span>
+            <span *ngIf="sortKey === 'chargeAssistanceCount'">{{ sortAsc ? ' ▲' : ' ▼' }}</span>
+          </th>
+
+          <th class="text-end col-count" (click)="sortTable('clientAssistanceCount')">
+            <span class="th-wrap">Client Asst</span>
+            <span *ngIf="sortKey === 'clientAssistanceCount'">{{ sortAsc ? ' ▲' : ' ▼' }}</span>
+          </th>
+
+          <th *ngIf="isAgentOrClientView()" class="text-end col-count" (click)="sortTable('visibleClaimCount')">
+            <span class="th-wrap">Visible Claims</span>
+            <span *ngIf="sortKey === 'visibleClaimCount'">{{ sortAsc ? ' ▲' : ' ▼' }}</span>
+          </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr
+          *ngFor="let row of sortedArLists; trackBy: trackByListNumber"
+          (click)="onListClick(row)"
+          class="ar-row"
+        >
+          <td class="list-name-cell">{{ row.listName }}</td>
+          <td>{{ row.currentOwner || '-' }}</td>
+          <td class="assigned-to-cell">{{ row.assignedTo || '-' }}</td>
+
+          <td class="text-center delete-cell" (click)="$event.stopPropagation()">
+            <button
+              type="button"
+              class="btn-delete-icon"
+              [title]="canDeleteList(row) ? 'Delete list' : 'Assigned lists can be deleted only by Admin or Super Admin'"
+              [disabled]="!canDeleteList(row) || isDeleting(row.listNumber)"
+              (click)="onDeleteList(row)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"></path>
+                <path d="M10 11v6M14 11v6"></path>
+                <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"></path>
+              </svg>
+            </button>
+          </td>
+
+          <td class="action-cell" (click)="$event.stopPropagation()">
+            <select
+              class="form-select form-select-sm action-select"
+              [disabled]="!canAssignArList() || isAssigning(row.listNumber)"
+              (change)="onActionChange(row, $any($event.target).value)">
+              <option value="">Assign List to...</option>
+              <option *ngFor="let u of revMaxUsers" [value]="u.email">
+                {{ u.fullName }} ({{ u.email }})
+              </option>
+            </select>
+          </td>
+
+          <td class="text-end">{{ row.totalClaimCount || 0 }}</td>
+          <td class="text-end">{{ row.untouchedCount || 0 }}</td>
+          <td class="text-end">{{ row.workedCount || 0 }}</td>
+          <td class="text-end">{{ row.arFollowupCount || 0 }}</td>
+          <td class="text-end">{{ row.codingAssistanceCount || 0 }}</td>
+          <td class="text-end">{{ row.paymentAssistanceCount || 0 }}</td>
+          <td class="text-end">{{ row.chargeAssistanceCount || 0 }}</td>
+          <td class="text-end">{{ row.clientAssistanceCount || 0 }}</td>
+
+          <td *ngIf="isAgentOrClientView()" class="text-end fw-semibold">
+            {{ row.visibleClaimCount || 0 }}
+          </td>
+        </tr>
+      </tbody>
+
+      <tfoot>
+        <tr class="table-light fw-semibold">
+          <th scope="row" colspan="5" class="text-end">TOTAL</th>
+          <th class="text-end">{{ summaryTotals.totalClaimCount }}</th>
+          <th class="text-end">{{ summaryTotals.untouchedCount }}</th>
+          <th class="text-end">{{ summaryTotals.workedCount }}</th>
+          <th class="text-end">{{ summaryTotals.arFollowupCount }}</th>
+          <th class="text-end">{{ summaryTotals.codingAssistanceCount }}</th>
+          <th class="text-end">{{ summaryTotals.paymentAssistanceCount }}</th>
+          <th class="text-end">{{ summaryTotals.chargeAssistanceCount }}</th>
+          <th class="text-end">{{ summaryTotals.clientAssistanceCount }}</th>
+          <th *ngIf="isAgentOrClientView()" class="text-end">
+            {{ summaryTotals.visibleClaimCount }}
+          </th>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1200;">
+    <div *ngIf="toastVisible" class="toast show" role="alert" aria-live="polite" aria-atomic="true">
+      <div class="toast-header">
+        <strong class="me-auto">RevMax AR</strong>
+        <button type="button" class="btn-close" aria-label="Close" (click)="hideToast()"></button>
+      </div>
+      <div class="toast-body">
+        {{ toastMessage }}
+      </div>
+    </div>
+  </div>
+
+
+</div>

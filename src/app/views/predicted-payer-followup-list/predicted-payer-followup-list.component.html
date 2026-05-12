@@ -1,0 +1,26 @@
+<div class="container-fluid mt-3 px-0">
+  <div *ngIf="isLoading" class="alert alert-info py-2 mb-2">
+    Loading predicted payer follow-up list…
+  </div>
+
+  <div *ngIf="!isLoading && errorMessage" class="alert alert-danger py-2 mb-2">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="!isLoading && !errorMessage && rows.length === 0" class="alert alert-warning py-2">
+    No predicted payer follow-up claims found.
+  </div>
+
+  <ng-container *ngIf="!isLoading && !errorMessage">
+    <app-claimstatus
+      *ngIf="rows.length > 0"
+      [claimStatuses]="rows"
+      [listName]="listName"
+      [listNumber]="null"
+      [isArFollowupListView]="false"
+      [isAssignedMode]="false"
+      [isPredictionFollowupListView]="true"
+      (listChanged)="refreshListDetailsSilently()">
+    </app-claimstatus>
+  </ng-container>
+</div>

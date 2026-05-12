@@ -1,0 +1,331 @@
+/* You can add global styles to this file, and also import other style files */
+
+// Import styles with default layout.
+@use "@coreui/coreui/scss/coreui" as * with (
+  $enable-deprecation-messages: false
+);
+
+// Import Chart.js custom tooltips styles
+@use "@coreui/chartjs/scss/coreui-chartjs";
+
+// Design tokens (CSS custom properties — must come before theme overrides)
+@use "tokens";
+
+// Theme layout & CoreUI structural overrides
+@use "theme";
+
+// Some temp fixes
+// @use "fixes";
+
+// Global component overrides
+@use "custom";
+
+// Examples (CoreUI demo styles — keep for demo routes)
+@use "examples";
+
+// =========================================================
+// Global baseline resets
+// =========================================================
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  font-family: var(--rm-font);
+}
+
+body {
+  font-family: var(--rm-font) !important;
+  font-size: var(--rm-font-md);
+  color: var(--rm-text);
+  background-color: var(--rm-bg);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Section/page title
+.section-title {
+  font-size: var(--rm-font-lg);
+  font-weight: 700;
+  color: var(--rm-text);
+  letter-spacing: -0.02em;
+}
+
+// =========================================================
+// AR List Popup (standalone popup.html)
+// =========================================================
+
+.popup-root {
+  min-height: 100vh;
+  margin: 0;
+  background-color: var(--rm-surface-2);
+}
+
+.popup-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.popup-ar-card {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  border-radius: var(--rm-radius-xl);
+  box-shadow: 0 4px 24px rgba(9, 9, 11, 0.08);
+  border: 1px solid var(--rm-border);
+  background: var(--rm-surface);
+}
+
+.popup-ar-header {
+  @extend .card-header;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--rm-text);
+  color: var(--rm-text-inverse);
+  border-bottom: none;
+  border-radius: var(--rm-radius-xl) var(--rm-radius-xl) 0 0;
+
+  h6 {
+    margin: 0;
+    font-size: var(--rm-font-md);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  small {
+    display: block;
+    font-size: var(--rm-font-xs);
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  .btn-outline-light {
+    --cui-btn-color: rgba(255, 255, 255, 0.85);
+    --cui-btn-border-color: rgba(255, 255, 255, 0.25);
+    --cui-btn-hover-bg: rgba(255, 255, 255, 0.1);
+    --cui-btn-hover-color: #ffffff;
+    --cui-btn-hover-border-color: rgba(255, 255, 255, 0.5);
+    --cui-btn-padding-y: 0.15rem;
+    --cui-btn-padding-x: 0.45rem;
+    font-size: var(--rm-font-xs);
+    line-height: 1;
+    border-radius: var(--rm-radius-sm);
+  }
+}
+
+.popup-ar-body {
+  padding: 0.85rem 1rem 0.5rem;
+  font-size: var(--rm-font-sm);
+  color: var(--rm-text);
+  background: var(--rm-surface);
+}
+
+.popup-ar-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem 0.75rem;
+  background-color: transparent;
+  border-top: 1px solid var(--rm-border);
+}
+
+.btn-ar-primary {
+  @extend .btn;
+  @extend .btn-sm;
+  background-color: var(--rm-text);
+  border-color: var(--rm-text);
+  color: var(--rm-text-inverse);
+  border-radius: 20px;
+
+  &:hover,
+  &:focus {
+    background-color: #27272a;
+    border-color: #27272a;
+    color: #ffffff;
+  }
+
+  &:disabled,
+  &[disabled] {
+    background-color: var(--rm-surface-3, #f4f4f5);
+    border-color: var(--rm-border, #e4e4e7);
+    color: var(--rm-text-3, #a1a1aa);
+    opacity: 1;
+    pointer-events: none;
+    cursor: not-allowed;
+  }
+}
+
+// =========================================================
+// Shared AR / Claims card + table styles
+// =========================================================
+
+:root {
+  --rev-bg:           var(--rm-surface);
+  --rev-text:         var(--rm-text);
+  --rev-muted:        var(--rm-text-2);
+  --rev-border:       var(--rm-border);
+  --rev-border-strong:var(--rm-border-strong);
+  --rev-row-hover:    var(--rm-hover);
+  --rev-head-bg:      var(--rm-surface-2);
+  --rev-accent:       var(--rm-info);
+}
+
+.rev-card {
+  background: var(--rev-bg);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: var(--rm-radius-lg);
+  box-shadow: var(--rm-shadow-sm);
+  overflow: hidden;
+}
+
+.rev-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background: var(--rev-bg);
+  border-bottom: 1px solid var(--rev-border);
+  color: var(--rev-text);
+
+  .rev-card-title {
+    margin: 0;
+    font-size: var(--rm-font-md);
+    font-weight: 600;
+    color: var(--rm-text);
+    letter-spacing: -0.01em;
+  }
+
+  .btn {
+    font-size: var(--rm-font-xs);
+    padding: 0.3rem 0.75rem;
+    border-radius: var(--rm-radius-pill);
+  }
+}
+
+.rev-card-header .rev-card-title {
+  color: var(--rm-text) !important;
+}
+
+.rev-table-wrapper {
+  padding: 0.75rem 1rem 1rem;
+}
+
+.rev-table {
+  width: 100%;
+  margin: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--rev-bg);
+  color: var(--rev-text);
+  font-size: var(--rm-font-md);
+
+  thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: var(--rev-head-bg);
+    color: var(--rev-muted);
+    font-weight: 600;
+    font-size: var(--rm-font-xs);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid var(--rev-border-strong);
+    white-space: nowrap;
+  }
+
+  tbody td {
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--rev-border);
+    vertical-align: middle;
+    height: 52px;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  tbody tr:hover {
+    background: var(--rev-row-hover);
+  }
+}
+
+.rev-table-link {
+  color: var(--rev-text);
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.12s ease;
+
+  &:hover {
+    color: var(--rm-text);
+    text-decoration: underline;
+    text-decoration-color: var(--rm-border-strong);
+    text-underline-offset: 2px;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--rm-focus-ring);
+    outline-offset: 2px;
+    border-radius: var(--rm-radius-sm);
+  }
+}
+
+.col-owner  { width: 140px; }
+.col-action { width: 160px; }
+.col-claims { width: 110px; }
+
+.filter-summary-cell {
+  max-width: 320px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rev-table--compact {
+  font-size: var(--rm-font-sm);
+
+  thead th { padding: 0.45rem 0.6rem; }
+  tbody td { padding: 0.45rem 0.6rem; height: auto; }
+}
+
+// =========================================================
+// Sidebar collapse — content full width
+// =========================================================
+
+body.sidebar-hidden .sidebar,
+body.sidebar-hide .sidebar,
+body.c-sidebar-hide .c-sidebar,
+body.c-sidebar-hidden .c-sidebar {
+  display: none !important;
+}
+
+body.sidebar-hidden .wrapper,
+body.sidebar-hide .wrapper,
+body.sidebar-hidden .c-wrapper,
+body.sidebar-hide .c-wrapper,
+body.c-sidebar-hide .wrapper,
+body.c-sidebar-hidden .wrapper,
+body.c-sidebar-hide .c-wrapper,
+body.c-sidebar-hidden .c-wrapper,
+body.sidebar-hidden .app-body .main,
+body.sidebar-hide .app-body .main {
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+  width: 100% !important;
+}
+
+body.sidebar-hidden .main,
+body.sidebar-hide .main,
+body.c-sidebar-hide .main,
+body.c-sidebar-hidden .main {
+  margin-left: 0 !important;
+  width: 100% !important;
+}

@@ -1,0 +1,26 @@
+/* src/app/views/collection-trend/collection-trend.component.scss */
+:host {
+  display: block;
+  margin: 1rem 0;
+}
+
+.section-title {
+  margin-bottom: 0.5rem;
+}
+// Base for all radio labels
+.radio-btn {
+  background-color: transparent !important;
+  border-color: #d0d5dd !important;
+  color: #71717a !important;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  padding: 0.3rem 0.7rem;
+}
+
+// Active: near-black fill — consistent with primary button
+.radio-btn.active {
+  background-color: #09090b !important;
+  border-color: #09090b !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}

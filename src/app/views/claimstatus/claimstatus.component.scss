@@ -1,0 +1,1217 @@
+/* ====== YOUR EXISTING STYLES (kept intact) ====== */
+
+::ng-deep table.claim-table {
+  font-size: 0.75rem;
+  margin-bottom: 0;
+}
+
+::ng-deep table.claim-table thead {
+  background-color: var(--rm-surface, #ffffff) !important;
+}
+
+::ng-deep table.claim-table thead th {
+  background-color: var(--rm-surface, #ffffff) !important;
+  color: var(--rm-text-2, #71717a) !important;
+  font-size: 0.6625rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--rm-border, #eaecf0) !important;
+}
+
+::ng-deep table.claim-table th span {
+  font-size: 0.75rem;
+  margin-left: 4px;
+}
+
+.no-wrap {
+  white-space: nowrap;
+}
+
+.badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.85em;
+}
+
+/* ── AR Aging color bands ─────────────────────────────────────────
+   0–30  : green   31–60 : green   61–90 : amber
+   91–120: red     >120  : dark-red
+   ─────────────────────────────────────────────────────────────── */
+
+/* 0-30 days — green */
+th.greenc   { background: transparent !important; color: #059669 !important; font-weight: 600 !important; }
+td.greenc   { background-color: rgba(5, 150, 105, 0.10) !important; color: #065f46 !important; }
+
+/* 31-60 days — green (same as 0-30) */
+th.amberc   { background: transparent !important; color: #059669 !important; font-weight: 600 !important; }
+td.amberc   { background-color: rgba(5, 150, 105, 0.10) !important; color: #065f46 !important; }
+
+/* 61-90 days — amber */
+th.light-redc { background: transparent !important; color: #d97706 !important; font-weight: 600 !important; }
+td.light-redc { background-color: rgba(217, 119, 6, 0.10) !important; color: #92400e !important; }
+
+/* 91-120 days — red */
+th.mid-redc { background: transparent !important; color: #dc2626 !important; font-weight: 600 !important; }
+td.mid-redc { background-color: rgba(220, 38, 38, 0.12) !important; color: #991b1b !important; }
+
+/* 120+ days — dark red */
+th.redc, th.maroonc   { background: transparent !important; color: #b91c1c !important; font-weight: 600 !important; }
+td.redc, td.maroonc   { background-color: rgba(220, 38, 38, 0.18) !important; color: #7f1d1d !important; }
+
+/* Informational blue */
+th.bluec    { background: transparent !important; color: #4f46e5 !important; font-weight: 600 !important; }
+td.bluec    { background-color: rgba(99, 102, 241, 0.04) !important; color: #3730a3 !important; }
+
+/* Neutral range / total column */
+.whitec     { background-color: transparent !important; color: var(--rm-text, #09090b) !important; }
+
+/* Links inside tinted cells */
+.light-redc a,
+.mid-redc a,
+.redc a,
+.maroonc a {
+  color: inherit !important;
+  text-decoration: none;
+}
+.linklike { background:none; border:0; color:var(--rm-text, #09090b); cursor:pointer; text-decoration:underline; text-decoration-color: var(--rm-border-strong, #d1d5db); text-underline-offset: 2px; padding:0; font:inherit; }
+
+dialog.rs-modal { width: min(1000px, 96vw); max-width: 1000px; padding:0; border:0; border-radius:12px; }
+dialog.rs-modal::backdrop { background: rgba(0,0,0,.55); }
+.rs-head { display:flex; align-items:center; justify-content:space-between; padding:10px 14px; border-bottom:1px solid #e5e7eb; background:#fff; position:sticky; top:0; z-index:1; }
+.rs-close { border:0; background:transparent; font-size:20px; line-height:1; cursor:pointer; }
+.rs-body { height: 75vh; }
+.rs-body iframe { width:100%; height:100%; border:0; display:block; }
+
+/* ====== ADD-ONS: COMPACT WITHOUT REGRESSION ====== */
+
+/* 1) Claims table: tighter cells + sticky header */
+::ng-deep table.claim-table > :not(caption) > * > * {
+  padding: 0.2rem 0.4rem;
+  line-height: 1.2;
+}
+::ng-deep table.claim-table tbody tr {
+  height: 32px;
+}
+::ng-deep table.claim-table thead th {
+  position: sticky;               /* header stays visible while scrolling */
+  top: 0;
+  z-index: 2;
+}
+
+/* 2) Claims table: align numeric columns (S2P, Charge, Adj, PR, Expected, Paid, Pend) */
+::ng-deep table.claim-table thead th:nth-child(6),
+::ng-deep table.claim-table thead th:nth-child(8),
+::ng-deep table.claim-table thead th:nth-child(9),
+::ng-deep table.claim-table thead th:nth-child(10),
+::ng-deep table.claim-table thead th:nth-child(11),
+::ng-deep table.claim-table thead th:nth-child(12),
+::ng-deep table.claim-table thead th:nth-child(13),
+::ng-deep table.claim-table tbody td:nth-child(6),
+::ng-deep table.claim-table tbody td:nth-child(8),
+::ng-deep table.claim-table tbody td:nth-child(9),
+::ng-deep table.claim-table tbody td:nth-child(10),
+::ng-deep table.claim-table tbody td:nth-child(11),
+::ng-deep table.claim-table tbody td:nth-child(12),
+::ng-deep table.claim-table tbody td:nth-child(13) {
+  text-align: right !important;
+  font-variant-numeric: tabular-nums; /* clean column alignment */
+}
+
+/* 3) Truncate long payer names (used by <td class="truncate">) */
+.truncate {
+  max-width: 12ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 4) Slightly smaller linklike buttons in dense table */
+.linklike { font-size: 0.78rem; }
+
+/* 5) AR Aging grids in cards: compact + numeric alignment (right) */
+::ng-deep .card .table.table-sm.align-middle.mb-0 {
+  font-size: 0.8125rem;
+}
+::ng-deep .card .table.table-sm.align-middle.mb-0 > :not(caption) > * > * {
+  padding: 0.2rem 0.5rem;
+  line-height: 1.2;
+}
+/* align all numeric cells except the first "Range" column */
+::ng-deep .card .table.table-sm.align-middle.mb-0 th:not(:first-child),
+::ng-deep .card .table.table-sm.align-middle.mb-0 td:not(:first-child) {
+  text-align: right !important;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Total row — visible grey */
+::ng-deep .card .table.table-sm.align-middle.mb-0 tr.table-light td {
+  background-color: rgba(0, 0, 0, 0.06) !important;
+  color: var(--rm-text, #09090b) !important;
+  font-weight: 600;
+  border-top: 1px solid var(--rm-border, #eaecf0) !important;
+}
+
+/* 6) Card body padding — consistent breathing room */
+::ng-deep .card .card-body { padding: 0.875rem 1.25rem; }
+
+/* AR aging card specifically — tighter padding to fit the grid */
+::ng-deep .claims-section .card .card-body { padding: 0.75rem 1rem; }
+
+
+@import "bootstrap-icons/font/bootstrap-icons.css";
+.help-icon--badge {
+  background: var(--rm-surface-3, #f4f4f5);
+  color: var(--rm-text-2, #71717a);
+  width: 32px; height: 32px; border-radius: 999px;
+  border: 1px solid var(--rm-border, #e4e4e7);
+}
+
+/* Size & accessibility */
+.help-icon {
+  display:inline-flex; align-items:center; justify-content:center;
+  border:0; background:transparent; cursor:pointer; padding:0;
+  vertical-align:middle; line-height:1;
+  font-size: 1.5rem; /* bigger glyph */
+}
+
+/* IMPORTANT: don’t stretch font-icons */
+.help-icon i { width:auto !important; height:auto !important; }
+
+/* (Optional) keep SVGs sized correctly too */
+.help-icon svg { width:1em; height:1em; }
+.help-icon--lg { font-size: 1.333rem; }
+td.nowrap-cell {
+  white-space: nowrap;     // keep number + icon on one line
+  /* optional: keep it tight and right-aligned */
+  // text-align: right;
+}
+.toast-host {
+  position: fixed;
+  top: 72px;
+  right: 18px;
+  z-index: 9999;
+  width: min(420px, 92vw);
+}
+
+.toast .toast-header {
+  opacity: 0.95;
+}
+
+/* =========================================================
+   Header: inline List Name (saved AR Follow-Up List view)
+   ========================================================= */
+.list-name-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.15rem 0.5rem;
+  border: 1px solid var(--rm-border, #e4e4e7);
+  border-radius: 999px;
+  background: var(--rm-surface-2, #fafafa);
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.list-name-label {
+  opacity: 0.9;
+  font-weight: 600;
+}
+
+.list-name-value {
+  font-weight: 600;
+}
+
+.form-check {
+  margin-right: 0;
+}
+.rs-update-icon{
+  font-size: calc(1.15rem + 1px);  /* 1px bigger */
+}
+
+/* ===== Update Status modal (compact) ===== */
+dialog.rs-modal.rs-modal--sm {
+  width: min(560px, 96vw);
+  max-width: 560px;
+}
+
+.rs-form-body {
+  padding: 12px 14px;
+}
+
+.rs-form-meta {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin-bottom: 10px;
+}
+
+.rs-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 12px;
+}
+
+.rs-update-icon {
+  cursor: pointer;
+  opacity: 0.85;
+  transition: opacity 120ms ease, transform 120ms ease;
+}
+
+.rs-update-icon:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   SAILU Drawer Dialogs (right-side, like your "Good UI" screen)
+   ========================================================= */
+
+/* Backdrop for native <dialog> */
+::ng-deep dialog.sailu-drawer::backdrop {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+/* Drawer shell (FORCED RIGHT + another 20% wider) */
+::ng-deep dialog.sailu-drawer {
+  position: fixed;
+  top: 0;
+
+  /* force right alignment (prevents left anchoring) */
+  right: 0 !important;
+  left: auto !important;
+  bottom: 0;
+
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+
+  border: 0;
+  border-radius: 0;
+
+  /* was 504px -> +20% = ~605px */
+  width: 605px;
+  max-width: 96vw;
+
+  background: var(--rm-surface, #ffffff);
+  overflow: hidden;
+
+  box-shadow: -8px 0 24px rgba(9, 9, 11, 0.08);
+  transform: translateX(0); /* end state */
+}
+
+/* Wider drawer for the PDF/guide (was 912px -> +20% = ~1094px) */
+::ng-deep dialog.sailu-drawer.sailu-drawer--guide {
+  width: 1094px;
+  max-width: 96vw;
+}
+
+/* Slightly narrower drawer for the form (was 552px -> +20% = ~662px) */
+::ng-deep dialog.sailu-drawer.sailu-drawer--sm {
+  width: 662px;
+  max-width: 96vw;
+}
+
+/* Slide-in animation */
+::ng-deep dialog.sailu-drawer[open] {
+  animation: sailuSlideIn 180ms ease-out;
+}
+
+@keyframes sailuSlideIn {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
+/* Inner layout */
+::ng-deep .sailu-drawer-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Header */
+::ng-deep .sailu-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 12px 14px;
+  background: #ffffff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+::ng-deep .sailu-drawer-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+::ng-deep .sailu-brand {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.55);
+}
+
+::ng-deep .sailu-brand-strong {
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+::ng-deep .sailu-drawer-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.9);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+::ng-deep .sailu-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Icon buttons (close/settings style) */
+::ng-deep .sailu-icon-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  background: #fff;
+
+  display: grid;
+  place-items: center;
+
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+
+  transition: background 120ms ease, transform 120ms ease;
+}
+
+::ng-deep .sailu-icon-btn:hover {
+  background: rgba(0, 0, 0, 0.03);
+  transform: translateY(-1px);
+}
+
+/* Body */
+::ng-deep .sailu-drawer-body {
+  flex: 1;
+  overflow: auto;
+  padding: 14px;
+}
+
+/* Iframe mode (no padding) */
+::ng-deep .sailu-drawer-body.sailu-drawer-body--iframe {
+  padding: 0;
+}
+
+::ng-deep .sailu-drawer-body.sailu-drawer-body--iframe iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+/* Form meta + actions */
+::ng-deep .sailu-form-meta {
+  font-size: 0.80rem;
+  color: #64748b;
+  margin-bottom: 10px;
+}
+
+::ng-deep .sailu-form-grid .form-label {
+  color: rgba(0, 0, 0, 0.65);
+  font-weight: 600;
+}
+
+/* Keep actions pinned to bottom when content is short */
+::ng-deep .sailu-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* Mobile: full width */
+@media (max-width: 576px) {
+  ::ng-deep dialog.sailu-drawer,
+  ::ng-deep dialog.sailu-drawer.sailu-drawer--guide,
+  ::ng-deep dialog.sailu-drawer.sailu-drawer--sm {
+    width: 100vw;
+    max-width: 100vw;
+  }
+}
+
+/* Status history table (Update Status drawer) */
+::ng-deep .sailu-history {
+  margin-top: 12px;
+}
+
+::ng-deep .sailu-history-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: rgba(0, 0, 0, 0.55);
+  margin: 0 0 8px;
+}
+
+::ng-deep .sailu-history-wrap {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.65);
+  overflow: auto;
+}
+
+::ng-deep .sailu-history-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 520px; /* wrapper will scroll on small width */
+}
+
+::ng-deep .sailu-history-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  text-align: left;
+
+  padding: 10px 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.70);
+
+  background: #ffffff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+::ng-deep .sailu-history-table tbody td {
+  padding: 10px 10px;
+  font-size: 0.78rem;
+  color: rgba(0, 0, 0, 0.78);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  vertical-align: top;
+}
+
+::ng-deep .sailu-history-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+::ng-deep .sailu-history-table tbody tr:hover td {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+
+/* Attachments column (Status History) */
+::ng-deep .sailu-muted {
+  color: rgba(0, 0, 0, 0.45);
+}
+
+::ng-deep .sailu-history-att-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 220px;
+}
+
+::ng-deep .sailu-history-att {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.01);
+}
+
+::ng-deep .sailu-history-att-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+::ng-deep .sailu-history-att-size {
+  flex: 0 0 auto;
+  font-size: 0.72rem;
+  color: rgba(0, 0, 0, 0.55);
+}
+
+::ng-deep .sailu-history-att-del {
+  flex: 0 0 auto;
+  border: 0;
+  background: transparent;
+  padding: 2px 4px;
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+::ng-deep .sailu-notes {
+  resize: none;
+}
+
+::ng-deep .sailu-notes-help {
+  margin-top: 4px;
+  font-size: 0.72rem;
+  color: rgba(0, 0, 0, 0.55);
+  text-align: right;
+}
+
+
+/* ===========================
+   Attachments (Update Status)
+   =========================== */
+::ng-deep .sailu-icon-btn.sailu-icon-btn--sm {
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+::ng-deep .sailu-attachments {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px dashed rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.015);
+}
+
+::ng-deep .sailu-attachments-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+::ng-deep .sailu-attachments-empty {
+  margin-top: 6px;
+  font-size: 0.80rem;
+  color: rgba(0, 0, 0, 0.55);
+}
+
+::ng-deep .sailu-attachments-list {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+::ng-deep .sailu-attachments-item {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+::ng-deep .sailu-attachments-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.86rem;
+  color: rgba(0, 0, 0, 0.82);
+}
+
+::ng-deep .sailu-attachments-size {
+  font-size: 0.78rem;
+  color: rgba(0, 0, 0, 0.55);
+  white-space: nowrap;
+}
+
+::ng-deep .sailu-attach-remove {
+  width: 28px;
+  height: 28px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  background: #fff;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  line-height: 1;
+}
+
+::ng-deep .sailu-attach-remove:hover {
+  background: rgba(0, 0, 0, 0.03);
+}
+/* Make Update Status drawer/dialog ~1cm wider */
+:host ::ng-deep .sailu-drawer.sailu-drawer--sm {
+  width: 900px !important;     /* was ~662px */
+  max-width: 900px !important;
+}
+
+.claim-table td.truncate {
+  max-width: 220px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sailu-history-att-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.sailu-history-att-link:hover {
+  text-decoration: underline;
+}
+.claim-table tbody tr.claim-row-returned > td {
+  background-color: rgba(5, 150, 105, 0.06) !important;
+}
+
+.claim-table.table-hover tbody tr.claim-row-returned:hover > td {
+  background-color: rgba(5, 150, 105, 0.10) !important;
+}
+/* =========================================================
+   Page-level header — title left, actions right
+   Mirrors the ar-lists reference layout pattern
+   ========================================================= */
+.page-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.page-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.page-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--rm-text, #09090b);
+  margin: 0;
+  line-height: 1.25;
+}
+
+.page-subtitle {
+  font-size: 0.8125rem;
+  color: var(--rm-text-2, #71717a);
+  margin: 0;
+  font-weight: 400;
+}
+
+/* =========================================================
+   Consistent section gap — 1.5rem between every page section
+   ========================================================= */
+.claims-pagination {
+  margin-bottom: 1.5rem;
+  font-size: 0.8125rem;
+  color: var(--rm-text-2, #71717a);
+}
+
+.claims-section {
+  margin-bottom: 1.5rem;
+}
+
+/* =========================================================
+   Filter toolbar — flat, no shadow (sits above table panel)
+   ========================================================= */
+.ar-filter-card {
+  background: var(--rm-surface, #ffffff);
+  border: 1px solid var(--rm-border, #eaecf0);
+  border-radius: 10px;
+  box-shadow: none;
+  margin-bottom: 1.5rem;
+}
+
+.ar-filter-body {
+  padding: 0.55rem 0.85rem;
+}
+
+/* =========================================================
+   Table panel — the floating card that holds the data grid
+   ========================================================= */
+.claims-table-panel {
+  background: var(--rm-surface, #ffffff);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+  box-shadow: var(--rm-shadow-sm, 0 1px 3px rgba(16,24,40,0.10));
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+}
+
+/* =========================================================
+   Filter toolbar — compact horizontal layout
+   ========================================================= */
+.filter-toolbar-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+
+  &--search { flex: 1 1 180px; }
+  &--payers { min-width: 110px; }
+  &--reset {
+    justify-content: flex-end;
+    padding-bottom: 0.05rem;
+  }
+}
+
+.filter-label {
+  font-size: 0.67rem;
+  font-weight: 600;
+  color: var(--rm-text, #09090b);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.filter-range {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+
+  input[type='number'] { width: 65px; }
+}
+
+.filter-range-sep {
+  color: var(--rm-text-3, #a1a1aa);
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+.filter-toggles-row {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  padding: 0.35rem 0 0.1rem;
+  
+  margin-top: 0.4rem;
+
+  .filter-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+
+    .form-check-input { margin-top: 0; }
+
+    .form-check-label {
+      font-size: 0.75rem;
+      color: var(--rm-text-2, #71717a);
+      white-space: nowrap;
+      cursor: pointer;
+    }
+  }
+}
+/* =========================================================
+   AR follow-up enrichment columns in Claim Status table
+   Keep original purple table header style
+   ========================================================= */
+
+/* Claim table header — white, muted uppercase */
+::ng-deep table.claim-table thead,
+::ng-deep table.claim-table thead tr,
+::ng-deep table.claim-table thead th {
+  background-color: var(--rm-surface, #ffffff) !important;
+  color: var(--rm-text-2, #71717a) !important;
+}
+
+::ng-deep table.claim-table thead th {
+  font-size: 0.6625rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  vertical-align: middle;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--rm-border, #eaecf0) !important;
+  position: sticky;
+  top: 0;
+  z-index: 3;
+}
+
+::ng-deep table.claim-table thead th.sortable {
+  cursor: pointer;
+}
+
+::ng-deep table.claim-table th span {
+  font-size: 0.75rem;
+  margin-left: 4px;
+  color: #ffffff !important;
+}
+
+/* Keep AR header columns same as other headers */
+::ng-deep table.claim-table thead th.ar-followup-list-col,
+::ng-deep table.claim-table thead th.ar-followup-status-col,
+::ng-deep table.claim-table thead th.ar-followup-action-col,
+::ng-deep table.claim-table thead th.ar-followup-notes-col,
+::ng-deep table.claim-table thead th.ar-followup-count-col {
+  background-color: var(--rm-surface, #ffffff) !important;
+  color: var(--rm-text-2, #71717a) !important;
+}
+
+/* Compact AR cells */
+::ng-deep table.claim-table .ar-followup-status-cell,
+::ng-deep table.claim-table .ar-followup-action-cell,
+::ng-deep table.claim-table .ar-followup-list-cell,
+::ng-deep table.claim-table .ar-followup-notes-cell {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+}
+
+/* Width control */
+::ng-deep table.claim-table .ar-followup-status-cell {
+  max-width: 85px;
+}
+
+::ng-deep table.claim-table .ar-followup-action-cell {
+  max-width: 115px;
+}
+
+::ng-deep table.claim-table .ar-followup-list-cell {
+  max-width: 95px;
+}
+
+::ng-deep table.claim-table .ar-followup-notes-cell {
+  max-width: 150px;
+}
+
+::ng-deep table.claim-table .ar-followup-count-cell {
+  min-width: 46px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+/* AR List chip */
+.ar-list-chip {
+  display: inline-block;
+  max-width: 90px;
+  padding: 0.05rem 0.35rem;
+  border-radius: 999px;
+  border: 1px solid var(--rm-border, #e4e4e7);
+  background: var(--rm-surface-2, #fafafa);
+  color: var(--rm-text, #09090b);
+  font-size: 0.72rem;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.ar-list-chip-empty {
+  border-color: var(--rm-border, #e4e4e7);
+  background: transparent;
+  color: var(--rm-text-3, #a1a1aa);
+}
+
+/* General table body compact style */
+::ng-deep table.claim-table tbody td {
+  font-size: 0.78rem;
+  vertical-align: middle;
+}
+/* =========================================================
+   Add selected claims to existing AR Follow-up List
+   ========================================================= */
+.add-existing-list-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  white-space: nowrap;
+}
+
+.add-selected-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.22);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+::ng-deep table.claim-table .add-select-col,
+::ng-deep table.claim-table .add-select-cell {
+  width: 38px;
+  min-width: 38px;
+  max-width: 38px;
+  text-align: center !important;
+  vertical-align: middle;
+}
+
+.claim-select-checkbox {
+  width: 0.95rem;
+  height: 0.95rem;
+  cursor: pointer;
+}
+
+.already-in-list-mark {
+  color: #94a3b8;
+  font-weight: 700;
+  cursor: not-allowed;
+}
+
+.add-to-ar-list-dialog .sailu-drawer-content {
+  max-width: 520px;
+}
+
+.add-list-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.65rem 0.75rem;
+  margin-bottom: 0.75rem;
+  border: 1px solid var(--rm-border, #e4e4e7);
+  border-radius: 0.75rem;
+  background: var(--rm-surface-2, #fafafa);
+}
+
+.add-list-summary-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.25rem;
+  height: 2.25rem;
+  padding: 0 0.5rem;
+  border-radius: 999px;
+  background: var(--rm-text, #09090b);
+  color: var(--rm-text-inverse, #ffffff);
+  font-weight: 700;
+}
+
+.add-list-summary-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.add-list-summary-help {
+  font-size: 0.76rem;
+  color: #64748b;
+}
+
+.selected-claim-preview {
+  padding: 0.55rem 0.65rem;
+  margin-top: 0.5rem;
+  border: 1px solid rgba(15, 23, 42, 0.10);
+  border-radius: 0.65rem;
+  background: rgba(15, 23, 42, 0.02);
+}
+
+.selected-claim-preview-title {
+  margin-bottom: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #475569;
+}
+
+.selected-claim-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.selected-claim-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.1rem 0.45rem;
+  border: 1px solid var(--rm-border, #e4e4e7);
+  border-radius: 999px;
+  background: var(--rm-surface, #ffffff);
+  color: var(--rm-text, #09090b);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.selected-claim-chip-more {
+  border-color: rgba(100, 116, 139, 0.25);
+  color: #475569;
+}
+
+
+/* =========================================================
+   Remove selected claims from existing AR Follow-up List
+   ========================================================= */
+.remove-existing-list-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  white-space: nowrap;
+}
+
+.remove-selected-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  background: rgba(220, 53, 69, 0.12);
+  color: #b42318;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.remove-from-ar-list-dialog .sailu-drawer-content {
+  max-width: 520px;
+}
+
+.remove-list-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.65rem 0.75rem;
+  margin-bottom: 0.75rem;
+  border: 1px solid var(--rm-danger-bg, #fef2f2);
+  border-left: 3px solid var(--rm-danger, #dc2626);
+  border-radius: 0.75rem;
+  background: var(--rm-danger-bg, #fef2f2);
+}
+
+.remove-list-summary-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.25rem;
+  height: 2.25rem;
+  padding: 0 0.5rem;
+  border-radius: 999px;
+  background: var(--rm-danger, #dc2626);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.remove-list-summary-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.remove-list-summary-help {
+  font-size: 0.76rem;
+  color: #64748b;
+}
+
+.selected-claim-chip-remove {
+  border-color: rgba(220, 53, 69, 0.25);
+  color: #b42318;
+}
+
+/* =========================================================
+   Dark mode overrides — [data-coreui-theme="dark"]
+   ========================================================= */
+
+// AR Aging cell text: swap dark shades → light shades for dark backgrounds
+:host-context([data-coreui-theme="dark"]) {
+  td.greenc  { color: #6ee7b7 !important; background-color: rgba(5, 150, 105, 0.15) !important; }
+  td.amberc  { color: #6ee7b7 !important; background-color: rgba(5, 150, 105, 0.15) !important; }
+  td.light-redc { color: #fcd34d !important; background-color: rgba(217, 119, 6, 0.15) !important; }
+  td.mid-redc   { color: #fca5a5 !important; background-color: rgba(220, 38, 38, 0.15) !important; }
+  td.redc, td.maroonc { color: #f87171 !important; background-color: rgba(220, 38, 38, 0.18) !important; }
+  td.bluec   { color: #a5b4fc !important; background-color: rgba(99, 102, 241, 0.12) !important; }
+
+  // th header colors — slightly lighter reds for dark bg readability
+  th.redc, th.maroonc { color: #f87171 !important; }
+  th.bluec  { color: #a5b4fc !important; }
+
+  // Total row in AR Aging — white alpha instead of black alpha
+  ::ng-deep .card .table.table-sm.align-middle.mb-0 tr.table-light td {
+    background-color: rgba(255, 255, 255, 0.07) !important;
+    color: var(--rm-text, #fafafa) !important;
+    border-top-color: var(--rm-border, #27272a) !important;
+  }
+
+  // Claims table total row (tfoot)
+  ::ng-deep .table .table-light td,
+  ::ng-deep .table .table-light th {
+    background-color: rgba(255, 255, 255, 0.06) !important;
+    color: var(--rm-text, #fafafa) !important;
+  }
+}
+
+// Sailu drawer — dark mode surface backgrounds
+[data-coreui-theme="dark"] ::ng-deep .sailu-drawer-header {
+  background: var(--rm-surface-2, #27272a) !important;
+  border-bottom-color: var(--rm-border, #27272a) !important;
+}
+[data-coreui-theme="dark"] ::ng-deep .sailu-drawer-title,
+[data-coreui-theme="dark"] ::ng-deep .sailu-brand-strong {
+  color: var(--rm-text, #fafafa) !important;
+}
+[data-coreui-theme="dark"] ::ng-deep .sailu-brand {
+  color: var(--rm-text-2, #a1a1aa) !important;
+}
+[data-coreui-theme="dark"] ::ng-deep .sailu-icon-btn {
+  background: var(--rm-surface-3, #3f3f46) !important;
+  border-color: var(--rm-border-strong, #3f3f46) !important;
+  color: var(--rm-text, #fafafa) !important;
+}
+[data-coreui-theme="dark"] ::ng-deep .sailu-history-wrap {
+  background: var(--rm-surface-2, #27272a) !important;
+  border-color: var(--rm-border, #27272a) !important;
+}
+[data-coreui-theme="dark"] ::ng-deep .sailu-history-table thead th {
+  background: var(--rm-surface-2, #27272a) !important;
+  color: var(--rm-text-2, #a1a1aa) !important;
+  border-bottom-color: var(--rm-border, #27272a) !important;
+}
+[data-coreui-theme="dark"] ::ng-deep .sailu-history-table tbody td {
+  color: var(--rm-text, #fafafa) !important;
+  border-bottom-color: var(--rm-border, #27272a) !important;
+}
+[data-coreui-theme="dark"] ::ng-deep .sailu-history-table tbody tr:hover td {
+  background: var(--rm-hover, #27272a) !important;
+}
+[data-coreui-theme="dark"] ::ng-deep .sailu-history-att {
+  background: var(--rm-surface-3, #3f3f46) !important;
+  border-color: var(--rm-border, #27272a) !important;
+}
+[data-coreui-theme="dark"] ::ng-deep .sailu-history-att-name {
+  color: var(--rm-text, #fafafa) !important;
+}
+[data-coreui-theme="dark"] ::ng-deep .sailu-history-att-size {
+  color: var(--rm-text-3, #71717a) !important;
+}
+[data-coreui-theme="dark"] ::ng-deep .sailu-attachments {
+  border-color: var(--rm-border, #27272a) !important;
+  background: rgba(255,255,255,0.02) !important;
+}
+[data-coreui-theme="dark"] ::ng-deep .sailu-attachments-item {
+  background: var(--rm-surface-2, #27272a) !important;
+  border-color: var(--rm-border, #27272a) !important;
+}
+[data-coreui-theme="dark"] ::ng-deep .sailu-attachments-name {
+  color: var(--rm-text, #fafafa) !important;
+}
+[data-coreui-theme="dark"] ::ng-deep .sailu-attachments-size,
+[data-coreui-theme="dark"] ::ng-deep .sailu-attachments-empty {
+  color: var(--rm-text-3, #71717a) !important;
+}
+[data-coreui-theme="dark"] ::ng-deep .sailu-attach-remove {
+  background: var(--rm-surface-3, #3f3f46) !important;
+  border-color: var(--rm-border, #27272a) !important;
+  color: var(--rm-text, #fafafa) !important;
+}

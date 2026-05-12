@@ -1,0 +1,209 @@
+<div class="resolution-report-page">
+  <div class="card report-card">
+    <div class="card-body report-body">
+      <div class="report-header d-flex align-items-start justify-content-between flex-wrap gap-2">
+        <div>
+          <div class="report-heading">Payments and Resolution Report</div>
+        </div>
+
+        <div class="report-pill" *ngIf="summaryRows.length">
+          {{ selectedUserLabel }} · {{ totalTouches | number:'1.0-0' }} touches
+        </div>
+      </div>
+
+      <form [formGroup]="filterForm" class="filter-row compact-filter-row" (ngSubmit)="loadReport()">
+        <div class="filter-item">
+          <label>From Date</label>
+          <input type="date" class="form-control date-control" formControlName="fromDate" />
+        </div>
+
+        <div class="filter-item">
+          <label>To Date</label>
+          <input type="date" class="form-control date-control" formControlName="toDate" />
+        </div>
+
+        <div class="filter-item">
+          <label>Claim ID</label>
+          <input type="text" class="form-control small-control" formControlName="claimId" placeholder="Optional" />
+        </div>
+
+        <div class="filter-item">
+          <label>Visit ID</label>
+          <input type="text" class="form-control visit-control" formControlName="visitFid" placeholder="Optional" />
+        </div>
+
+        <div class="report-action-group">
+          <button type="submit" class="btn btn-primary">Run Report</button>
+          <button type="button" class="btn btn-outline-secondary" (click)="resetFilters()">Reset</button>
+          <button type="button" class="btn btn-outline-secondary" (click)="toggleDetails()">
+            {{ showDetails ? 'Hide Details' : 'Show Details' }}
+          </button>
+        </div>
+      </form>
+
+      <div *ngIf="errorMessage" class="alert alert-danger mt-3 mb-0">
+        {{ errorMessage }}
+      </div>
+
+      <div *ngIf="loading" class="empty-state mt-3 p-3 text-center">
+        Loading resolution report...
+      </div>
+
+      <ng-container *ngIf="!loading">
+        <div class="metric-grid" *ngIf="summaryRows.length">
+          <div class="metric-card">
+            <div class="metric-label">Worked AR $</div>
+            <div class="metric-value">{{ totalWorkedAr | currency:'USD':'symbol':'1.2-2' }}</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-label">Resolved $</div>
+            <div class="metric-value">{{ totalResolved | currency:'USD':'symbol':'1.2-2' }}</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-label">Payments Posted</div>
+            <div class="metric-value">{{ totalPayments | currency:'USD':'symbol':'1.2-2' }}</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-label">Touch Count</div>
+            <div class="metric-value">{{ totalTouches | number:'1.0-0' }}</div>
+          </div>
+        </div>
+
+        <div class="section-block summary-block" *ngIf="summaryRows.length">
+          <div class="section-title d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <span>Consolidated Report</span>
+            <span class="section-hint">Click a user to filter detail rows</span>
+          </div>
+
+          <div class="report-table-wrap summary-table-wrap">
+            <table class="table report-table summary-table">
+              <thead>
+                <tr>
+                  <th>User Name</th>
+                  <th class="text-end">Worked AR $</th>
+                  <th class="text-end">Resolved $</th>
+                  <th class="text-end">Payments Posted</th>
+                  <th class="text-end">Touch Count</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr
+                  *ngFor="let row of summaryRows; trackBy: trackByUserName"
+                  [class.row-selected]="selectedUser === row.userName"
+                  (click)="selectUser(row.userName)"
+                >
+                  <td>{{ row.userName }}</td>
+                  <td class="text-end">{{ row.workedArDollars | currency:'USD':'symbol':'1.2-2' }}</td>
+                  <td class="text-end">{{ row.resolvedDollars | currency:'USD':'symbol':'1.2-2' }}</td>
+                  <td class="text-end">{{ row.paymentsPosted | currency:'USD':'symbol':'1.2-2' }}</td>
+                  <td class="text-end">{{ row.touchCount | number:'1.0-0' }}</td>
+                </tr>
+              </tbody>
+
+              <tfoot>
+                <tr>
+                  <th>Total</th>
+                  <th class="text-end">{{ totalWorkedAr | currency:'USD':'symbol':'1.2-2' }}</th>
+                  <th class="text-end">{{ totalResolved | currency:'USD':'symbol':'1.2-2' }}</th>
+                  <th class="text-end">{{ totalPayments | currency:'USD':'symbol':'1.2-2' }}</th>
+                  <th class="text-end">{{ totalTouches | number:'1.0-0' }}</th>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+
+        <div class="section-block detail-block" *ngIf="showDetails && detailRows.length">
+          <div class="section-title detail-toolbar">
+            <div>
+              Detail Report
+              <span class="section-hint">({{ filteredDetails.length | number:'1.0-0' }} rows)</span>
+            </div>
+
+            <div class="detail-controls">
+              <select class="form-select user-filter" [(ngModel)]="selectedUser" [ngModelOptions]="{ standalone: true }">
+                <option value="ALL">All users</option>
+                <option *ngFor="let user of userOptions" [value]="user">{{ user }}</option>
+              </select>
+
+              <input
+                type="text"
+                class="form-control detail-search"
+                [(ngModel)]="searchText"
+                [ngModelOptions]="{ standalone: true }"
+                placeholder="Search claim, visit, patient, action"
+              />
+
+              <button type="button" class="btn btn-outline-secondary" (click)="clearUserFilter()" *ngIf="selectedUser !== 'ALL'">
+                Clear User
+              </button>
+
+              <button type="button" class="btn btn-outline-secondary" (click)="exportDetailsCsv()" [disabled]="!filteredDetails.length">
+                Export CSV
+              </button>
+            </div>
+          </div>
+
+          <div class="report-table-wrap detail-table-wrap">
+            <table class="table report-table detail-table">
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Visit ID</th>
+                  <th>Claim ID</th>
+                  <th>Carrier</th>
+                  <th>Patient</th>
+                  <th>DOS</th>
+                  <th>Touch Date</th>
+                  <th>Next Touch</th>
+                  <th>Action</th>
+                  <th class="text-end">Worked AR Base</th>
+                  <th class="text-end">Resolved $</th>
+                  <th class="text-end">Payments</th>
+                  <th class="text-end">Writeoffs</th>
+                  <th class="text-end">AR After Touch</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let row of filteredDetails; trackBy: trackByDetail">
+                  <td>
+                  
+                    <div class="muted-text">{{ row.userLogin }}</div>
+                  </td>
+                  <td>{{ row.visitId }}</td>
+               <td>{{ row.claimId || '-' }}</td>
+                  <td>{{ row.carrierCode || '-' }}</td>
+                  <td class="patient-cell">{{ row.patientName || '-' }}</td>
+                  <td>
+                    <div class="dos-cell">{{ row.firstDos || '-' }}</div>
+                   <!-- <div class="muted-text">{{ row.lastDos || '-' }}</div> -->
+                  </td>
+                  <td>{{ row.touchDateTime | date:'MM/dd/yyyy' }}</td>
+                  <!--  <td>{{ row.touchDateTime | date:'MM/dd/yyyy HH:mm' }}</td>-->
+                  <td>{{ row.nextTouchDateTime ? (row.nextTouchDateTime | date:'MM/dd/yyyy') : 'Open' }}</td>
+               <td class="action-cell" [title]="row.touchNote || row.touchAction || ''">
+  {{ row.touchAction ? (row.touchAction | slice:0:15) + (row.touchAction.length > 15 ? '...' : '') : '-' }}
+</td>
+                  <td class="text-end">{{ row.workedArBase | currency:'USD':'symbol':'1.2-2' }}</td>
+                  <td class="text-end resolved-cell">{{ row.resolvedDollars | currency:'USD':'symbol':'1.2-2' }}</td>
+                  <td class="text-end">{{ row.paymentsPosted | currency:'USD':'symbol':'1.2-2' }}</td>
+                  <td class="text-end">{{ row.insuranceWriteoffs | currency:'USD':'symbol':'1.2-2' }}</td>
+                  <td class="text-end">{{ row.pendingArAtNextTouch | currency:'USD':'symbol':'1.2-2' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div *ngIf="!summaryRows.length && !detailRows.length && !errorMessage" class="empty-state mt-3 p-3 text-center">
+          No resolution report data found for the selected filters.
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

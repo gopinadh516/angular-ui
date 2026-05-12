@@ -1,0 +1,106 @@
+<div class="dashboard-container">
+
+  <!-- Claim Processing Queue -->
+  <div class="dash-section">
+    <app-claimstatus
+      [claimStatuses]="claimStatusData"
+      headerTitle="AR Center">
+    </app-claimstatus>
+  </div>
+
+  <!-- 4 KPI Widgets -->
+  <div class="dash-section">
+    <app-widgets-dropdown></app-widgets-dropdown>
+  </div>
+
+  <!-- Denial Pareto chart -->
+  <c-row class="dash-section">
+    <c-col xs="12">
+      <c-card class="dash-card">
+        <c-card-header>
+          <span class="dash-card-title">Top Denial Reasons</span>
+        </c-card-header>
+        <c-card-body class="p-3">
+          <app-pareto-chart></app-pareto-chart>
+        </c-card-body>
+      </c-card>
+    </c-col>
+  </c-row>
+
+  <!-- First Pass Rate + Revenue Distribution -->
+  <c-row class="dash-section gy-4">
+    <c-col xs="12" md="6">
+      <c-card class="dash-card">
+        <c-card-header>
+          <span class="dash-card-title">First Pass Rate by Payer</span>
+        </c-card-header>
+        <c-card-body class="p-4">
+          <app-first-pass-rate></app-first-pass-rate>
+        </c-card-body>
+      </c-card>
+    </c-col>
+    <c-col xs="12" md="6">
+      <c-card class="dash-card">
+        <c-card-header>
+          <span class="dash-card-title">Revenue Distribution by Payer</span>
+        </c-card-header>
+        <c-card-body class="p-4">
+          <app-revenue-distribution></app-revenue-distribution>
+        </c-card-body>
+      </c-card>
+    </c-col>
+  </c-row>
+
+  <!-- Top 10 Procedure Codes -->
+  <c-row class="dash-section gy-4">
+    <c-col xs="12" md="6">
+      <c-card class="dash-card">
+        <c-card-header>
+          <span class="dash-card-title">Top 10 Procedure Codes</span>
+          <span class="dash-card-subtitle">By occurrence count</span>
+        </c-card-header>
+        <c-card-body class="p-3">
+          <app-top-procedure-bar-chart></app-top-procedure-bar-chart>
+        </c-card-body>
+      </c-card>
+    </c-col>
+    <c-col xs="12" md="6">
+      <c-card class="dash-card">
+        <c-card-header>
+          <span class="dash-card-title">Procedure Code Reference</span>
+          <span class="dash-card-subtitle">Top 10 billed codes</span>
+        </c-card-header>
+        <c-card-body class="p-0">
+          <div class="proc-table-wrap">
+            <table class="table dash-table mb-0">
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td class="code-cell">HC^99213</td><td>Established patient visit (~15 min), straightforward</td></tr>
+                <tr><td class="code-cell">HC^99214</td><td>Established patient visit (~25 min), moderate complexity</td></tr>
+                <tr><td class="code-cell">HC^99214^25</td><td>99214 with modifier 25 — separate, extra service same day</td></tr>
+                <tr><td class="code-cell">HC^87804^59^QW</td><td>RSV rapid immunoassay, CLIA-waived point-of-care</td></tr>
+                <tr><td class="code-cell">HC^87635</td><td>COVID-19 molecular (NAAT) test</td></tr>
+                <tr><td class="code-cell">HC^99213^25</td><td>99213 with modifier 25 — separate, extra service same day</td></tr>
+                <tr><td class="code-cell">HC^99203</td><td>New patient visit (~30 min), low-to-moderate complexity</td></tr>
+                <tr><td class="code-cell">HC^81002</td><td>Basic urine dipstick test (no microscopy)</td></tr>
+                <tr><td class="code-cell">HC^87635^QW</td><td>COVID-19 NAAT, CLIA-waived point-of-care</td></tr>
+                <tr><td class="code-cell">HC^99203^25</td><td>99203 with modifier 25 — separate, extra service same day</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </c-card-body>
+      </c-card>
+    </c-col>
+  </c-row>
+
+  <!-- Claim Collection Trend -->
+  <div class="dash-section">
+    <app-collection-trend></app-collection-trend>
+  </div>
+
+</div>

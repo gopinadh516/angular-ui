@@ -1,0 +1,57 @@
+<!--sidebar-->
+<c-sidebar
+  #sidebar1="cSidebar"
+  class="d-print-none sidebar sidebar-fixed border-end"
+  id="sidebar1"
+  visible
+>
+  <c-sidebar-header class="border-bottom">
+    <c-sidebar-brand [routerLink]="[]">
+      <img src="assets/images/ss.png" alt="Full Logo" class="sidebar-brand-full" height="40">
+      <img src="assets/images/ss-small.png" alt="Small Logo" class="sidebar-brand-narrow" height="40">
+    </c-sidebar-brand>
+  </c-sidebar-header>
+
+  <ng-scrollbar pointerEventsMethod="scrollbar" visibility="hover">
+    <c-sidebar-nav [navItems]="navItems" dropdownMode="close" compact />
+  </ng-scrollbar>
+
+<c-sidebar-footer
+  cSidebarToggle="sidebar1"
+  toggle="visible"
+  class="border-top d-none d-lg-flex justify-content-end"
+  style="cursor: pointer;"
+>
+  <button
+    type="button"
+    class="btn px-2"
+    cSidebarToggler
+    aria-label="Show / Hide sidebar"
+    title="Show / Hide sidebar"
+  ></button>
+</c-sidebar-footer>
+
+</c-sidebar>
+
+<!--main-->
+<div class="wrapper app-main-wrapper d-flex flex-column min-vh-100"
+     [class.sidebar-hidden]="!sidebar1.visible">
+
+  <!--app-header-->
+  <app-default-header
+    [cShadowOnScroll]="'sm'"
+    class="d-print-none header header-sticky p-0"
+    position="sticky"
+    sidebarId="sidebar1"
+  />
+
+  <!--app-body-->
+  <main class="body app-body flex-grow-1">
+    <c-container [fluid]="true" class="app-content-container px-4 px-lg-4 pt-4">
+      <router-outlet />
+    </c-container>
+  </main>
+
+  <!--app footer-->
+  <app-default-footer class="app-default-footer" />
+</div>

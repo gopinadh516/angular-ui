@@ -1,0 +1,279 @@
+:host {
+  display: block;
+  width: 100%;
+  background: #fff;
+}
+
+.physician-report-page {
+  width: 100%;
+  padding: 0.15rem 0.2rem 0.35rem;
+  background: #fff;
+  min-height: 100vh;
+}
+
+.report-title-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.6rem;
+  background: #fff;
+}
+
+.page-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--rm-text, #09090b);
+  margin: 0;
+  line-height: 1.25;
+}
+
+.report-subtitle {
+  font-size: 0.78rem;
+  color: #6b7280;
+  margin-top: 0;
+}
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.55rem;
+  margin-bottom: 0.35rem;
+  padding: 0.2rem 0;
+  background: #fff;
+}
+
+.filter-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.filter-item label {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #111827;
+  white-space: nowrap;
+}
+
+.date-item .date-control {
+  width: 136px;
+  min-width: 136px;
+}
+
+.physician-item .physician-control {
+  width: 200px;
+  min-width: 200px;
+}
+
+.filter-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-left: auto;
+}
+
+.form-control-sm,
+.form-select-sm,
+.btn-sm {
+  font-size: 0.8rem;
+  padding-top: 0.22rem;
+  padding-bottom: 0.22rem;
+}
+
+.report-table-wrap {
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: visible;
+  border: 1px solid #d9dee7;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.report-table {
+  width: auto;
+  min-width: 100%;
+  table-layout: auto;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-bottom: 0;
+  background: #fff;
+}
+
+.report-table th,
+.report-table td {
+  font-size: 0.76rem;
+  padding: 0.18rem 0.12rem;
+  border-color: #e5e7eb;
+}
+
+.report-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #f3f5f8;
+  color: #1f2937;
+  font-weight: 700;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+  word-break: normal;
+  line-height: 1;
+  box-shadow: inset 0 -1px 0 #d9dee7;
+  cursor: help;
+}
+
+.report-table tbody td {
+  white-space: nowrap;
+  vertical-align: middle;
+  background: transparent;
+}
+
+.report-table tbody tr:nth-child(odd) {
+  background: #ffffff;
+}
+
+.report-table tbody tr:nth-child(even) {
+  background: #f7f8fa;
+}
+
+.report-table tbody tr:hover {
+  background: #eef4ff;
+}
+
+.exp-col {
+  width: 28px;
+  min-width: 28px;
+  max-width: 28px;
+}
+
+.expand-btn {
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: 1px solid #6c63ff;
+  border-radius: 4px;
+  background: #fff;
+  color: #4f46e5;
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 16px;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+
+.expand-btn:hover {
+  background: #eef2ff;
+  border-color: #4f46e5;
+}
+
+.row-error {
+  background: #fff5f5 !important;
+}
+
+.detail-cell {
+  background: #fafbfc !important;
+  padding: 0.35rem !important;
+}
+
+.detail-card {
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  padding: 0.4rem;
+  background: #fff;
+  box-shadow: none;
+}
+
+.detail-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+  color: #1f2937;
+}
+
+.detail-table th,
+.detail-table td {
+  font-size: 0.76rem;
+  white-space: nowrap;
+  padding: 0.22rem 0.25rem;
+}
+
+.badge {
+  min-width: 16px;
+  font-size: 0.62rem;
+  padding: 0.12rem 0.18rem;
+  line-height: 1;
+}
+
+.rule-badge {
+  min-width: 16px;
+  font-size: 0.62rem;
+  padding: 0.12rem 0.18rem;
+  line-height: 1;
+  cursor: help;
+}
+
+.report-table th:nth-child(2),
+.report-table td:nth-child(2) {
+  min-width: 74px;
+}
+
+.report-table th:nth-child(18),
+.report-table td:nth-child(18) {
+  min-width: 74px;
+}
+
+.report-table th:nth-child(21),
+.report-table td:nth-child(21) {
+  min-width: 58px;
+}
+
+@media (max-width: 1200px) {
+  .filter-bar {
+    gap: 0.3rem 0.45rem;
+  }
+
+  .date-item .date-control {
+    width: 126px;
+    min-width: 126px;
+  }
+
+  .physician-item .physician-control {
+    width: 180px;
+    min-width: 180px;
+  }
+
+  .report-table th,
+  .report-table td {
+    font-size: 0.73rem;
+    padding: 0.16rem 0.1rem;
+  }
+
+  .report-table th:nth-child(2),
+  .report-table td:nth-child(2) {
+    min-width: 68px;
+  }
+
+  .report-table th:nth-child(18),
+  .report-table td:nth-child(18) {
+    min-width: 68px;
+  }
+
+  .report-table th:nth-child(21),
+  .report-table td:nth-child(21) {
+    min-width: 52px;
+  }
+}
+
+@media (max-width: 992px) {
+  .filter-actions {
+    margin-left: 0;
+  }
+
+  .report-table-wrap {
+    overflow-x: auto;
+  }
+}

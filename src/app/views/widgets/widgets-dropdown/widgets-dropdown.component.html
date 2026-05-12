@@ -1,0 +1,152 @@
+<c-row class="g-4">
+  <!-- 1. Clean Pass Rate widget  -->
+  <c-col sm="6" xl="3">
+    <c-widget-stat-a [title]="'Clean Claim Rate'" color="dark">
+      <ng-template cTemplateId="widgetValueTemplate" ngPreserveWhitespaces>
+        <span>{{ cleanPassRate | number:'1.2-2' }}%</span>
+        <span class="fw-normal" style="font-size: 12px;">
+          ({{ cleanPassDelta | number:'1.2-2' }}%
+          <svg cIcon [name]="cleanPassDelta >= 0 ? 'cilArrowTop' : 'cilArrowBottom'" size="sm"></svg>
+          )
+        </span>
+      </ng-template>
+
+      <ng-template cTemplateId="widgetActionTemplate">
+        <c-dropdown alignment="end" variant="btn-group">
+          <button [caret]="false" cButton cDropdownToggle class="p-0 text-white" color="transparent"
+            aria-label="Open dropdown">
+            <svg cIcon name="cilOptions"></svg>
+          </button>
+          <ul cDropdownMenu>
+            <li><a [routerLink]="[]" cDropdownItem>Refresh</a></li>
+            <li><a [routerLink]="[]" cDropdownItem>Settings</a></li>
+            <li><a [routerLink]="[]" cDropdownItem>Help</a></li>
+            <li>
+              <a [disabled]="true" [routerLink]="[]" cDropdownItem>Disabled</a>
+            </li>
+          </ul>
+        </c-dropdown>
+      </ng-template>
+
+      <ng-template cTemplateId="widgetChartTemplate">
+        <div class="clean-pass-chart-container">
+          <c-chart [data]="cleanPassChartData" [options]="cleanPassChartOptions" height="70" type="line">
+          </c-chart>
+        </div>
+      </ng-template>
+    </c-widget-stat-a>
+  </c-col>
+
+  <!-- 2. First Pass Rate widget  -->
+  <c-col sm="6" xl="3">
+    <c-widget-stat-a [title]="'First Pass Rate'" color="dark">
+      <!-- dynamically show latest first-pass % and delta -->
+      <ng-template cTemplateId="widgetValueTemplate" ngPreserveWhitespaces>
+        <span>{{ firstPassRate | number:'1.2-2' }}%</span>
+        <span class="fw-normal" style="font-size: 12px;">
+          ({{ firstPassDelta | number:'1.2-2' }}%
+          <svg cIcon [name]="firstPassDelta >= 0 ? 'cilArrowTop' : 'cilArrowBottom'" size="sm"></svg>)
+        </span>
+      </ng-template>
+      <ng-template cTemplateId="widgetActionTemplate">
+        <c-dropdown alignment="end" variant="btn-group">
+          <button [caret]="false" cButton cDropdownToggle class="p-0 text-white" color="transparent"
+            aria-label="Open dropdown">
+            <svg cIcon name="cilOptions"></svg>
+          </button>
+          <ul cDropdownMenu>
+            <li><a [routerLink]="[]" cDropdownItem>Action</a></li>
+            <li><a [routerLink]="[]" cDropdownItem>Another action</a></li>
+            <li><a [routerLink]="[]" cDropdownItem>Something else here</a></li>
+            <li><a [disabled]="true" [routerLink]="[]" cDropdownItem>Disabled</a></li>
+          </ul>
+        </c-dropdown>
+      </ng-template>
+      <ng-template cTemplateId="widgetChartTemplate">
+        <div class="first-pass-chart-container">
+          <c-chart [data]="firstPassChartData" [options]="firstPassChartOptions" height="70" type="line">
+          </c-chart>
+        </div>
+      </ng-template>
+
+    </c-widget-stat-a>
+  </c-col>
+
+  <!--3. AR aging currently to static data-->
+  <c-col sm="6" xl="3">
+    <c-widget-stat-a
+      [title]="'Under Construction Widget'"
+      color="dark"
+    >
+      <ng-template cTemplateId="widgetValueTemplate" ngPreserveWhitespaces>
+        <span>00</span>
+        <span class="fw-normal" style="font-size: 12px;">
+          (0.0% <svg cIcon name="cilArrowTop" size="sm"></svg>)
+        </span>
+      </ng-template>
+      <ng-template cTemplateId="widgetActionTemplate">
+        <c-dropdown alignment="end" variant="btn-group">
+          <button [caret]="false" cButton cDropdownToggle class="p-0 text-white" color="transparent" aria-label="Open dropdown">
+            <svg cIcon name="cilOptions"></svg>
+          </button>
+          <ul cDropdownMenu>
+            <li><a [routerLink]="[]" cDropdownItem>Action</a></li>
+            <li><a [routerLink]="[]" cDropdownItem>Another action</a></li>
+            <li><a [routerLink]="[]" cDropdownItem>Something else here</a></li>
+            <li><a [disabled]="true" [routerLink]="[]" cDropdownItem>Disabled</a></li>
+          </ul>
+        </c-dropdown>
+      </ng-template>
+      <ng-template cTemplateId="widgetChartTemplate">
+        <c-chart [data]="data[2]" [options]="options[2]" class="mt-3" height="70" type="line"></c-chart>
+      </ng-template>
+    </c-widget-stat-a>
+  </c-col>
+  <!-- 4. Avg Days to Adjudication (bar) --><c-col sm="6" xl="3">
+  <c-widget-stat-a [title]="'Avg Days to Adjudication'" color="dark">
+    <!-- header: latest value + delta -->
+    <ng-template cTemplateId="widgetValueTemplate" ngPreserveWhitespaces>
+      <span>{{ latestAvgDays }}</span>
+      <span class="fw-normal" style="font-size:12px;">
+        ({{ deltaAvgDays }}
+         <svg cIcon
+              [name]="deltaAvgDays >= 0 ? 'cilArrowTop' : 'cilArrowBottom'"
+              size="sm"></svg>)
+      </span>
+    </ng-template>
+
+    <!-- action dropdown -->
+    <ng-template cTemplateId="widgetActionTemplate">
+      <c-dropdown alignment="end" variant="btn-group">
+        <button [caret]="false"
+                cButton
+                cDropdownToggle
+                class="p-0 text-white"
+                color="transparent"
+                aria-label="Open dropdown">
+          <svg cIcon name="cilOptions"></svg>
+        </button>
+        <ul cDropdownMenu>
+          <li><a [routerLink]="[]" cDropdownItem>Refresh</a></li>
+          <li><a [routerLink]="[]" cDropdownItem>Settings</a></li>
+          <li><a [routerLink]="[]" cDropdownItem>Help</a></li>
+          <li><a [disabled]="true" [routerLink]="[]" cDropdownItem>Disabled</a></li>
+        </ul>
+      </c-dropdown>
+    </ng-template>
+
+    <!-- bar chart -->
+    <ng-template cTemplateId="widgetChartTemplate">
+      <c-chart
+        [data]="adjudicationChartData"
+        [options]="adjudicationChartOptions"
+        class="mt-3 mx-3"
+        height="70"
+        type="bar">
+      </c-chart>
+    </ng-template>
+  </c-widget-stat-a>
+</c-col>
+
+
+</c-row>

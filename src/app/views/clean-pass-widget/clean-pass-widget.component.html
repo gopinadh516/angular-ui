@@ -1,0 +1,14 @@
+<!-- src/app/views/clean-pass-widget/clean-pass-widget.component.html -->
+<c-card>
+  <c-card-header>Clean Pass Rate</c-card-header>
+  <c-card-body>
+    <div style="height:320px">
+      <canvas baseChart
+              [type]="'bar'"
+              [data]="chartData"
+              [options]="chartOptions"
+              [plugins]="chartPlugins">
+      </canvas>
+    </div>
+  </c-card-body>
+</c-card>

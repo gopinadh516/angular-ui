@@ -1,0 +1,27 @@
+[
+  {
+    "email": "manager@surescripts.local",
+    "fullName": "RevMax AR Manager",
+    "status": 1
+  },
+  {
+    "email": "ar.agent@surescripts.local",
+    "fullName": "Anita AR Agent",
+    "status": 1
+  },
+  {
+    "email": "code.agent@surescripts.local",
+    "fullName": "Cody Coding Agent",
+    "status": 1
+  },
+  {
+    "email": "charge.agent@surescripts.local",
+    "fullName": "Chandra Charge Agent",
+    "status": 1
+  },
+  {
+    "email": "pay.agent@surescripts.local",
+    "fullName": "Priya Payment Agent",
+    "status": 1
+  }
+]

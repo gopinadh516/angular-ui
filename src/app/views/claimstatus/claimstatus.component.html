@@ -1,0 +1,1275 @@
+<div class="container-fluid px-0 mt-0">
+  <!-- Update Status (two dropdowns) -->
+  <dialog
+    #updateStatusDialog
+    class="sailu-drawer sailu-drawer--sm"
+    (click)="onUpdateBackdrop($event)"
+    (cancel)="onUpdateCancel($event)"
+    aria-modal="true">
+    <div class="sailu-drawer-content">
+      <div class="sailu-drawer-header">
+        <div class="sailu-drawer-title-wrap">
+          <div class="sailu-drawer-title">
+            Update Claim Status-List Name <span *ngIf="listName"> — {{ listName }}</span>
+          </div>
+        </div>
+        <div class="sailu-header-actions">
+          <button type="button" class="sailu-icon-btn" (click)="closeUpdateStatus()" aria-label="Close">×</button>
+        </div>
+      </div>
+
+      <div class="sailu-drawer-body">
+        <div class="sailu-form-meta" *ngIf="updateRow">
+          Claim <strong>{{ updateRow.claimNumber }}</strong>
+          <span *ngIf="updateRow.patientFirstName || updateRow.patientLastName">
+            — {{ updateRow.patientFirstName }} {{ updateRow.patientLastName }}
+          </span>
+        </div>
+
+        <div class="row g-2 sailu-form-grid">
+          <div class="col-12 col-md-6">
+            <label class="form-label mb-1 small">Status</label>
+            <select
+              class="form-select form-select-sm"
+              [(ngModel)]="updateStatusObj"
+              (ngModelChange)="onUpdateStatusChange()"
+              [disabled]="isCommentOnlyRole() || followupSaveBusy || attachmentUploadBusy">
+              <option [ngValue]="null" disabled>Select status</option>
+              <option *ngFor="let o of arStatusLookup" [ngValue]="o">{{ o.statusLabel }}</option>
+            </select>
+          </div>
+
+          <div class="col-12 col-md-6">
+            <label class="form-label mb-1 small">Action</label>
+            <select
+              class="form-select form-select-sm"
+              [(ngModel)]="updateActionObj"
+              [disabled]="isCommentOnlyRole() || !updateStatusObj || followupSaveBusy || attachmentUploadBusy">
+              <option [ngValue]="null" disabled>Select action</option>
+              <option *ngFor="let o of updateActionOptions" [ngValue]="o">{{ o.actionLabel }}</option>
+            </select>
+          </div>
+<div class="col-12 col-md-6">
+  <label class="form-label mb-1 small" for="updateRemainderDate">Reminder Date</label>
+  <input
+    id="updateRemainderDate"
+    type="date"
+    class="form-control form-control-sm"
+    [(ngModel)]="remainderDate"
+    [min]="todayDate"
+    [disabled]="followupSaveBusy || attachmentUploadBusy" />
+</div>
+          <div class="col-12" *ngIf="isCommentOnlyRole()">
+            <div class="text-muted small mt-1">
+              Status and Action are read-only for your role. Previous values from the latest follow-up are preserved.
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 mt-2">
+          <label class="form-label mb-1 small">Notes (max 100 words)</label>
+          <textarea
+            class="form-control form-control-sm sailu-notes"
+            rows="2"
+            [(ngModel)]="updateNotes"
+            (input)="limitNotesWords($event)"
+            placeholder="Add a short note…"></textarea>
+          <div class="sailu-notes-help">{{ notesWordCount }}/100 words</div>
+        </div>
+
+        <!-- Attachments -->
+        <div class="sailu-attachments mt-2">
+          <div class="sailu-attachments-head">
+            <label class="form-label mb-1 small">Attachments</label>
+
+            <label
+              class="sailu-icon-btn sailu-icon-btn--sm"
+              aria-label="Attach files"
+              title="Attach files">
+              <i class="bi bi-paperclip" aria-hidden="true"></i>
+              <input
+                #attachmentInput
+                type="file"
+                multiple
+                (change)="onAttachmentsSelected($event)"
+                hidden />
+            </label>
+          </div>
+
+          <div class="sailu-attachments-empty" *ngIf="selectedAttachments.length === 0">
+            No files attached.
+          </div>
+
+          <ul class="sailu-attachments-list" *ngIf="selectedAttachments.length > 0">
+            <li class="sailu-attachments-item" *ngFor="let f of selectedAttachments; let i = index">
+              <div class="sailu-attachments-name" title="{{ f.name }}">{{ f.name }}</div>
+              <div class="sailu-attachments-size">{{ formatBytes(f.size) }}</div>
+              <button
+                type="button"
+                class="sailu-attach-remove"
+                (click)="removeAttachment(i)"
+                aria-label="Remove attachment"
+                title="Remove">
+                <i class="bi bi-trash" aria-hidden="true"></i>
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <div class="sailu-form-actions">
+          <button type="button" class="btn btn-sm btn-light" (click)="closeUpdateStatus()">Cancel</button>
+         <button
+  type="button"
+  class="btn btn-sm btn-primary"
+  (click)="saveUpdateStatus()"
+  [disabled]="!canSaveUpdateStatus()">
+  {{ followupSaveBusy ? 'Saving…' : (attachmentUploadBusy ? 'Uploading…' : 'Save') }}
+</button>
+        </div>
+
+        <!-- Status History (live) -->
+        <div class="sailu-history">
+          <div class="sailu-history-title">Status History</div>
+
+          <div class="sailu-history-table-wrap" aria-label="Status history table">
+            <table class="sailu-history-table">
+              <thead>
+                <tr>
+                  <th scope="col">Date</th>
+                  <th scope="col">Time (EST)</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Action</th>
+                  <th scope="col">Email ID</th>
+                  <th scope="col">Notes</th>
+                  <th scope="col">Attachments</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngIf="followupHistoryLoading">
+                  <td colspan="7">Loading…</td>
+                </tr>
+
+                <tr *ngIf="!followupHistoryLoading && followupHistoryError">
+                  <td colspan="7">{{ followupHistoryError }}</td>
+                </tr>
+
+                <tr *ngIf="!followupHistoryLoading && !followupHistoryError && followupHistoryRows.length === 0">
+                  <td colspan="7">No history found.</td>
+                </tr>
+
+                <tr *ngFor="let h of followupHistoryRows">
+                  <td>{{ formatHistoryDate(h.actionDate) }}</td>
+                  <td>{{ formatHistoryTime(h.actionTime) }}</td>
+                  <td>{{ h.statusLabel }}</td>
+                  <td>{{ h.actionLabel }}</td>
+                  <td>{{ h.userId || '' }}</td>
+                  <td>{{ $any(h).notes || '' }}</td>
+                  <td>
+                    <div class="sailu-history-att-list" *ngIf="$any(h).attachments?.length > 0; else noHistAtt">
+                      <div class="sailu-history-att" *ngFor="let a of $any(h).attachments">
+                        <a
+                          href="javascript:void(0)"
+                          class="sailu-history-att-link"
+                          (click)="downloadHistoryAttachment(a, $event)"
+                          [title]="'Download ' + (a.originalName || a.storedName || 'attachment')">
+                          <i class="bi bi-paperclip" aria-hidden="true"></i>
+                          <span class="sailu-history-att-name" title="{{ a.originalName }}">
+                            {{ a.originalName }}
+                          </span>
+                        </a>
+
+                        <span class="sailu-history-att-size">{{ formatBytes(a.fileSize) }}</span>
+
+                        <button
+                          type="button"
+                          class="sailu-history-att-del"
+                          disabled
+                          title="Delete (coming soon)"
+                          aria-label="Delete attachment">
+                          <i class="bi bi-trash" aria-hidden="true"></i>
+                        </button>
+                      </div>
+                    </div>
+
+                    <ng-template #noHistAtt>
+                      <span class="sailu-muted">—</span>
+                    </ng-template>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Add selected claims to existing AR Follow-up List -->
+  <dialog
+    #addToArListDialog
+    class="sailu-drawer sailu-drawer--sm add-to-ar-list-dialog"
+    (click)="onAddToExistingArListBackdrop($event)"
+    (cancel)="onAddToExistingArListCancel($event)"
+    aria-modal="true">
+    <div class="sailu-drawer-content">
+      <div class="sailu-drawer-header">
+        <div class="sailu-drawer-title-wrap">
+          <div class="sailu-drawer-title">Add Claims to Existing AR Follow-up List</div>
+        </div>
+        <div class="sailu-header-actions">
+          <button
+            type="button"
+            class="sailu-icon-btn"
+            (click)="closeAddToExistingArListDialog()"
+            [disabled]="addToExistingListSaving"
+            aria-label="Close">×</button>
+        </div>
+      </div>
+
+      <div class="sailu-drawer-body">
+        <div class="add-list-summary">
+          <div class="add-list-summary-count">{{ selectedRowsForExistingArList().length }}</div>
+          <div>
+            <div class="add-list-summary-title">selected claim(s)</div>
+            <div class="add-list-summary-help">Only claims not already assigned to an AR follow-up list can be added.</div>
+          </div>
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label mb-1 small">Select one AR Follow-up List</label>
+          <select
+            class="form-select form-select-sm"
+            [(ngModel)]="selectedExistingListNumber"
+            [disabled]="addToExistingListLoading || addToExistingListSaving">
+            <option [ngValue]="null" disabled>Select AR follow-up list</option>
+            <option *ngFor="let l of arFollowupListOptions" [ngValue]="l.listNumber">
+              {{ l.listName || ('List #' + l.listNumber) }}{{ l.totalClaimCount != null ? ' (' + l.totalClaimCount + ' claims)' : '' }}
+            </option>
+          </select>
+        </div>
+
+        <div class="small text-muted mb-2" *ngIf="addToExistingListLoading">Loading AR lists…</div>
+        <div class="alert alert-warning py-2 mb-2" *ngIf="!addToExistingListLoading && arFollowupListOptions.length === 0 && !addToExistingListError">
+          No AR follow-up lists are available for your role.
+        </div>
+        <div class="alert alert-danger py-2 mb-2" *ngIf="addToExistingListError">
+          {{ addToExistingListError }}
+        </div>
+
+        <div class="selected-claim-preview" *ngIf="selectedRowsForExistingArList().length > 0">
+          <div class="selected-claim-preview-title">Selected claims</div>
+          <div class="selected-claim-chips">
+            <span class="selected-claim-chip" *ngFor="let r of selectedRowsForExistingArList() | slice:0:8">
+              {{ r.claimNumber }}
+            </span>
+            <span class="selected-claim-chip selected-claim-chip-more" *ngIf="selectedRowsForExistingArList().length > 8">
+              +{{ selectedRowsForExistingArList().length - 8 }} more
+            </span>
+          </div>
+        </div>
+
+        <div class="sailu-form-actions">
+          <button
+            type="button"
+            class="btn btn-sm btn-light"
+            (click)="closeAddToExistingArListDialog()"
+            [disabled]="addToExistingListSaving">
+            Cancel
+          </button>
+          <button
+            type="button"
+            class="btn btn-sm btn-primary"
+            (click)="confirmAddSelectedClaimsToExistingList()"
+            [disabled]="!selectedExistingListNumber || selectedRowsForExistingArList().length === 0 || addToExistingListLoading || addToExistingListSaving">
+            {{ addToExistingListSaving ? 'Adding…' : 'Add to List' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Remove selected claims from current AR Follow-up List -->
+  <dialog
+    #removeFromArListDialog
+    class="sailu-drawer sailu-drawer--sm remove-from-ar-list-dialog"
+    (click)="onRemoveFromExistingArListBackdrop($event)"
+    (cancel)="onRemoveFromExistingArListCancel($event)"
+    aria-modal="true">
+    <div class="sailu-drawer-content">
+      <div class="sailu-drawer-header">
+        <div class="sailu-drawer-title-wrap">
+          <div class="sailu-drawer-title">Remove Claims from AR Follow-up List</div>
+        </div>
+        <div class="sailu-header-actions">
+          <button
+            type="button"
+            class="sailu-icon-btn"
+            (click)="closeRemoveSelectedClaimsFromExistingListDialog()"
+            [disabled]="removeFromListSaving"
+            aria-label="Close">×</button>
+        </div>
+      </div>
+
+      <div class="sailu-drawer-body">
+        <div class="remove-list-summary">
+          <div class="remove-list-summary-count">{{ selectedRowsForRemovalFromExistingArList().length }}</div>
+          <div>
+            <div class="remove-list-summary-title">selected claim(s)</div>
+            <div class="remove-list-summary-help">
+              These claims will be removed only from this AR follow-up list.
+            </div>
+          </div>
+        </div>
+
+        <div class="alert alert-danger py-2 mb-2" *ngIf="removeFromListError">
+          {{ removeFromListError }}
+        </div>
+
+        <div class="selected-claim-preview" *ngIf="selectedRowsForRemovalFromExistingArList().length > 0">
+          <div class="selected-claim-preview-title">Claims to remove</div>
+          <div class="selected-claim-chips">
+            <span class="selected-claim-chip selected-claim-chip-remove" *ngFor="let r of selectedRowsForRemovalFromExistingArList() | slice:0:8">
+              {{ r.claimNumber }}
+            </span>
+            <span class="selected-claim-chip selected-claim-chip-more" *ngIf="selectedRowsForRemovalFromExistingArList().length > 8">
+              +{{ selectedRowsForRemovalFromExistingArList().length - 8 }} more
+            </span>
+          </div>
+        </div>
+
+        <div class="small text-muted mt-2">
+          This does not delete the claim from AMD/EDI. It only removes the claim association from the saved AR follow-up list.
+        </div>
+
+        <div class="sailu-form-actions">
+          <button
+            type="button"
+            class="btn btn-sm btn-light"
+            (click)="closeRemoveSelectedClaimsFromExistingListDialog()"
+            [disabled]="removeFromListSaving">
+            Cancel
+          </button>
+          <button
+            type="button"
+            class="btn btn-sm btn-danger"
+            (click)="confirmRemoveSelectedClaimsFromExistingList()"
+            [disabled]="selectedRowsForRemovalFromExistingArList().length === 0 || removeFromListSaving">
+            {{ removeFromListSaving ? 'Removing…' : 'Remove from List' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Toast -->
+  <div class="rev-toast-wrapper" *ngIf="toast.visible">
+    <div
+      class="rev-toast"
+      [ngClass]="'rev-toast-' + toast.variant"
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true">
+      <div class="rev-toast-body">
+        <div class="rev-toast-msg">{{ toast.message }}</div>
+        <button
+          type="button"
+          class="rev-toast-close"
+          (click)="hideToast()"
+          aria-label="Close">×</button>
+      </div>
+    </div>
+  </div>
+  <!-- Page header: title left, actions right — matches ar-lists reference pattern -->
+  <div class="page-header-row">
+    <div class="page-header-left">
+      <h4 class="page-title mb-0">{{ headerTitle }}</h4>
+      <p class="page-subtitle mb-0" *ngIf="headerSubtitle">{{ headerSubtitle }}</p>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+      <button
+        *ngIf="canUseAddToExistingArList()"
+        type="button"
+        class="btn btn-sm btn-primary add-existing-list-btn"
+        (click)="openAddToExistingArListDialog()"
+        [disabled]="selectedClaimCount === 0 || addToExistingListSaving"
+        aria-label="Add selected claims to existing AR follow-up list"
+        title="Select claims not already in an AR list, then add them to one existing AR follow-up list">
+        <i class="bi bi-plus-circle me-1" aria-hidden="true"></i>
+        Add to List
+        <span class="add-selected-count" *ngIf="selectedClaimCount > 0">{{ selectedClaimCount }}</span>
+      </button>
+      <button
+        *ngIf="canUseRemoveFromExistingArList()"
+        type="button"
+        class="btn btn-sm btn-outline-danger remove-existing-list-btn"
+        (click)="openRemoveSelectedClaimsFromExistingListDialog()"
+        [disabled]="selectedClaimCount === 0 || removeFromListSaving"
+        aria-label="Remove selected claims from this AR follow-up list"
+        title="Select claims in this AR list, then remove them from this list">
+        <i class="bi bi-trash me-1" aria-hidden="true"></i>
+        Remove Selected
+        <span class="remove-selected-count" *ngIf="selectedClaimCount > 0">{{ selectedClaimCount }}</span>
+      </button>
+      <button
+        type="button"
+        class="btn btn-sm btn-outline-success"
+        (click)="downloadClaimListCsv()"
+        [disabled]="!totalCount"
+        aria-label="Export claim list to CSV"
+        title="Export all filtered claim rows to CSV">
+        <i class="bi bi-download me-1" aria-hidden="true"></i>
+        Export CSV
+      </button>
+    </div>
+  </div>
+
+  <div class="ar-filter-card">
+    <div class="ar-filter-body">
+      <!-- Filter toolbar: single horizontal row -->
+      <div class="filter-toolbar-row">
+        <div class="filter-group">
+          <span class="filter-label">Queue</span>
+          <select
+            id="queueSelect"
+            class="form-select form-select-sm"
+            [(ngModel)]="queue"
+            (ngModelChange)="onQueueChange()"
+            aria-label="Claim Processing Queue">
+            <option value="ALL">All Claims</option>
+            <option value="INS_PEND_GT0">Pending Insurance AR</option>
+            <optgroup *ngFor="let g of statusGroups" [label]="g.label">
+              <option *ngFor="let o of g.options" [value]="o.value">{{ o.label }}</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <div class="filter-group filter-group--search">
+          <span class="filter-label">Search</span>
+          <input
+            id="searchBox"
+            type="text"
+            [(ngModel)]="searchText"
+            class="form-control form-control-sm"
+            placeholder="Claim #, patient, payer..."
+            aria-label="Search claims" />
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">AR Days</span>
+          <div class="filter-range">
+            <input type="number" class="form-control form-control-sm" [(ngModel)]="arDaysFrom" (ngModelChange)="onArFilterChange()" placeholder="Min" />
+            <span class="filter-range-sep">–</span>
+            <input type="number" class="form-control form-control-sm" [(ngModel)]="arDaysTo" (ngModelChange)="onArFilterChange()" placeholder="Max" />
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Insurance AR $</span>
+          <div class="filter-range">
+            <input type="number" class="form-control form-control-sm" [(ngModel)]="amountFrom" (ngModelChange)="onArFilterChange()" placeholder="Min" />
+            <span class="filter-range-sep">–</span>
+            <input type="number" class="form-control form-control-sm" [(ngModel)]="amountTo" (ngModelChange)="onArFilterChange()" placeholder="Max" />
+          </div>
+        </div>
+
+        <div class="filter-group filter-group--payers">
+          <span class="filter-label">Top Payers</span>
+          <select class="form-select form-select-sm" [(ngModel)]="payerTopN" (ngModelChange)="onArFilterChange()">
+            <option [ngValue]="'ALL'">All payers</option>
+            <option [ngValue]="1">Top 1</option>
+            <option [ngValue]="2">Top 2</option>
+            <option [ngValue]="3">Top 3</option>
+            <option [ngValue]="4">Top 4</option>
+            <option [ngValue]="5">Top 5</option>
+            <option [ngValue]="6">Top 6</option>
+            <option [ngValue]="7">Top 7</option>
+            <option [ngValue]="8">Top 8</option>
+            <option [ngValue]="9">Top 9</option>
+            <option [ngValue]="10">Top 10</option>
+          </select>
+        </div>
+
+        <div class="filter-group filter-group--reset">
+          <button type="button" class="btn btn-sm btn-outline-secondary" (click)="resetArFilters()">Reset</button>
+        </div>
+      </div>
+
+      <!-- Toggle switches row -->
+      <div class="filter-toggles-row">
+        <div class="form-check form-switch filter-toggle m-0">
+          <input id="excludeInArTeamQueueToggle" class="form-check-input" type="checkbox"
+            [(ngModel)]="excludeInArTeamQueue" (ngModelChange)="onArFilterChange()"
+            aria-label="Exclude claims currently in AR Team work queue" />
+          <label class="form-check-label" for="excludeInArTeamQueueToggle">Exclude AR Team queue</label>
+        </div>
+        <div class="form-check form-switch filter-toggle m-0">
+          <input id="excludeWorkedLast30DaysToggle" class="form-check-input" type="checkbox"
+            [(ngModel)]="excludeWorkedLast30Days" (ngModelChange)="onArFilterChange()"
+            aria-label="Exclude claims worked in the last 30 days" />
+          <label class="form-check-label" for="excludeWorkedLast30DaysToggle">Exclude worked last 30 days</label>
+        </div>
+        <div class="form-check form-switch filter-toggle m-0">
+          <input id="includePatientArToggle" class="form-check-input" type="checkbox"
+            [(ngModel)]="includePatientAr" (ngModelChange)="onArFilterChange()"
+            aria-label="Include patient AR in pending dollar calculations" />
+          <label class="form-check-label" for="includePatientArToggle">Include Patient AR</label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="claims-table-panel table-responsive">
+  <table class="table table-hover claim-table">
+    <thead>
+      <tr>
+        <th *ngIf="canUseClaimSelection()" class="text-center add-select-col">
+          <input
+            class="form-check-input claim-select-checkbox"
+            type="checkbox"
+            [checked]="isPageFullySelected()"
+            [indeterminate]="isPagePartiallySelected()"
+            (change)="onTogglePageSelection($any($event.target).checked)"
+            title="Select eligible claims on this page"
+            aria-label="Select eligible claims on this page" />
+        </th>
+        <th
+          (click)="sortTable('claimNumber')"
+          [attr.aria-sort]="sortKey==='claimNumber' ? (sortAsc ? 'ascending' : 'descending') : 'none'"
+          class="sortable no-wrap">
+          Claim #<span *ngIf="sortKey === 'claimNumber'">{{ sortAsc ? '▲' : '▼' }}</span>
+        </th>
+        <th
+          (click)="sortTable('patientFirstName')"
+          [attr.aria-sort]="sortKey==='patientFirstName' ? (sortAsc ? 'ascending' : 'descending') : 'none'">
+          FName<span *ngIf="sortKey === 'patientFirstName'">{{ sortAsc ? '▲' : '▼' }}</span>
+        </th>
+        <th
+          (click)="sortTable('patientLastName')"
+          [attr.aria-sort]="sortKey==='patientLastName' ? (sortAsc ? 'ascending' : 'descending') : 'none'">
+          LName<span *ngIf="sortKey === 'patientLastName'">{{ sortAsc ? '▲' : '▼' }}</span>
+        </th>
+        <th
+          style="width:120px;white-space:nowrap;"
+          (click)="sortTable('serviceDate')"
+          [attr.aria-sort]="sortKey==='serviceDate' ? (sortAsc ? 'ascending' : 'descending') : 'none'"
+          class="sortable no-wrap">
+          Svc Date<span *ngIf="sortKey === 'serviceDate'">{{ sortAsc ? '▲' : '▼' }}</span>
+        </th>
+        <th
+          (click)="sortTable('transmissionDate')"
+          [attr.aria-sort]="sortKey==='transmissionDate' ? (sortAsc ? 'ascending' : 'descending') : 'none'"
+          class="sortable no-wrap">
+          Tx Date
+          <span *ngIf="sortKey === 'transmissionDate'">{{ sortAsc ? '▲' : '▼' }}</span>
+        </th>
+        <th
+          style="width:120px;white-space:nowrap;"
+          (click)="sortTable('paymentDate')"
+          [attr.aria-sort]="sortKey==='paymentDate' ? (sortAsc ? 'ascending' : 'descending') : 'none'"
+          class="sortable no-wrap">
+          Pay Date<span *ngIf="sortKey === 'paymentDate'">{{ sortAsc ? '▲' : '▼' }}</span>
+        </th>
+
+        <th
+          (click)="sortTable('agingDays')"
+          [attr.aria-sort]="sortKey === 'agingDays' ? (sortAsc ? 'ascending' : 'descending') : 'none'">
+          AR days
+          <span *ngIf="sortKey === 'agingDays'" class="sortable no-wrap">
+            {{ sortAsc ? '▲' : '▼' }}
+          </span>
+        </th>
+
+        <th
+          (click)="sortTable('procedureCode')"
+          [attr.aria-sort]="sortKey==='procedureCode' ? (sortAsc ? 'ascending' : 'descending') : 'none'">
+          CPT Code<span *ngIf="sortKey === 'procedureCode'">{{ sortAsc ? '▲' : '▼' }}</span>
+        </th>
+        <th
+          (click)="sortTable('totalClaimAmount')"
+          [attr.aria-sort]="sortKey==='totalClaimAmount' ? (sortAsc ? 'ascending' : 'descending') : 'none'">
+          Chg Amt<span *ngIf="sortKey === 'totalClaimAmount'">{{ sortAsc ? '▲' : '▼' }}</span>
+        </th>
+
+        <th
+          (click)="sortTable('adjustedAmount')"
+          [attr.aria-sort]="sortKey==='adjustedAmount' ? (sortAsc ? 'ascending' : 'descending') : 'none'">
+          Adj.<span *ngIf="sortKey === 'adjustedAmount'">{{ sortAsc ? '▲' : '▼' }}</span>
+        </th>
+
+        <th
+          (click)="sortTable('insuranceResponsibility')"
+          [attr.aria-sort]="sortKey==='insuranceResponsibility' ? (sortAsc ? 'ascending' : 'descending') : 'none'">
+          Ins Res<span *ngIf="sortKey === 'insuranceResponsibility'">{{ sortAsc ? '▲' : '▼' }}</span>
+        </th>
+
+        <th
+          (click)="sortTable('paidAmount')"
+          [attr.aria-sort]="sortKey==='paidAmount' ? (sortAsc ? 'ascending' : 'descending') : 'none'">
+          Ins Paid<span *ngIf="sortKey === 'paidAmount'">{{ sortAsc ? '▲' : '▼' }}</span>
+        </th>
+
+        <th
+          (click)="sortTable('pendingAmount')"
+          [attr.aria-sort]="sortKey==='pendingAmount' ? (sortAsc ? 'ascending' : 'descending') : 'none'">
+          Ins Pend
+          <span *ngIf="sortKey === 'pendingAmount'">{{ sortAsc ? '▲' : '▼' }}</span>
+        </th>
+
+        <th
+          (click)="sortTable('paymentStatus')"
+          [attr.aria-sort]="sortKey==='paymentStatus' ? (sortAsc ? 'ascending' : 'descending') : 'none'">
+          Ins Sts<span *ngIf="sortKey === 'paymentStatus'">{{ sortAsc ? '▲' : '▼' }}</span>
+        </th>
+        <th
+          (click)="sortTable('pst')"
+          [attr.aria-sort]="sortKey==='pst' ? (sortAsc ? 'ascending' : 'descending') : 'none'">
+          PST <span *ngIf="sortKey==='pst'">{{ sortAsc ? '▲' : '▼' }}</span>
+        </th>
+        <th
+          (click)="sortTable('patientResponsibility')"
+          [attr.aria-sort]="sortKey==='patientResponsibility' ? (sortAsc ? 'ascending' : 'descending') : 'none'">
+          Pat Res<span *ngIf="sortKey === 'patientResponsibility'">{{ sortAsc ? '▲' : '▼' }}</span>
+        </th>
+
+        <th
+          (click)="sortTable('patientPendingAr')"
+          [attr.aria-sort]="sortKey==='patientPendingAr' ? (sortAsc ? 'ascending' : 'descending') : 'none'">
+          Pat Pend<span *ngIf="sortKey==='patientPendingAr'">{{ sortAsc ? '▲' : '▼' }}</span>
+        </th>
+
+        <th
+          (click)="sortTable('patArStatus')"
+          [attr.aria-sort]="sortKey==='patArStatus' ? (sortAsc ? 'ascending' : 'descending') : 'none'">
+          Pt AR Sts<span *ngIf="sortKey==='patArStatus'">{{ sortAsc ? '▲' : '▼' }}</span>
+        </th>
+        <th
+          (click)="sortTable('payerName')"
+          [attr.aria-sort]="sortKey==='payerName' ? (sortAsc ? 'ascending' : 'descending') : 'none'">
+          TPA<span *ngIf="sortKey === 'payerName'">{{ sortAsc ? '▲' : '▼' }}</span>
+        </th>
+
+        <th
+          *ngIf="showPredictionColumns()"
+          (click)="sortTable('predictionWorkStatusAtRun')"
+          [attr.aria-sort]="sortKey==='predictionWorkStatusAtRun' ? (sortAsc ? 'ascending' : 'descending') : 'none'"
+          class="sortable no-wrap prediction-work-status-col">
+          AI Pick
+          <span *ngIf="sortKey === 'predictionWorkStatusAtRun'">{{ sortAsc ? '▲' : '▼' }}</span>
+        </th>
+
+        <th
+          *ngIf="showPredictionColumns()"
+          (click)="sortTable('predictionPriorityAtRun')"
+          [attr.aria-sort]="sortKey==='predictionPriorityAtRun' ? (sortAsc ? 'ascending' : 'descending') : 'none'"
+          class="sortable no-wrap prediction-priority-col">
+          Priority
+          <span *ngIf="sortKey === 'predictionPriorityAtRun'">{{ sortAsc ? '▲' : '▼' }}</span>
+        </th>
+
+        <th
+          *ngIf="showPredictionColumns()"
+          (click)="sortTable('predictionMessage')"
+          [attr.aria-sort]="sortKey==='predictionMessage' ? (sortAsc ? 'ascending' : 'descending') : 'none'"
+          class="sortable no-wrap prediction-message-col">
+          Prediction Message
+          <span *ngIf="sortKey === 'predictionMessage'">{{ sortAsc ? '▲' : '▼' }}</span>
+        </th>
+
+        <th class="text-center">
+          <i class="bi bi-chat-right-text rs-update-icon" title="Update Status" aria-hidden="true"></i>
+        </th>
+
+        <th
+          *ngIf="showArFollowupColumns()"
+          (click)="sortTable('latestStatusLabel')"
+          [attr.aria-sort]="sortKey==='latestStatusLabel' ? (sortAsc ? 'ascending' : 'descending') : 'none'"
+          class="sortable no-wrap ar-followup-status-col">
+          AR Status
+          <span *ngIf="sortKey === 'latestStatusLabel'">{{ sortAsc ? '▲' : '▼' }}</span>
+        </th>
+
+        <th
+          *ngIf="showArFollowupColumns()"
+          (click)="sortTable('latestActionLabel')"
+          [attr.aria-sort]="sortKey==='latestActionLabel' ? (sortAsc ? 'ascending' : 'descending') : 'none'"
+          class="sortable no-wrap ar-followup-action-col">
+          AR Action
+          <span *ngIf="sortKey === 'latestActionLabel'">{{ sortAsc ? '▲' : '▼' }}</span>
+        </th>
+
+        <th
+          *ngIf="showArFollowupColumns()"
+          (click)="sortTable('latestNotes')"
+          [attr.aria-sort]="sortKey==='latestNotes' ? (sortAsc ? 'ascending' : 'descending') : 'none'"
+          class="sortable no-wrap ar-followup-notes-col">
+          Last Note
+          <span *ngIf="sortKey === 'latestNotes'">{{ sortAsc ? '▲' : '▼' }}</span>
+        </th>
+
+        <th
+          *ngIf="showArFollowupColumns()"
+          (click)="sortTable('followupCount')"
+          [attr.aria-sort]="sortKey==='followupCount' ? (sortAsc ? 'ascending' : 'descending') : 'none'"
+          class="sortable no-wrap text-center ar-followup-count-col">
+          FU #
+          <span *ngIf="sortKey === 'followupCount'">{{ sortAsc ? '▲' : '▼' }}</span>
+        </th>
+
+      
+          <th
+          *ngIf="showArFollowupColumns()"
+          (click)="sortTable('listName')"
+          [attr.aria-sort]="sortKey==='listName' ? (sortAsc ? 'ascending' : 'descending') : 'none'"
+          class="sortable no-wrap ar-followup-list-col">
+          AR List
+          <span *ngIf="sortKey === 'listName'">{{ sortAsc ? '▲' : '▼' }}</span>
+        </th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr  *ngFor="let item of paginatedResults(); trackBy: trackByClaim"  [id]="'claim-' + item.claimNumber"
+  [class.table-active]="highlightClaimNumber === ('' + item.claimNumber)"
+    [class.claim-row-returned]="isReturnedToArAgent(item)">
+        <td *ngIf="canUseClaimSelection()" class="text-center add-select-cell">
+          <input
+            *ngIf="canSelectClaimForCurrentBulkAction(item); else cannotSelectClaimForBulkAction"
+            class="form-check-input claim-select-checkbox"
+            type="checkbox"
+            [checked]="isClaimSelected(item.claimNumber)"
+            (change)="onClaimToggle($any($event.target).checked, item.claimNumber, item)"
+            (click)="$event.stopPropagation()"
+            [attr.aria-label]="'Select claim ' + item.claimNumber" />
+          <ng-template #cannotSelectClaimForBulkAction>
+            <span class="already-in-list-mark" [title]="claimSelectionDisabledTitle(item)">—</span>
+          </ng-template>
+        </td>
+        <td>
+          <div class="d-flex align-items-center gap-2">
+            <button
+              type="button"
+              class="linklike"
+              (click)="openPopup($event, item.filename, item.claimNumber)">
+              {{ item.claimNumber }}
+            </button>
+          </div>
+        </td>
+
+        <td>{{ item.patientFirstName }}</td>
+        <td>{{ item.patientLastName }}</td>
+
+        <td
+          [title]="item.serviceDate ? (item.serviceDate | date:'MMM d, yyyy') : 'N/A'"
+          class="no-wrap">
+          {{ item.serviceDate ? (item.serviceDate | date:'MMM d, yyyy') : 'N/A' }}
+        </td>
+
+        <td class="no-wrap">
+          <ng-container *ngIf="item.transmissionDate; else noTx">
+            {{ item.transmissionDate | date: 'MMM d, y' }}
+          </ng-container>
+          <ng-template #noTx> N/A </ng-template>
+        </td>
+
+        <td
+          [title]="item.paymentDate ? (item.paymentDate | date:'MMM d, yyyy') : 'N/A'"
+          class="no-wrap">
+          {{ item.paymentDate ? (item.paymentDate | date:'MMM d, yyyy') : 'N/A' }}
+        </td>
+
+        <td>{{ item.agingDays ?? '—' }}</td>
+
+        <td (mouseenter)="showClaimHover($event, item)" (mousemove)="moveClaimHover($event)" (mouseleave)="scheduleHideClaimHover()">
+          {{ item.procedureCode }}
+        </td>
+
+        <td>{{ item.totalClaimAmount | number:'1.0-2' }}</td>
+
+        <td
+          class="nowrap-cell"
+          [attr.title]="getFormattedAdjustmentInfo(item?.adjustmentInfoCo ?? undefined)">
+          {{ item.adjustedAmount | number:'1.0-2' }}
+          <i
+            *ngIf="item?.adjustmentInfoCo"
+            class="bi bi-info-circle ms-1 text-dark"
+            style="cursor: help;"
+            aria-hidden="true"></i>
+        </td>
+
+        <td>{{ displayInsuranceResponsibility(item) | number:'1.0-2' }}</td>
+
+        <td>{{ item.paidAmount | number:'1.0-2' }}</td>
+
+        <td>{{ displayPending(item) | number:'1.0-2' }}</td>
+
+        <td>
+          <span
+            class="badge text-dark"
+            [ngClass]="statusBadgeClass(item.__insStatus)"
+            [title]="statusLabel(item.__insStatus)">
+            {{ statusShort(item.__insStatus) }}
+          </span>
+        </td>
+
+        <td>{{ item.pst ?? '-' }}</td>
+
+        <td
+          class="nowrap-cell"
+          [attr.title]="getFormattedAdjustmentInfo(item?.adjustmentInfoPr ?? undefined)">
+          {{ item.patientResponsibility | number:'1.0-2' }}
+          <i
+            *ngIf="item?.adjustmentInfoPr"
+            class="bi bi-info-circle ms-1 text-dark"
+            style="cursor: help;"
+            aria-hidden="true"></i>
+        </td>
+
+        <td [title]="item?.patientPendingAr != null ? (item.patientPendingAr | number:'1.0-2') : ''">
+          {{ item?.patientPendingAr != null
+              ? (item.patientPendingAr | currency:'USD':'symbol':'1.0-2')
+              : '—' }}
+        </td>
+
+        <td class="text-center">
+          <span
+            [ngClass]="patArBadge(item.patArStatus)"
+            [title]="patArLabel(item.patArStatus)">
+            {{ patArText(item.patArStatus) }}
+          </span>
+        </td>
+
+        <td class="truncate" [title]="item.payerName || ''">
+          {{ item.payerName && item.payerName.length > 5
+              ? (item.payerName | slice:0:5) + '…'
+              : (item.payerName || '') }}
+        </td>
+
+        <td
+          *ngIf="showPredictionColumns()"
+          class="no-wrap prediction-work-status-cell"
+          [title]="$any(item).predictionWorkStatusAtRun || ''">
+          {{ shortText($any(item).predictionWorkStatusAtRun, 8) }}
+        </td>
+
+        <td
+          *ngIf="showPredictionColumns()"
+          class="no-wrap prediction-priority-cell"
+          [title]="$any(item).predictionPriorityAtRun || ''">
+          <span
+            class="prediction-priority-chip"
+            [ngClass]="'prediction-priority-' + (($any(item).predictionPriorityAtRun || 'unknown') | lowercase)">
+            {{ shortText($any(item).predictionPriorityAtRun, 12) }}
+          </span>
+        </td>
+
+        <td
+          *ngIf="showPredictionColumns()"
+          class="prediction-message-cell"
+          [title]="$any(item).predictionMessage || ''">
+          {{ shortText($any(item).predictionMessage, 25) }}
+        </td>
+
+         <td class="text-center align-middle">
+          <i
+            class="bi bi-chat-right-text rs-update-icon"
+            title="Update Status"
+            (click)="updateStatus(item); $event.stopPropagation()"></i>
+        </td>
+
+       <td
+  *ngIf="showArFollowupColumns()"
+  class="no-wrap ar-followup-status-cell"
+  [title]="$any(item).latestStatusLabel || 'No AR status yet'">
+  {{ shortText($any(item).latestStatusLabel, 10) }}
+</td>
+
+       <td
+  *ngIf="showArFollowupColumns()"
+  class="no-wrap ar-followup-action-cell"
+  [title]="$any(item).latestActionLabel || 'No AR action yet'">
+  {{ shortText($any(item).latestActionLabel, 10) }}
+</td>
+
+        <td
+          *ngIf="showArFollowupColumns()"
+          class="ar-followup-notes-cell"
+          [title]="$any(item).latestNotes || ''">
+          {{ shortText($any(item).latestNotes, 10) }}
+        </td>
+
+        <td
+          *ngIf="showArFollowupColumns()"
+          class="text-center ar-followup-count-cell"
+          [title]="$any(item).lastFollowupCreated ? ('Last follow-up: ' + $any(item).lastFollowupCreated) : ''">
+          {{ $any(item).followupCount ?? 0 }}
+        </td>
+
+       <td
+  *ngIf="showArFollowupColumns()"
+  class="no-wrap ar-followup-list-cell"
+  [title]="arListTitle(item)">
+  <span
+    class="ar-list-chip"
+    [class.ar-list-chip-empty]="!hasArFollowupData(item)">
+    {{ arListDisplay(item) }}
+  </span>
+</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div
+  *ngIf="hover.visible && hover.item"
+  id="claimHoverCard"
+  class="card shadow-sm rev-claim-hover"
+  [style.position]="'fixed'"
+  [style.zIndex]="9999"
+  [style.top.px]="hover.y"
+  [style.left.px]="hover.x"
+  style="width: 800px; max-width: 95vw; max-height: 60vh; overflow: hidden;"
+  (mouseenter)="setHoverLocked(true)"
+  (mouseleave)="setHoverLocked(false)">
+
+  <div class="card-header py-1 px-2 d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center gap-2 header-line">
+      <span class="me-1 hdr-item">Claim {{ hover.item.claimNumber }}</span>
+      <span class="hdr-item hdr-name">{{ hover.item.patientFirstName }} {{ hover.item.patientLastName }}</span>
+      <span class="hdr-item">Svc {{ hover.item.serviceDate ? (hover.item.serviceDate | date:'MMM d, y') : 'N/A' }}</span>
+      <span class="hdr-item">Tx {{ hover.item.transmissionDate ? (hover.item.transmissionDate | date:'MMM d, y') : 'N/A' }}</span>
+      <span class="hdr-item">Pay {{ hover.item.paymentDate ? (hover.item.paymentDate | date:'MMM d, y') : 'N/A' }}</span>
+      <span class="hdr-item">Service Lines ({{ hover.item.__lineCount }})</span>
+    </div>
+
+    <span
+      class="badge text-dark"
+      [ngClass]="statusBadgeClass(hover.item.__insStatus)"
+      [title]="statusLabel(hover.item.__insStatus)">
+      {{ statusShort(hover.item.__insStatus) }}
+    </span>
+  </div>
+
+  <div class="card-body p-1" style="overflow: auto; overflow-x: hidden; max-height: calc(60vh - 40px);">
+    <div class="fw-semibold mb-1">Service lines</div>
+    <table class="table table-sm table-striped table-bordered mb-0">
+      <thead>
+        <tr>
+          <th style="width: 44px;">#</th>
+          <th style="width: 92px;">Svc</th>
+          <th style="width: 380px;">CPT / Adjustments</th>
+          <th class="text-end">Chg</th>
+          <th class="text-end">Adj</th>
+          <th class="text-end">Pat Res</th>
+          <th class="text-end">Pat Pend</th>
+          <th class="text-end">Ins Paid</th>
+          <th class="text-end">Ins Pend</th>
+          <th style="width: 84px;" class="text-center">Ins Sts</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let l of hover.item.__lines; let i = index">
+          <td>{{ l.lineIndex ?? (i + 1) }}</td>
+          <td class="no-wrap">{{ l.serviceDate ? (l.serviceDate | date:'MMM d, y') : 'N/A' }}</td>
+          <td class="cpt-cell">
+            <div class="cpt-line">
+              <span class="cpt-code">{{ l.procedureCode }}</span>
+              <span class="cpt-text" *ngIf="l?.adjustmentInfoCo || l?.adjustmentInfoPr">
+                — <span *ngIf="l?.adjustmentInfoCo">{{ formatAdjustmentSummary(l.adjustmentInfoCo) }}</span>
+                <span *ngIf="l?.adjustmentInfoCo && l?.adjustmentInfoPr"> • </span>
+                <span *ngIf="l?.adjustmentInfoPr">{{ formatAdjustmentSummary(l.adjustmentInfoPr) }}</span>
+              </span>
+            </div>
+          </td>
+
+          <td class="text-end">{{ (l.totalClaimAmount ?? 0) | number:'1.0-2' }}</td>
+          <td class="text-end nowrap-cell">{{ (l.adjustedAmount ?? 0) | number:'1.0-2' }}</td>
+          <td class="text-end nowrap-cell">{{ (l.patientResponsibility ?? 0) | number:'1.0-2' }}</td>
+          <td class="text-end">{{ (l.patientPendingAr ?? 0) | number:'1.0-2' }}</td>
+          <td class="text-end">{{ (l.paidAmount ?? 0) | number:'1.0-2' }}</td>
+          <td class="text-end">{{ displayPending(l) | number:'1.0-2' }}</td>
+
+          <td class="text-center">
+            <span
+              class="badge text-dark"
+              [ngClass]="statusBadgeClass(l.paymentStatus)"
+              [title]="statusLabel(l.paymentStatus)">
+              {{ statusShort(l.paymentStatus) }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr class="table-light">
+          <td colspan="3" class="fw-bold text-end">Total</td>
+          <td class="text-end fw-semibold">{{ hover.item.totalClaimAmount | number:'1.0-2' }}</td>
+          <td class="text-end fw-semibold">{{ hover.item.adjustedAmount | number:'1.0-2' }}</td>
+          <td class="text-end fw-semibold">{{ hover.item.patientResponsibility | number:'1.0-2' }}</td>
+          <td class="text-end fw-semibold">{{ hover.item.patientPendingAr | number:'1.0-2' }}</td>
+          <td class="text-end fw-semibold">{{ hover.item.paidAmount | number:'1.0-2' }}</td>
+          <td class="text-end fw-semibold">{{ displayPending(hover.item) | number:'1.0-2' }}</td>
+          <td class="text-center">
+            <span
+              class="badge text-dark"
+              [ngClass]="statusBadgeClass(hover.item.__insStatus)"
+              [title]="statusLabel(hover.item.__insStatus)">
+              {{ statusShort(hover.item.__insStatus) }}
+            </span>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
+
+<div class="d-flex justify-content-between align-items-center claims-pagination" aria-live="polite">
+  <div>
+    Page {{ currentPage + 1 }} of {{ totalPages }}
+    <small class="text-muted">(Total: {{ totalCount }})</small>
+    <span *ngIf="selectedGridRange || selectedGridBucket" class="ms-2 text-primary">
+      • Drilldown active
+    </span>
+  </div>
+  <div>
+    <button
+      type="button"
+      class="btn btn-sm btn-secondary me-1"
+      (click)="prevPage()"
+      [disabled]="currentPage === 0">
+      Prev
+    </button>
+    <button
+      type="button"
+      class="btn btn-sm btn-secondary"
+      (click)="nextPage()"
+      [disabled]="(currentPage + 1) >= totalPages">
+      Next
+    </button>
+
+    <button
+      type="button"
+      class="btn-ar-primary ms-2"
+      (click)="openArListPopup($event)"
+      [disabled]="!filteredResults.length">
+      Create List
+    </button>
+  </div>
+</div>
+
+<div
+  *ngIf="selectedGridRange || selectedGridBucket"
+  class="alert alert-info py-2 d-flex align-items-center justify-content-between">
+  <span>
+    Drilldown:
+    <strong *ngIf="selectedGridRange">{{ selectedGridRange }}</strong>
+    <span *ngIf="selectedGridRange && selectedGridBucket"> × </span>
+    <strong *ngIf="selectedGridBucket">{{ selectedGridBucket }}</strong>
+  </span>
+  <button type="button" class="btn btn-sm btn-outline-secondary" (click)="clearDrilldown()">
+    Clear
+  </button>
+</div>
+
+<div class="row g-3 align-items-stretch claims-section">
+  <div class="col-lg-5">
+    <div class="card h-100">
+      <div class="card-body">
+        <h6 class="card-title">
+          AR Aging — # of Claims
+          <ng-container *ngIf="maxAgingDays() > 0">
+            <a
+              href="#"
+              class="ms-2 small text-decoration-underline"
+              (click)="$event.preventDefault(); focusMaxAgingClaim()">
+              Max Age: {{ maxAgingDays() }} days
+            </a>
+          </ng-container>
+        </h6>
+
+        <div class="grid-fill">
+          <div class="table-responsive" *ngIf="claimGrid">
+            <table class="table table-sm align-middle mb-0">
+              <thead>
+                <tr>
+                  <th class="whitec">Range</th>
+                  <th
+                    *ngFor="let col of claimGrid.columns; let ci = index; trackBy: trackByIdx"
+                    [ngClass]="columnClass(ci)">
+                    {{ col.label }}
+                  </th>
+                  <th class="whitec">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let band of claimGrid.bands; let ri = index; trackBy: trackByIdx">
+                  <td class="whitec">{{ band.label }}</td>
+                  <td
+                    *ngFor="let col of claimGrid.columns; let ci = index; trackBy: trackByIdx"
+                    [ngClass]="columnClass(ci)">
+                    <a
+                      class="text-decoration-none"
+                      href="javascript:void(0)"
+                      (click)="onCellClick(band.label, col.label, claimGrid.cells[ri][ci])"
+                      [title]="'Click to drill down: ' + band.label + ' × ' + col.label">
+                      {{ cellDisplayCount(claimGrid.cells[ri][ci]) }}
+                    </a>
+                  </td>
+                  <td class="fw-semibold whitec">
+                    {{ cellDisplayCount(claimGrid.rowTotals[ri]) }}
+                  </td>
+                </tr>
+
+                <tr class="table-light">
+                  <td class="fw-semibold whitec">Total</td>
+                  <td
+                    *ngFor="let col of claimGrid.columns; let ci = index; trackBy: trackByIdx"
+                    [ngClass]="columnClass(ci)">
+                    {{ cellDisplayCount(claimGrid.colTotals[ci]) }}
+                  </td>
+                  <td class="fw-bold whitec">
+                    {{ cellDisplayCount(claimGrid.grand) }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-5">
+    <div class="card h-100">
+      <div class="card-body">
+        <div class="chart-fill">
+          <apx-chart
+            *ngIf="claimChartSeries?.length"
+            [series]="claimChartSeries"
+            [chart]="chartOptions"
+            [xaxis]="claimChartXAxis"
+            [legend]="chartLegend"
+            [plotOptions]="chartPlotOptions"
+            [dataLabels]="chartDataLabels"
+            [colors]="claimChartColors"
+            [yaxis]="yAxisInt"
+            [tooltip]="chartTooltipInt"
+            [states]="chartStates"
+            [fill]="chartFill">
+          </apx-chart>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3 align-items-stretch claims-section">
+  <div class="col-lg-5">
+    <div class="card h-100">
+      <div class="card-body">
+        <h6 class="card-title">
+          AR Aging — $ Pending
+          <span class="small text-muted ms-1">
+            ({{ includePatientAr ? 'Ins + Patient' : 'Insurance only' }})
+          </span>
+          <ng-container *ngIf="maxPendingDollar() > 0">
+            <a
+              href="#"
+              class="ms-2 small text-decoration-underline"
+              (click)="$event.preventDefault(); focusMaxPendingClaim()">
+              Max: ${{ maxPendingDollar() | number:'1.0-2' }}
+            </a>
+          </ng-container>
+        </h6>
+
+        <div class="grid-fill">
+          <div class="table-responsive" *ngIf="dollarGrid">
+            <table class="table table-sm align-middle mb-0">
+              <thead>
+                <tr>
+                  <th class="whitec">Range</th>
+                  <th
+                    *ngFor="let col of dollarGrid.columns; let ci = index; trackBy: trackByIdx"
+                    [ngClass]="columnClass(ci)">
+                    {{ col.label }}
+                  </th>
+                  <th class="whitec">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let band of dollarGrid.bands; let ri = index; trackBy: trackByIdx">
+                  <td class="whitec">{{ band.label }}</td>
+                  <td
+                    *ngFor="let col of dollarGrid.columns; let ci = index; trackBy: trackByIdx"
+                    [ngClass]="columnClass(ci)">
+                    <a
+                      class="text-decoration-none"
+                      href="javascript:void(0)"
+                      (click)="onCellClick(band.label, col.label, dollarGrid.cells[ri][ci])"
+                      [title]="'Click to drill down: ' + band.label + ' × ' + col.label">
+                      {{ dollarGrid.cells[ri][ci] | number:'1.0-0' }}
+                    </a>
+                  </td>
+                  <td class="fw-semibold whitec">
+                    {{ dollarGrid.rowTotals[ri] | number:'1.0-0' }}
+                  </td>
+                </tr>
+
+                <tr class="table-light">
+                  <td class="fw-semibold whitec">Total</td>
+                  <td
+                    *ngFor="let col of dollarGrid.columns; let ci = index; trackBy: trackByIdx"
+                    [ngClass]="columnClass(ci)">
+                    {{ dollarGrid.colTotals[ci] | number:'1.0-0' }}
+                  </td>
+                  <td class="fw-bold whitec">
+                    {{ dollarGrid.grand | number:'1.0-0' }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-5">
+    <div class="card h-100">
+      <div class="card-body">
+        <div class="chart-fill">
+          <apx-chart
+            *ngIf="dollarChartSeries?.length"
+            [series]="dollarChartSeries"
+            [chart]="chartOptions"
+            [xaxis]="dollarChartXAxis"
+            [legend]="chartLegend"
+            [plotOptions]="chartPlotOptions"
+            [dataLabels]="chartDataLabels"
+            [colors]="dollarChartColors"
+            [yaxis]="yAxisInt"
+            [tooltip]="chartTooltipInt"
+            [states]="chartStates"
+            [fill]="chartFill">
+          </apx-chart>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  #claimHoverCard.rev-claim-hover { font-size: 11.5px; line-height: 1.25; border: 0.5px solid var(--rm-border-strong, #d0d5dd) !important; background: var(--rm-surface, #ffffff); }
+  #claimHoverCard.rev-claim-hover .card-header { padding: .25rem .5rem; background: var(--rm-surface-2, #f9fafb); border-bottom-color: var(--rm-border, #eaecf0); }
+  #claimHoverCard.rev-claim-hover .header-line { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #claimHoverCard.rev-claim-hover .hdr-item { color: var(--rm-text, #09090b); }
+  #claimHoverCard.rev-claim-hover .hdr-name { font-weight: 700; }
+  #claimHoverCard.rev-claim-hover .card-body { padding: .35rem .5rem; background: var(--rm-surface, #ffffff); }
+  #claimHoverCard.rev-claim-hover .badge { font-size: 10.5px; padding: .15rem .35rem; display: inline-block; }
+  #claimHoverCard.rev-claim-hover .table-sm > :not(caption) > * > * { padding: .15rem .3rem; color: var(--rm-text, #09090b); }
+  #claimHoverCard.rev-claim-hover th { font-weight: 600; color: var(--rm-text-2, #71717a); }
+  #claimHoverCard.rev-claim-hover .nowrap-cell { white-space: nowrap; }
+  #claimHoverCard.rev-claim-hover .cpt-cell { white-space: normal; }
+  #claimHoverCard.rev-claim-hover .cpt-line { white-space: normal; }
+  #claimHoverCard.rev-claim-hover .cpt-code { font-weight: 600; color: var(--rm-text, #09090b); }
+  #claimHoverCard.rev-claim-hover .cpt-text { color: var(--rm-text-2, #71717a); font-weight: 400; white-space: normal; overflow-wrap: anywhere; word-break: break-word; }
+</style>

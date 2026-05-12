@@ -1,0 +1,109 @@
+/* 🔹 Sortable Columns */
+.sortable {
+    cursor: pointer;
+    user-select: none;
+}
+
+.sortable:hover {
+    text-decoration: underline;
+}
+
+/* 🔹 Table Styling */
+.table {
+    font-size: 12px; /* ✅ Reduced font size by 2 points */
+}
+
+.table th, .table td {
+    padding: 6px 8px; /* ✅ Compact spacing */
+}
+.no-wrap {
+  white-space: nowrap;
+}
+
+/* 🔹 Expand/Collapse Button */
+.expand-btn {
+    background-color: #edceee; /* ✅ Grey background */
+    color: rgb(227, 245, 234); /* ✅ White text */
+    border: none;
+    padding: 3px 8px; /* ✅ Smaller padding */
+    font-size: 11px; /* ✅ Adjusted font size */
+    border-radius: 4px; /* ✅ Rounded edges */
+    min-width: 25px; /* ✅ Smaller button */
+    transition: all 0.2s ease-in-out;
+}
+
+.expand-btn:hover {
+    background-color: #5a6268; /* ✅ Darker grey on hover */
+}
+
+/* 🔹 Pagination Styling */
+.pagination {
+    margin-top: 8px;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap; /* ✅ Allows wrapping to next line */
+    justify-content: center;
+    gap: 2px; /* ✅ Reduce space between page links */
+    max-width: 100%; /* ✅ Ensures pagination stays within the container */
+}
+
+/* 🔹 Limit to 50 page links per row before wrapping */
+.pagination .page-item {
+    font-size: 10px; /* ✅ Smaller font size */
+    margin: 0; /* ✅ Remove extra spacing */
+    flex: 0 1 auto; /* ✅ Ensures proper wrapping */
+    min-width: 22px; /* ✅ Smaller width per page link */
+}
+
+/* 🔹 Pagination Links */
+.page-link {
+    padding: 2px 5px; /* ✅ Reduce padding further */
+    font-size: 10px; /* ✅ Smaller font */
+    border-radius: 3px;
+    border: 1px solid #bbb;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    min-width: 22px;
+    text-align: center;
+}
+
+.page-link:hover {
+    background-color: #e6e6e6;
+}
+
+.page-item.active .page-link {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.page-item.disabled .page-link {
+    color: #aaa;
+    pointer-events: none;
+}
+
+/* 🔹 Ensure wrapping happens after 50 links */
+@media screen and (max-width: 1200px) {
+    .pagination {
+        flex-wrap: wrap;
+        max-width: 650px; /* ✅ Adjusts max width for proper wrapping */
+    }
+}
+
+/* 🔹 Small Button Styling */
+.btn-sm {
+    padding: 2px 6px;
+    font-size: 12px;
+}
+
+/* 🔹 Global Button Styling */
+button {
+    min-width: 30px;
+}
+.no-wrap {
+    white-space: nowrap;
+  }
+  .no-wrap {
+    white-space: nowrap;
+  }
+    

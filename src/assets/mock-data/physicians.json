@@ -1,0 +1,14 @@
+[
+  {
+    "physicianProfileFid": 101,
+    "physicianName": "Dr. Ramesh Kumar"
+  },
+  {
+    "physicianProfileFid": 102,
+    "physicianName": "Dr. Linda Smith"
+  },
+  {
+    "physicianProfileFid": 103,
+    "physicianName": "Dr. Anita Rao"
+  }
+]

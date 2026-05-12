@@ -1,0 +1,11 @@
+.first-pass-chart-wrapper {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  margin: 0 auto;
+  overflow: visible;
+  border: 1px solid var(--rm-border, #e4e4e7);
+  border-radius: 8px;
+  padding: 16px;
+  background-color: var(--rm-surface, #ffffff);
+}

@@ -1,0 +1,83 @@
+<div class="container-fluid mgmt-dashboard px-0">
+
+  <!-- Header -->
+  <div class="mgmt-header">
+    <h5 class="mb-0 mgmt-title">Management Dashboard</h5>
+  </div>
+
+  <!-- GCR and NCR by Date of Entry -->
+  <div class="card dash-tile">
+    <div class="card-body">
+      <div class="report-title-row">
+        <div class="ncr-heading">GCR and NCR by Date of Entry</div>
+        <button type="button" class="btn-accordion" [class.is-open]="showDoeReport" (click)="toggleDoeReport()">
+          {{ showDoeReport ? 'Collapse' : 'Expand' }}
+        </button>
+      </div>
+      <div *ngIf="showDoeReport" class="report-content">
+        <app-ncrreport-by-doe [licenseKey]="licenseKey" [showChart]="true"></app-ncrreport-by-doe>
+      </div>
+    </div>
+  </div>
+
+  <!-- CPT Charge and Payment Report -->
+  <div class="card dash-tile">
+    <div class="card-body">
+      <div class="report-title-row">
+        <div class="ncr-heading">CPT Charge and Payment Report</div>
+        <button type="button" class="btn-accordion" [class.is-open]="showCptReport" (click)="toggleCptReport()">
+          {{ showCptReport ? 'Collapse' : 'Expand' }}
+        </button>
+      </div>
+      <div *ngIf="showCptReport" class="report-content">
+        <app-cpt-charge-payment-report [licenseKey]="licenseKey"></app-cpt-charge-payment-report>
+      </div>
+    </div>
+  </div>
+
+  <!-- Clean Claim Report -->
+  <div class="card dash-tile">
+    <div class="card-body">
+      <div class="report-title-row">
+        <div class="ncr-heading">Clean Claim Report</div>
+        <button type="button" class="btn-accordion" [class.is-open]="showCleanClaimReport" (click)="toggleCleanClaimReport()">
+          {{ showCleanClaimReport ? 'Collapse' : 'Expand' }}
+        </button>
+      </div>
+      <div *ngIf="showCleanClaimReport" class="report-content">
+        <app-clean-claim-report [licenseKey]="licenseKey"></app-clean-claim-report>
+      </div>
+    </div>
+  </div>
+
+  <!-- Liquidation Rate Report -->
+  <div class="card dash-tile">
+    <div class="card-body">
+      <div class="report-title-row">
+        <div class="ncr-heading">Liquidation Rate Report</div>
+        <button type="button" class="btn-accordion" [class.is-open]="showLiquidationRateReport" (click)="toggleLiquidationRateReport()">
+          {{ showLiquidationRateReport ? 'Collapse' : 'Expand' }}
+        </button>
+      </div>
+      <div *ngIf="showLiquidationRateReport" class="report-content">
+        <app-liquidation-rate-report [licenseKey]="licenseKey"></app-liquidation-rate-report>
+      </div>
+    </div>
+  </div>
+
+  <!-- Daily Pending AR Trend -->
+  <div class="card dash-tile">
+    <div class="card-body">
+      <div class="report-title-row">
+        <div class="ncr-heading">Daily Pending AR Trend</div>
+        <button type="button" class="btn-accordion" [class.is-open]="showPendingArSnapshotTrendReport" (click)="togglePendingArSnapshotTrendReport()">
+          {{ showPendingArSnapshotTrendReport ? 'Collapse' : 'Expand' }}
+        </button>
+      </div>
+      <div *ngIf="showPendingArSnapshotTrendReport" class="report-content">
+        <app-pending-ar-snapshot-trend [companyId]="licenseKey"></app-pending-ar-snapshot-trend>
+      </div>
+    </div>
+  </div>
+
+</div>

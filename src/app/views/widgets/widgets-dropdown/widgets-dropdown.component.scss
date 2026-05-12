@@ -1,0 +1,15 @@
+/* Shared container rules */
+.widget-chart-container {
+  height: 90px;      // pick a height that works for you
+  position: relative; // ensures the chart fills this box
+}
+
+/* First Pass */
+.first-pass-chart-container {
+  @extend .widget-chart-container;
+}
+
+/* Clean Claim Rate */
+.clean-pass-chart-container {
+  @extend .widget-chart-container;
+}

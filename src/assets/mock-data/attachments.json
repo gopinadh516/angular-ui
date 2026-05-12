@@ -1,0 +1,20 @@
+[
+  {
+    "attachmentId": 7001,
+    "followupId": 9001,
+    "attachPath": "/mock/eob_13084550.pdf",
+    "originalName": "payer_portal_screenshot.pdf",
+    "storedName": "mock-payer-portal-13084550.pdf",
+    "contentType": "application/pdf",
+    "fileSize": 124000
+  },
+  {
+    "attachmentId": 7002,
+    "followupId": 9002,
+    "attachPath": "/mock/coding_note_13084551.txt",
+    "originalName": "coding_note.txt",
+    "storedName": "mock-coding-note-13084551.txt",
+    "contentType": "text/plain",
+    "fileSize": 2048
+  }
+]

@@ -1,0 +1,227 @@
+// =========================================================
+// Design Tokens — RevMax Premium Minimal Theme
+// Single source of truth for all CSS custom properties
+// =========================================================
+
+:root {
+  // ── Surfaces ─────────────────────────────────────────
+  --rm-bg:             #f8f9fb;   // light warm-gray page bg — cards float on this
+  --rm-surface:        #ffffff;
+  --rm-surface-2:      #f9fafb;
+  --rm-surface-3:      #f3f4f6;
+
+  // ── Shadows ──────────────────────────────────────────
+  --rm-shadow-xs:      0 1px 2px 0 rgba(16, 24, 40, 0.05);
+  --rm-shadow-sm:      0 1px 3px 0 rgba(16, 24, 40, 0.10), 0 1px 2px -1px rgba(16, 24, 40, 0.10);
+  --rm-shadow-md:      0 4px 8px -2px rgba(16, 24, 40, 0.10), 0 2px 4px -2px rgba(16, 24, 40, 0.06);
+  --rm-shadow-lg:      0 12px 16px -4px rgba(16, 24, 40, 0.08), 0 4px 6px -2px rgba(16, 24, 40, 0.03);
+
+  // ── Borders ──────────────────────────────────────────
+  --rm-border:         #eaecf0;
+  --rm-border-strong:  #d0d5dd;
+  --rm-divider:        #f2f4f7;
+
+  // ── Text ─────────────────────────────────────────────
+  --rm-text:           #09090b;
+  --rm-text-2:         #71717a;
+  --rm-text-3:         #a1a1aa;
+  --rm-text-inverse:   #ffffff;
+
+  // ── Interactive states ────────────────────────────────
+  --rm-hover:          #fafafa;
+  --rm-active:         #f4f4f5;
+  --rm-active-border:  #09090b;
+  --rm-focus-ring:     rgba(9, 9, 11, 0.12);
+
+  // ── Status ───────────────────────────────────────────
+  --rm-success:        #059669;
+  --rm-success-bg:     #ecfdf5;
+  --rm-success-text:   #065f46;
+  --rm-warning:        #d97706;
+  --rm-warning-bg:     #fffbeb;
+  --rm-warning-text:   #92400e;
+  --rm-danger:         #dc2626;
+  --rm-danger-bg:      #fef2f2;
+  --rm-danger-text:    #991b1b;
+  --rm-info:           #4f46e5;
+  --rm-info-bg:        #eef2ff;
+  --rm-info-text:      #3730a3;
+  --rm-neutral:        #71717a;
+  --rm-neutral-bg:     #f4f4f5;
+
+  // ── Data viz (6-color minimal set) ───────────────────
+  --rm-chart-1:        #09090b;
+  --rm-chart-2:        #6366f1;
+  --rm-chart-3:        #059669;
+  --rm-chart-4:        #d97706;
+  --rm-chart-5:        #dc2626;
+  --rm-chart-6:        #7c3aed;
+
+  // ── Typography ───────────────────────────────────────
+  --rm-font:           'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --rm-font-xs:        0.75rem;      // 12px — labels, meta
+  --rm-font-sm:        0.8125rem;    // 13px — secondary body
+  --rm-font-md:        0.875rem;     // 14px — base body
+  --rm-font-lg:        0.9375rem;    // 15px — section headings
+  --rm-font-xl:        1.5rem;       // 24px — page titles
+  --rm-font-2xl:       1.875rem;     // 30px — metric values
+
+  // ── Shape ────────────────────────────────────────────
+  --rm-radius-sm:      6px;
+  --rm-radius-md:      8px;
+  --rm-radius-lg:      10px;
+  --rm-radius-xl:      12px;
+  --rm-radius-pill:    999px;
+
+  // ── Layout ───────────────────────────────────────────
+  --rm-sidebar-w:      220px;
+  --rm-sidebar-narrow: 52px;
+  --rm-header-h:       60px;
+  --rm-footer-h:       48px;
+
+  // ── CoreUI overrides (light) ──────────────────────────
+
+  // Primary colour → near-black (replaces CoreUI's default purple)
+  --cui-primary:                       #09090b;
+  --cui-primary-rgb:                   9, 9, 11;
+  --bs-primary:                        #09090b;
+  --bs-primary-rgb:                    9, 9, 11;
+
+  // Neutralise every tinted primary surface
+  --cui-primary-bg-subtle:             #f4f4f5;
+  --cui-primary-border-subtle:         #e4e4e7;
+  --cui-primary-text-emphasis:         #09090b;
+
+  // Button CSS variable cascade that Bootstrap/CoreUI reads
+  --bs-btn-bg:                         transparent;
+  --cui-btn-active-bg:                 #09090b;
+  --cui-btn-active-border-color:       #09090b;
+  --cui-btn-active-color:              #ffffff;
+
+  --cui-body-bg:                       #f8f9fb;
+  --cui-body-color:                    #09090b;
+  --cui-body-color-rgb:                9, 9, 11;
+  --cui-emphasis-color:                #09090b;
+  --cui-emphasis-color-rgb:            9, 9, 11;
+  --cui-secondary-color:               #71717a;
+  --cui-tertiary-color:                #a1a1aa;
+  --cui-tertiary-bg:                   #ffffff;
+  --cui-secondary-bg:                  #fafafa;
+  --cui-border-color:                  #e4e4e7;
+  --cui-border-color-translucent:      rgba(9, 9, 11, 0.08);
+
+  --cui-body-font-family:              'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --bs-font-sans-serif:                'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+
+  --cui-sidebar-bg:                    #ffffff;
+  --cui-sidebar-color:                 #09090b;
+  --cui-sidebar-width:                 var(--rm-sidebar-w, 220px);
+  --cui-sidebar-narrow-width:          var(--rm-sidebar-narrow, 52px);
+  --cui-sidebar-brand-bg:              #ffffff;
+  --cui-sidebar-brand-color:           #09090b;
+  --cui-sidebar-nav-link-color:        #09090b;
+  --cui-sidebar-nav-link-hover-bg:     #fafafa;
+  --cui-sidebar-nav-link-hover-color:  #09090b;
+  --cui-sidebar-nav-link-active-bg:    #f4f4f5;
+  --cui-sidebar-nav-link-active-color: #09090b;
+  --cui-sidebar-nav-link-active-icon-color: #09090b;
+  --cui-sidebar-nav-link-hover-icon-color:  #09090b;
+  --cui-sidebar-nav-link-icon-color:   #09090b;
+  --cui-sidebar-nav-title-color:       #a1a1aa;
+  --cui-sidebar-toggler-bg:            #f4f4f5;
+  --cui-sidebar-toggler-hover-bg:      #e4e4e7;
+
+  --cui-header-bg:                     #ffffff;
+  --cui-header-color:                  #09090b;
+  --cui-header-border-color:           #e4e4e7;
+
+  --cui-footer-bg:                     #ffffff;
+  --cui-footer-color:                  #71717a;
+  --cui-footer-border-color:           #e4e4e7;
+
+  --cui-card-bg:                       #ffffff;
+  --cui-card-border-color:             #e4e4e7;
+  --cui-card-cap-bg:                   #ffffff;
+  --cui-card-color:                    #09090b;
+  --cui-card-box-shadow:               none;
+
+  --cui-link-color:                    #09090b;
+  --cui-link-hover-color:              #3f3f46;
+
+  --bs-body-bg:                        #f8f9fb;
+  --bs-body-color:                     #09090b;
+  --bs-body-color-rgb:                 9, 9, 11;
+  --bs-border-color:                   #eaecf0;
+  --bs-emphasis-color:                 #09090b;
+}
+
+// ── Dark mode (CoreUI [data-coreui-theme="dark"]) ─────────────────────────────
+[data-coreui-theme="dark"] {
+  color-scheme: dark;
+
+  --rm-bg:             #09090b;
+  --rm-surface:        #18181b;
+  --rm-surface-2:      #27272a;
+  --rm-surface-3:      #3f3f46;
+  --rm-border:         #27272a;
+  --rm-border-strong:  #3f3f46;
+  --rm-divider:        #27272a;
+  --rm-text:           #fafafa;
+  --rm-text-2:         #a1a1aa;
+  --rm-text-3:         #71717a;
+  --rm-text-inverse:   #09090b;
+  --rm-hover:          #27272a;
+  --rm-active:         #3f3f46;
+  --rm-active-border:  #fafafa;
+  --rm-focus-ring:     rgba(250, 250, 250, 0.12);
+
+  --cui-body-bg:                       #09090b;
+  --cui-body-color:                    #fafafa;
+  --cui-body-color-rgb:                250, 250, 250;
+  --cui-emphasis-color:                #fafafa;
+  --cui-emphasis-color-rgb:            250, 250, 250;
+  --cui-secondary-color:               #a1a1aa;
+  --cui-tertiary-color:                #71717a;
+  --cui-tertiary-bg:                   #09090b;
+  --cui-secondary-bg:                  #27272a;
+  --cui-border-color:                  #27272a;
+  --cui-border-color-translucent:      rgba(250, 250, 250, 0.08);
+
+  --cui-sidebar-bg:                    #18181b;
+  --cui-sidebar-color:                 #fafafa;
+  --cui-sidebar-brand-bg:              #18181b;
+  --cui-sidebar-brand-color:           #fafafa;
+  --cui-sidebar-nav-link-color:        #a1a1aa;
+  --cui-sidebar-nav-link-hover-bg:     #27272a;
+  --cui-sidebar-nav-link-hover-color:  #fafafa;
+  --cui-sidebar-nav-link-active-bg:    #3f3f46;
+  --cui-sidebar-nav-link-active-color: #fafafa;
+  --cui-sidebar-nav-link-active-icon-color: #fafafa;
+  --cui-sidebar-nav-link-hover-icon-color:  #fafafa;
+  --cui-sidebar-nav-link-icon-color:   #71717a;
+  --cui-sidebar-nav-title-color:       #71717a;
+  --cui-sidebar-toggler-bg:            #27272a;
+  --cui-sidebar-toggler-hover-bg:      #3f3f46;
+
+  --cui-header-bg:                     #18181b;
+  --cui-header-color:                  #fafafa;
+  --cui-header-border-color:           #27272a;
+
+  --cui-footer-bg:                     #18181b;
+  --cui-footer-color:                  #a1a1aa;
+  --cui-footer-border-color:           #27272a;
+
+  --cui-card-bg:                       #18181b;
+  --cui-card-border-color:             #27272a;
+  --cui-card-cap-bg:                   #18181b;
+  --cui-card-color:                    #fafafa;
+  --cui-card-box-shadow:               none;
+
+  --cui-link-color:                    #fafafa;
+  --cui-link-hover-color:              #a1a1aa;
+
+  --bs-body-bg:                        #09090b;
+  --bs-body-color:                     #fafafa;
+  --bs-border-color:                   #27272a;
+  --bs-emphasis-color:                 #fafafa;
+}

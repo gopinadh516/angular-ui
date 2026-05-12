@@ -1,0 +1,180 @@
+<div class="et-wrapper">
+
+  <!-- Page header -->
+  <div class="et-page-header">
+    <h5 class="et-page-title mb-0">Encounters</h5>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="et-toolbar c-card">
+    <div class="et-left">
+
+      <!-- Date navigation group -->
+      <div class="et-date-nav">
+        <button type="button" class="et-date-nav-btn" (click)="shiftDay(-1)" title="Previous day">&#9664;</button>
+        <input
+          type="date"
+          class="et-date-input"
+          [(ngModel)]="selectedDateISO"
+          (ngModelChange)="onDateChange($event)" />
+        <button type="button" class="et-date-nav-btn" (click)="shiftDay(1)" title="Next day">&#9654;</button>
+      </div>
+
+      <button type="button" class="et-today-btn" (click)="goToday()">Today</button>
+    </div>
+
+    <div class="et-right">
+      <label class="et-persist-label">
+        <input type="checkbox" [(ngModel)]="persistToLocal" (change)="onPersistToggle()" />
+        Persist in browser
+      </label>
+
+      <button type="button" class="btn-et-primary" (click)="emitBulkSave()">Save All</button>
+      <button type="button" class="btn-et-ghost-danger" (click)="clearDay()">Clear Day</button>
+    </div>
+  </div>
+
+  <!-- Quick Add -->
+  <div class="c-card quick-add">
+    <button type="button" class="btn-et-primary" (click)="addQuick()">+ Add (Enter)</button>
+  </div>
+
+  <!-- Summary -->
+  <div class="summary c-card" *ngIf="summary.total > 0">
+    <div class="stat"><span class="k">Total</span><span class="v">{{ summary.total }}</span></div>
+    <div class="stat"><span class="k">Scheduled</span><span class="v">{{ summary.scheduled }}</span></div>
+    <div class="stat"><span class="k">Checked-In</span><span class="v">{{ summary.checkedIn }}</span></div>
+    <div class="stat"><span class="k">In-Progress</span><span class="v">{{ summary.inProgress }}</span></div>
+    <div class="stat"><span class="k">Completed</span><span class="v">{{ summary.completed }}</span></div>
+    <div class="stat"><span class="k">Cancelled</span><span class="v">{{ summary.cancelled }}</span></div>
+    <div class="stat"><span class="k">No-Show</span><span class="v">{{ summary.noShow }}</span></div>
+    <div class="stat" *ngIf="summary.avgDurationCompleted !== null">
+      <span class="k">Avg Duration</span><span class="v">{{ summary.avgDurationCompleted }}m</span>
+    </div>
+  </div>
+
+  <!-- Grid -->
+  <div class="et-table c-card">
+    <div class="et-header">
+      <div class="col time">Appt</div>
+      <div class="col patient">Patient</div>
+      <div class="col mrn">MRN</div>
+      <div class="col physician" *ngIf="selectedPhysicianId === 'ALL'">Physician</div>
+      <div class="col type">Visit</div>
+      <div class="col room">Room</div>
+      <div class="col status">Status</div>
+      <div class="col t">Check-In</div>
+      <div class="col t">Start</div>
+      <div class="col t">Complete</div>
+      <div class="col dur">Dur</div>
+      <div class="col notes">Notes</div>
+      <div class="col actions">Actions</div>
+    </div>
+
+    <div
+      class="et-row"
+      *ngFor="let e of filtered; trackBy: trackById"
+      [class.inprogress]="e.status === 'In-Progress'"
+      [class.completed]="e.status === 'Completed'"
+      [class.cancelled]="e.status === 'Cancelled'"
+      [class.noshow]="e.status === 'No-Show'"
+    >
+      <div class="col time">
+        <input type="time" [(ngModel)]="e.appointmentTime" (change)="touch(e)" />
+        <button class="link" type="button" (click)="setNow(e,'appointmentTime')">now</button>
+      </div>
+
+      <div class="col patient">
+        <input type="text" [(ngModel)]="e.patientName" (input)="touch(e)" placeholder="Name" />
+      </div>
+
+      <div class="col mrn">
+        <input type="text" [(ngModel)]="e.patientId" (input)="touch(e)" placeholder="MRN" />
+      </div>
+
+      <div class="col physician" *ngIf="selectedPhysicianId === 'ALL'">
+        <select [(ngModel)]="e.physicianId" (change)="onEncounterPhysicianChange(e)">
+          <option *ngFor="let p of physicians" [value]="p.id">{{ p.name }}</option>
+        </select>
+      </div>
+
+      <div class="col type">
+        <select [(ngModel)]="e.visitType" (change)="touch(e)">
+          <option value="">-</option>
+          <option *ngFor="let v of visitTypeOptions" [value]="v">{{ v }}</option>
+        </select>
+      </div>
+
+      <div class="col room">
+        <select [(ngModel)]="e.room" (change)="touch(e)">
+          <option value="">-</option>
+          <option *ngFor="let r of roomOptions" [value]="r">{{ r }}</option>
+        </select>
+      </div>
+
+      <div class="col status">
+        <select [(ngModel)]="e.status" (change)="onStatusSelect(e)">
+          <option>Scheduled</option>
+          <option>Checked-In</option>
+          <option>In-Progress</option>
+          <option>Completed</option>
+          <option>Cancelled</option>
+          <option>No-Show</option>
+        </select>
+      </div>
+
+      <div class="col t">
+        <div class="time-edit">
+          <input type="time" [(ngModel)]="e.checkedInAt" (change)="touch(e)" />
+          <button class="link" type="button" (click)="setNow(e,'checkedInAt')">now</button>
+        </div>
+      </div>
+
+      <div class="col t">
+        <div class="time-edit">
+          <input type="time" [(ngModel)]="e.startedAt" (change)="touch(e)" />
+          <button class="link" type="button" (click)="setNow(e,'startedAt')">now</button>
+        </div>
+      </div>
+
+      <div class="col t">
+        <div class="time-edit">
+          <input type="time" [(ngModel)]="e.completedAt" (change)="touch(e)" />
+          <button class="link" type="button" (click)="setNow(e,'completedAt')">now</button>
+        </div>
+      </div>
+
+      <div class="col dur">
+        {{ e.durationMinutes != null ? e.durationMinutes : '-' }}
+      </div>
+
+      <div class="col notes">
+        <input type="text" [(ngModel)]="e.notes" (input)="touch(e)" placeholder="Notes" />
+      </div>
+
+      <div class="col actions">
+        <div class="row-actions">
+          <button type="button" class="btn-et-outline" (click)="emitSave(e)">Save</button>
+          <button type="button" class="btn-et-outline" (click)="duplicate(e)">Duplicate</button>
+          <button type="button" class="btn-et-icon-danger" (click)="remove(e.id)" title="Delete encounter">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"></path>
+              <path d="M10 11v6M14 11v6"></path>
+              <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"></path>
+            </svg>
+          </button>
+        </div>
+        <div class="minor-links">
+          <button class="link" type="button" (click)="markCancelled(e)" [disabled]="e.status === 'Completed'">Cancel</button>
+          <button class="link" type="button" (click)="markNoShow(e)" [disabled]="e.status !== 'Scheduled'">No-Show</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="et-empty" *ngIf="filtered.length === 0">
+      No encounters for this day with current filters.
+    </div>
+  </div>
+
+</div>

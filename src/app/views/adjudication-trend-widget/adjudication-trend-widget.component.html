@@ -1,0 +1,17 @@
+<c-widget-stat-a [title]="'Avg Days to Adjudication'" color="secondary">
+  <ng-template cTemplateId="widgetValueTemplate">
+    <span>{{ latestAvgDays }}</span>
+    <span class="fw-normal" style="font-size:12px;">
+      ({{ delta }}
+       <svg cIcon [name]="delta >= 0 ? 'cilArrowTop' : 'cilArrowBottom'" size="sm"></svg>)
+    </span>
+  </ng-template>
+  <ng-template cTemplateId="widgetChartTemplate">
+    <c-chart
+      [data]="adjudicationChartData"
+      [options]="adjudicationChartOptions"
+      height="70"
+      type="bar">
+    </c-chart>
+  </ng-template>
+</c-widget-stat-a>

@@ -1,0 +1,109 @@
+.ncr-root {
+  width: 100%;
+  background: #fff;
+}
+
+.ncr-grid {
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+  background: #fff;
+}
+
+/* 50/50 layout */
+.ncr-table-pane,
+.ncr-chart-pane {
+  flex: 0 0 50%;
+  max-width: 50%;
+  min-width: 420px;
+  background: #fff;
+}
+
+/* Chart pane layout */
+.ncr-chart-pane {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== TABLE ===== */
+.ncr-table-scroll {
+  max-height: 420px;
+  overflow: auto;
+  background: #fff;
+  position: relative; /* helps sticky inside scroll container */
+}
+
+.ncr-table {
+  font-size: 13px;
+  background: #fff;
+  border-collapse: separate; /* improves sticky rendering */
+  border-spacing: 0;
+
+  th,
+  td {
+    padding: 0.22rem 0.35rem;
+    white-space: nowrap;
+    background: #fff; /* important for sticky cells */
+  }
+
+  tbody tr td {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+}
+
+/* Sticky header (like DOE) */
+.ncr-thead th {
+  border-bottom: 2px solid rgba(0, 0, 0, 0.35);
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: #fff;
+}
+
+/* Totals row: make cells sticky at bottom (this is the key fix) */
+.ncr-table tfoot td {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  background: #fff;
+  border-top: 2px solid rgba(0, 0, 0, 0.12);
+}
+
+/* Extra clarity for totals row */
+.ncr-total-row td {
+  font-weight: 600;
+}
+
+/* ===== CHART ===== */
+.ncr-apex {
+  width: 100%;
+  height: 420px;
+  background: #fff;
+}
+
+.ncr-apex apx-chart {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .ncr-grid {
+    flex-direction: column;
+  }
+
+  .ncr-table-pane,
+  .ncr-chart-pane {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .ncr-apex {
+    height: 420px;
+  }
+}

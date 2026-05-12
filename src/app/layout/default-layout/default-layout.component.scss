@@ -1,0 +1,256 @@
+// =========================================================
+// Default Layout — shell sizing + sidebar premium minimal
+// =========================================================
+
+:host::ng-deep {
+  .ng-scrollbar {
+    --scrollbar-padding: 1px;
+    --scrollbar-size: 4px;
+    --scrollbar-thumb-color: var(--rm-border-strong, #d1d5db);
+    --scrollbar-thumb-hover-color: var(--rm-text-3, #a1a1aa);
+    --scrollbar-hover-size: 6px;
+    --scrollbar-border-radius: 999px;
+  }
+
+  .ng-scroll-content {
+    display: flex;
+  }
+}
+
+// ── Layout dimensions ─────────────────────────────────────
+:host {
+  --app-sidebar-width:        var(--rm-sidebar-w, 220px);
+  --app-sidebar-narrow-width: var(--rm-sidebar-narrow, 52px);
+  --app-header-height:        var(--rm-header-h, 60px);
+  --app-footer-height:        var(--rm-footer-h, 48px);
+  --app-content-bottom-reserve: 4rem;
+}
+
+// ── Sidebar scoped overrides ──────────────────────────────
+#sidebar1 {
+  --cui-sidebar-bg:                    var(--rm-surface, #ffffff);
+  --cui-sidebar-color:                 var(--rm-text, #09090b);
+  --cui-sidebar-width:                 var(--app-sidebar-width);
+  --cui-sidebar-narrow-width:          var(--app-sidebar-narrow-width);
+  --cui-sidebar-brand-bg:              var(--rm-surface, #ffffff);
+  --cui-sidebar-brand-color:           var(--rm-text, #09090b);
+  --cui-sidebar-nav-link-color:        var(--rm-text-2, #71717a);
+  --cui-sidebar-nav-link-hover-bg:     var(--rm-hover, #fafafa);
+  --cui-sidebar-nav-link-hover-color:  var(--rm-text, #09090b);
+  --cui-sidebar-nav-link-active-bg:    var(--rm-active, #f4f4f5);
+  --cui-sidebar-nav-link-active-color: var(--rm-text, #09090b);
+  --cui-sidebar-nav-link-icon-color:   var(--rm-text-3, #a1a1aa);
+  --cui-sidebar-nav-title-color:       var(--rm-text-3, #a1a1aa);
+
+  background: var(--rm-surface, #ffffff);
+  border-right: none;
+  box-shadow: 1px 0 0 rgba(0, 0, 0, 0.06);
+}
+
+// ── Sidebar nav link — left-border active indicator ───────
+#sidebar1 .sidebar-nav .nav-link {
+  color: var(--rm-text, #09090b);
+  border-left: 2px solid transparent;
+  border-radius: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding-top: 0.55rem;
+  padding-bottom: 0.55rem;
+  transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+}
+
+#sidebar1 .sidebar-nav .nav-link:hover {
+  background: var(--cui-sidebar-nav-link-hover-bg);
+  color: var(--rm-text, #09090b);
+  border-left-color: var(--rm-border-strong, #d1d5db);
+}
+
+#sidebar1 .sidebar-nav .nav-link.active,
+#sidebar1 .sidebar-nav .nav-link.router-link-active {
+  background: var(--cui-sidebar-nav-link-active-bg) !important;
+  color: var(--rm-text, #09090b) !important;
+  border-left-color: var(--rm-active-border, #09090b) !important;
+  font-weight: 700;
+}
+
+// ── Sidebar icons — always black ──────────────────────────
+#sidebar1 .sidebar-nav .nav-icon,
+#sidebar1 .sidebar-nav c-icon,
+#sidebar1 .sidebar-nav .nav-link svg {
+  color: var(--rm-text, #09090b) !important;
+  fill: var(--rm-text, #09090b) !important;
+  transition: color 0.12s ease;
+}
+
+#sidebar1 .sidebar-nav .nav-link:hover .nav-icon,
+#sidebar1 .sidebar-nav .nav-link:hover c-icon,
+#sidebar1 .sidebar-nav .nav-link:hover svg {
+  color: var(--rm-text, #09090b) !important;
+  fill: var(--rm-text, #09090b) !important;
+}
+
+#sidebar1 .sidebar-nav .nav-link.active .nav-icon,
+#sidebar1 .sidebar-nav .nav-link.active c-icon,
+#sidebar1 .sidebar-nav .nav-link.active svg,
+#sidebar1 .sidebar-nav .nav-link.router-link-active .nav-icon,
+#sidebar1 .sidebar-nav .nav-link.router-link-active c-icon,
+#sidebar1 .sidebar-nav .nav-link.router-link-active svg {
+  color: var(--rm-text, #09090b) !important;
+  fill: var(--rm-text, #09090b) !important;
+}
+
+// ── Nav group title (divider label) ───────────────────────
+#sidebar1 .sidebar-nav .nav-title {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--rm-text-3, #a1a1aa) !important;
+  padding: 1rem 1rem 0.35rem;
+}
+
+// ── Sidebar brand / logo area ─────────────────────────────
+#sidebar1 .sidebar-brand {
+  background: var(--rm-surface, #ffffff);
+  border-bottom: 1px solid var(--rm-border, #e4e4e7);
+}
+
+// ── Sidebar toggler ───────────────────────────────────────
+#sidebar1 .sidebar-toggler {
+  background: var(--rm-surface-2, #fafafa);
+  border-top: 1px solid var(--rm-border, #e4e4e7);
+
+  &:hover {
+    background: var(--rm-active, #f4f4f5);
+  }
+}
+
+// ── Fixed sidebar wrapper offset ─────────────────────────
+@media (min-width: 992px) {
+  #sidebar1.sidebar-fixed ~ .wrapper {
+    padding-left: var(--app-sidebar-width) !important;
+  }
+
+  #sidebar1.sidebar-fixed.sidebar-narrow ~ .wrapper,
+  #sidebar1.sidebar-fixed.sidebar-narrow-unfoldable ~ .wrapper {
+    padding-left: var(--app-sidebar-narrow-width) !important;
+  }
+
+  #sidebar1.sidebar-fixed ~ .wrapper.sidebar-hidden {
+    padding-left: 0 !important;
+  }
+}
+
+// ── Main layout sizing ────────────────────────────────────
+.app-main-wrapper {
+  min-height: 100vh;
+  overflow: visible;
+}
+
+.app-body {
+  flex: 1 0 auto;
+  min-height: calc(100vh - var(--app-header-height) - var(--app-footer-height));
+  overflow: visible;
+  padding-bottom: var(--app-content-bottom-reserve);
+}
+
+.app-content-container {
+  min-height: calc(100vh - var(--app-header-height) - var(--app-footer-height));
+  padding-bottom: var(--app-content-bottom-reserve) !important;
+  overflow: visible;
+}
+
+// ── Footer in document flow ───────────────────────────────
+app-default-footer.app-default-footer {
+  flex: 0 0 auto;
+  min-height: var(--app-footer-height);
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0 1.5rem;
+  border-top: 1px solid var(--rm-border, #e4e4e7);
+  background: var(--rm-surface, #ffffff);
+}
+
+// ── Sidebar dark mode ─────────────────────────────────────
+[data-coreui-theme="dark"] #sidebar1 {
+  --cui-sidebar-bg:                    var(--rm-surface, #18181b);
+  --cui-sidebar-color:                 var(--rm-text, #fafafa);
+  --cui-sidebar-brand-bg:              var(--rm-surface, #18181b);
+  --cui-sidebar-brand-color:           var(--rm-text, #fafafa);
+  --cui-sidebar-nav-link-color:        var(--rm-text-2, #a1a1aa);
+  --cui-sidebar-nav-link-hover-bg:     var(--rm-hover, #27272a);
+  --cui-sidebar-nav-link-hover-color:  var(--rm-text, #fafafa);
+  --cui-sidebar-nav-link-active-bg:    var(--rm-active, #3f3f46);
+  --cui-sidebar-nav-link-active-color: var(--rm-text, #fafafa);
+  --cui-sidebar-nav-link-icon-color:   var(--rm-text-3, #71717a);
+  --cui-sidebar-nav-title-color:       var(--rm-text-3, #71717a);
+  --cui-sidebar-toggler-bg:            var(--rm-surface-2, #27272a);
+  --cui-sidebar-toggler-hover-bg:      var(--rm-surface-3, #3f3f46);
+
+  background: var(--rm-surface, #18181b) !important;
+  border-right-color: var(--rm-border, #27272a) !important;
+  box-shadow: 1px 0 0 rgba(255, 255, 255, 0.04);
+}
+
+[data-coreui-theme="dark"] #sidebar1 .sidebar-brand {
+  background: var(--rm-surface, #18181b) !important;
+  border-bottom-color: var(--rm-border, #27272a) !important;
+}
+
+[data-coreui-theme="dark"] #sidebar1 .sidebar-nav .nav-link {
+  color: var(--rm-text-2, #a1a1aa) !important;
+}
+
+[data-coreui-theme="dark"] #sidebar1 .sidebar-nav .nav-link:hover {
+  background: var(--rm-hover, #27272a) !important;
+  color: var(--rm-text, #fafafa) !important;
+  border-left-color: var(--rm-border-strong, #3f3f46) !important;
+}
+
+[data-coreui-theme="dark"] #sidebar1 .sidebar-nav .nav-link.active,
+[data-coreui-theme="dark"] #sidebar1 .sidebar-nav .nav-link.router-link-active {
+  background: var(--rm-active, #3f3f46) !important;
+  color: var(--rm-text, #fafafa) !important;
+  border-left-color: var(--rm-active-border, #fafafa) !important;
+}
+
+[data-coreui-theme="dark"] #sidebar1 .sidebar-nav .nav-icon,
+[data-coreui-theme="dark"] #sidebar1 .sidebar-nav c-icon,
+[data-coreui-theme="dark"] #sidebar1 .sidebar-nav .nav-link svg {
+  color: var(--rm-text-2, #a1a1aa) !important;
+  fill: var(--rm-text-2, #a1a1aa) !important;
+}
+
+[data-coreui-theme="dark"] #sidebar1 .sidebar-nav .nav-link:hover .nav-icon,
+[data-coreui-theme="dark"] #sidebar1 .sidebar-nav .nav-link:hover svg,
+[data-coreui-theme="dark"] #sidebar1 .sidebar-nav .nav-link.active .nav-icon,
+[data-coreui-theme="dark"] #sidebar1 .sidebar-nav .nav-link.active svg,
+[data-coreui-theme="dark"] #sidebar1 .sidebar-nav .nav-link.router-link-active .nav-icon,
+[data-coreui-theme="dark"] #sidebar1 .sidebar-nav .nav-link.router-link-active svg {
+  color: var(--rm-text, #fafafa) !important;
+  fill: var(--rm-text, #fafafa) !important;
+}
+
+[data-coreui-theme="dark"] #sidebar1 .sidebar-toggler {
+  background: var(--rm-surface-2, #27272a) !important;
+  border-top-color: var(--rm-border, #27272a) !important;
+
+  &:hover { background: var(--rm-surface-3, #3f3f46) !important; }
+}
+
+// ── Dashboard breathing room ──────────────────────────────
+:host ::ng-deep .mgmt-dashboard {
+  padding-bottom: 6rem;
+}
+
+:host ::ng-deep .dash-tile {
+  overflow: visible;
+}
+
+:host ::ng-deep .chart-wrap {
+  max-width: 100%;
+  overflow: hidden;
+}

@@ -1,0 +1,170 @@
+.pending-ar-snapshot-page {
+  padding-bottom: 0.75rem;
+
+  /*
+   * This component is embedded inside the Management Dashboard card.
+   * Do not use internal report-card/title styles here.
+   */
+
+  .filter-top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.85rem;
+    padding: 0.65rem 0.75rem;
+    border-radius: 12px;
+    background: #f8fafc;
+    border: 1px solid #edf0f4;
+  }
+
+  .date-row {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-field {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+
+    .form-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #374151;
+      margin-bottom: 0;
+      white-space: nowrap;
+    }
+
+    .form-control {
+      width: 150px;
+      min-height: 32px;
+      font-size: 0.84rem;
+      border-radius: 8px;
+    }
+  }
+
+  .action-block {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    flex-wrap: nowrap;
+  }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(135px, 1fr));
+    gap: 0.65rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .summary-card {
+    border: 1px solid #e5e7eb;
+    background: #f9fafb;
+    border-radius: 12px;
+    padding: 0.65rem 0.75rem;
+    min-height: 68px;
+  }
+
+  .summary-label {
+    font-size: 0.75rem;
+    color: #6b7280;
+    font-weight: 650;
+    margin-bottom: 0.25rem;
+  }
+
+  .summary-value {
+    font-size: 0.95rem;
+    font-weight: 750;
+    color: #111827;
+    white-space: nowrap;
+  }
+
+  .total-card {
+    background: #f3f6fa;
+  }
+
+ .chart-wrap {
+  position: relative;
+  height: 470px;       // doubled from 285px
+  max-height: 570px;   // doubled from 285px
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid #edf0f4;
+  border-radius: 12px;
+  padding: 0.65rem 0.75rem;
+  background: #fff;
+}
+  .empty-state {
+    border: 1px dashed #d0d5dd;
+    border-radius: 12px;
+    color: #667085;
+    font-size: 0.88rem;
+    padding: 1rem;
+    text-align: center;
+    background: #fcfcfd;
+  }
+
+  .alert {
+    font-size: 0.84rem;
+    border-radius: 10px;
+  }
+
+  @media (max-width: 1100px) {
+    .summary-grid {
+      grid-template-columns: repeat(2, minmax(150px, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    .filter-top-row {
+      align-items: stretch;
+      flex-direction: column;
+    }
+
+    .date-row,
+    .action-block {
+      width: 100%;
+    }
+
+    .filter-field {
+      width: 100%;
+      justify-content: space-between;
+
+      .form-control {
+        flex: 1;
+        width: auto;
+      }
+    }
+
+    .summary-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .chart-wrap {
+      height: 260px;
+      max-height: 260px;
+    }
+  }
+}
+
+/*
+ * Required for CoreUI c-chart / Chart.js.
+ * Without this, canvas can overflow outside chart-wrap and go behind footer.
+ */
+:host ::ng-deep .chart-wrap c-chart {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  max-height: 100% !important;
+}
+
+:host ::ng-deep .chart-wrap canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  max-height: 100% !important;
+}

@@ -1,0 +1,50 @@
+.lead-times-container {
+  max-width: none;
+  margin: 0;
+}
+
+.lt-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.lt-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--rm-text, #09090b);
+  line-height: 1.25;
+  margin: 0;
+}
+
+.lt-card {
+  border: 1px solid var(--rm-border, #eaecf0);
+  border-radius: 10px;
+  box-shadow: none;
+}
+
+.lt-card-header {
+  display: flex;
+  align-items: center;
+  padding: 0.6rem 1rem;
+  background: var(--rm-surface, #ffffff);
+  border-bottom: 1px solid var(--rm-border, #eaecf0);
+}
+
+.lt-card-label {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--rm-text, #09090b);
+  letter-spacing: -0.01em;
+}
+
+.lt-card-body {
+  padding: 1rem !important;
+}
+
+.chart-wrap {
+  position: relative;
+  height: 300px;
+  width: 100%;
+}

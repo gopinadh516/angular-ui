@@ -1,0 +1,26 @@
+<div class="lead-times-container">
+
+  <div class="lt-header">
+    <h5 class="lt-title mb-0">Lead Times</h5>
+  </div>
+
+  <c-row class="gy-3">
+    <c-col xs="12">
+      <c-card class="lt-card">
+        <c-card-header class="lt-card-header">
+          <span class="lt-card-label">Bell Curve - Normal Distribution</span>
+        </c-card-header>
+        <c-card-body class="lt-card-body">
+          <div class="chart-wrap">
+            <c-chart
+              [data]="bellCurveData"
+              [options]="bellCurveOptions"
+              type="line">
+            </c-chart>
+          </div>
+        </c-card-body>
+      </c-card>
+    </c-col>
+  </c-row>
+
+</div>

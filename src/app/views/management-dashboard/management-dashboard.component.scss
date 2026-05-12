@@ -1,0 +1,90 @@
+.mgmt-dashboard {
+  max-width: none;
+  margin: 0;
+}
+
+.mgmt-header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.mgmt-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--rm-text, #09090b);
+  margin: 0;
+  line-height: 1.25;
+}
+
+.ncr-heading {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--rm-text, #09090b);
+  letter-spacing: -0.01em;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.report-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 44px;
+  margin-bottom: 0;
+}
+
+// Divider between header and expanded content
+.report-content {
+  border-top: 1px solid var(--rm-border, #eaecf0);
+  margin-top: 0.5rem;
+  padding-top: 0.75rem;
+}
+
+// Consistent card padding for all accordion tiles
+.dash-tile {
+  margin-bottom: 0.5rem;
+
+  .card-body {
+    padding: 0.75rem 1rem !important;
+  }
+}
+
+// Expand / collapse pill button — B&W theme
+.btn-accordion {
+  flex-shrink: 0;
+  border-radius: 999px;
+  border: 1px solid var(--rm-border-strong, #d1d5db);
+  background: var(--rm-surface, #ffffff);
+  color: var(--rm-text, #09090b);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  padding: 0.25rem 0.85rem;
+  line-height: 1.4;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+  white-space: nowrap;
+
+  &:hover {
+    background: var(--rm-hover, #f4f4f5);
+    border-color: var(--rm-text-2, #71717a);
+  }
+
+  &.is-open {
+    background: var(--rm-text, #09090b);
+    border-color: var(--rm-text, #09090b);
+    color: #ffffff;
+  }
+}
+.pending-ar-trend-host {
+  display: block;
+  width: 100%;
+  min-height: 620px;
+}
+
+.pending-ar-trend-host app-pending-ar-snapshot-trend {
+  display: block;
+  width: 100%;
+}

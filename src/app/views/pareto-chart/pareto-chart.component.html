@@ -1,0 +1,55 @@
+<div class="pareto-layout">
+  <!-- Chart panel -->
+  <div class="pareto-panel">
+    <div class="pareto-panel-header">
+      <div class="form-check form-switch mb-0">
+        <input class="form-check-input" type="checkbox" id="togglePareto" (change)="togglePareto($event)">
+        <label class="form-check-label" for="togglePareto">{{ currentMode }}</label>
+      </div>
+    </div>
+    <div class="pareto-panel-body">
+      <ng-container *ngIf="isLoaded; else loading">
+        <apx-chart #chart
+          [series]="chartOptions.series!"
+          [chart]="chartOptions.chart!"
+          [title]="chartOptions.title!"
+          [xaxis]="chartOptions.xaxis!"
+          [yaxis]="chartOptions.yaxis!"
+          [stroke]="chartOptions.stroke!"
+          [dataLabels]="chartOptions.dataLabels!">
+        </apx-chart>
+      </ng-container>
+      <ng-template #loading>
+        <div class="loading-container">
+          <c-spinner size="sm"></c-spinner>
+          <p class="mt-2 mb-0">Loading chart…</p>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+  <!-- Table panel -->
+  <div class="pareto-panel">
+    <div class="pareto-panel-header">
+      <span class="pareto-panel-label">Denial Code Details</span>
+    </div>
+    <div class="pareto-table-wrap">
+      <table class="table pareto-table mb-0">
+        <thead>
+          <tr>
+            <th style="width: 10%;">Code</th>
+            <th style="width: 32%;">Description</th>
+            <th>Remediation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of displayDetails">
+            <td><strong>{{ item.code }}</strong></td>
+            <td>{{ item.description }}</td>
+            <td>{{ item.remediation }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

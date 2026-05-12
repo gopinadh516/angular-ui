@@ -1,0 +1,32 @@
+[
+  {
+    "period": "Nov-25",
+    "collections": 268000,
+    "charges": 420000
+  },
+  {
+    "period": "Dec-25",
+    "collections": 282000,
+    "charges": 440000
+  },
+  {
+    "period": "Jan-26",
+    "collections": 304000,
+    "charges": 470000
+  },
+  {
+    "period": "Feb-26",
+    "collections": 299000,
+    "charges": 455000
+  },
+  {
+    "period": "Mar-26",
+    "collections": 327000,
+    "charges": 492000
+  },
+  {
+    "period": "Apr-26",
+    "collections": 351000,
+    "charges": 515000
+  }
+]

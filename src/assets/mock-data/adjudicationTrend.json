@@ -1,0 +1,38 @@
+[
+  {
+    "month": "Nov-25",
+    "clean": 80,
+    "dirty": 20,
+    "adjudicated": 420
+  },
+  {
+    "month": "Dec-25",
+    "clean": 82,
+    "dirty": 18,
+    "adjudicated": 435
+  },
+  {
+    "month": "Jan-26",
+    "clean": 84,
+    "dirty": 16,
+    "adjudicated": 455
+  },
+  {
+    "month": "Feb-26",
+    "clean": 79,
+    "dirty": 21,
+    "adjudicated": 410
+  },
+  {
+    "month": "Mar-26",
+    "clean": 86,
+    "dirty": 14,
+    "adjudicated": 480
+  },
+  {
+    "month": "Apr-26",
+    "clean": 88,
+    "dirty": 12,
+    "adjudicated": 510
+  }
+]
