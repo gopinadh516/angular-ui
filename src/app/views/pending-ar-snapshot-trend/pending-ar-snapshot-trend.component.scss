@@ -62,29 +62,40 @@
   }
 
   .summary-card {
-    border: 1px solid #e5e7eb;
-    background: #f9fafb;
-    border-radius: 12px;
-    padding: 0.65rem 0.75rem;
-    min-height: 68px;
+    background: var(--rm-surface);
+    border: 1px solid var(--rm-border);
+    border-radius: var(--rm-radius-lg);
+    box-shadow: var(--rm-shadow-xs);
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 0;
   }
 
   .summary-label {
-    font-size: 0.75rem;
-    color: #6b7280;
-    font-weight: 650;
-    margin-bottom: 0.25rem;
+    font-size: var(--rm-font-xs);
+    font-weight: 500;
+    color: var(--rm-text-2);
+    letter-spacing: 0.01em;
+    line-height: 1.4;
   }
 
   .summary-value {
-    font-size: 0.95rem;
-    font-weight: 750;
-    color: #111827;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--rm-text);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
     white-space: nowrap;
   }
 
   .total-card {
-    background: #f3f6fa;
+    background: var(--rm-surface);
+    border: 1px solid var(--rm-border);
+    border-radius: var(--rm-radius-lg);
+    box-shadow: var(--rm-shadow-xs);
+    padding: 1rem 1.25rem;
   }
 
  .chart-wrap {

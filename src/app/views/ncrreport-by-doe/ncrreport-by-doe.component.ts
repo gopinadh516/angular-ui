@@ -205,7 +205,7 @@ private buildChart(): void {
   const fmtPct = (v: number) => `${(Number(v) || 0).toFixed(1)}%`;
 
   this.chartOptions = {
-    colors: ['#09090b', '#71717a'],
+    colors: ['#6366f1', '#059669'],
     series: [
       { name: 'GCR %', data: gcr },
       { name: 'NCR %', data: ncr },

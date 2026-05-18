@@ -46,8 +46,8 @@ private createChart(labels: string[], dataValues: number[]): void {
   }
 
   const themeScale = [
-    '#09090b', '#27272a', '#3f3f46', '#52525b', '#71717a',
-    '#334155', '#475569', '#64748b', '#374151', '#4b5563'
+    '#6366f1', '#059669', '#d97706', '#dc2626', '#7c3aed',
+    '#0ea5e9', '#f59e0b', '#10b981', '#ef4444', '#8b5cf6'
   ];
   const backgroundColors = dataValues.map((_, i) => themeScale[i % themeScale.length]);
 

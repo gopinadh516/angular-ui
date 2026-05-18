@@ -122,13 +122,13 @@ this.http.get<DenialParetoBean>(`${environment.apiBaseUrl}/denials/pareto/${type
           name: label,
           type: 'column',
           data: data.values,
-          color: '#27272a'
+          color: '#6366f1'
         },
         {
           name: 'Cumulative %',
           type: 'line',
           data: data.cumulativePercentages,
-          color: '#71717a'
+          color: '#d97706'
         }
       ],
       chart: {

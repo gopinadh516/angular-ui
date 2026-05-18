@@ -200,27 +200,36 @@ export class PendingArSnapshotTrendComponent implements OnInit {
       {
         data: insurancePending,
         label: 'Insurance Pending AR',
-        borderColor: '#09090b',
-        backgroundColor: 'transparent',
+        borderColor: '#6366f1',
+        backgroundColor: 'rgba(99,102,241,0.08)',
         borderWidth: 2,
-        fill: false
+        fill: true,
+        pointBackgroundColor: '#6366f1',
+        pointRadius: 4,
+        tension: 0.3
       },
       {
         data: patientPending,
         label: 'Patient Pending AR',
-        borderColor: '#52525b',
-        backgroundColor: 'transparent',
+        borderColor: '#059669',
+        backgroundColor: 'rgba(5,150,105,0.08)',
         borderWidth: 2,
-        fill: false
+        fill: true,
+        pointBackgroundColor: '#059669',
+        pointRadius: 4,
+        tension: 0.3
       },
       {
         data: totalPending,
         label: 'Total Pending AR',
-        borderColor: '#a1a1aa',
-        backgroundColor: 'transparent',
+        borderColor: '#d97706',
+        backgroundColor: 'rgba(217,119,6,0.08)',
         borderWidth: 2,
         borderDash: [6, 4],
-        fill: false
+        fill: true,
+        pointBackgroundColor: '#d97706',
+        pointRadius: 4,
+        tension: 0.3
       }
     ];
 

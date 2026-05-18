@@ -118,9 +118,9 @@ export class CollectionTrendComponent implements OnInit, OnChanges {
     const bodyCol   = getStyle('--cui-body-color');
 
     const colors = [
-      { backgroundColor: 'rgba(9,9,11,0.06)', borderColor: '#09090b', fill: true,  borderWidth: 2 },
-      { backgroundColor: 'transparent',        borderColor: '#52525b', borderWidth: 2 },
-      { backgroundColor: 'transparent',        borderColor: '#a1a1aa', borderDash: [8, 5] }
+      { backgroundColor: 'rgba(99,102,241,0.08)', borderColor: '#6366f1', fill: true,  borderWidth: 2 },
+      { backgroundColor: 'rgba(5,150,105,0.08)',  borderColor: '#059669', fill: true,  borderWidth: 2 },
+      { backgroundColor: 'transparent',            borderColor: '#dc2626', borderWidth: 2, borderDash: [8, 5] }
     ];
 
     const datasets: ChartDataset[] = [

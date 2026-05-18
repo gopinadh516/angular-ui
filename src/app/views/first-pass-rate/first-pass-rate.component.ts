@@ -45,7 +45,15 @@ export class FirstPassRateComponent implements OnInit {
       datalabels: {
         anchor: 'center',
         align: 'center',
-        color: '#fff',
+        color: (ctx: any) => {
+          const bgs = ctx.dataset.backgroundColor;
+          const bg = Array.isArray(bgs) ? bgs[ctx.dataIndex] : bgs;
+          if (!bg || typeof bg !== 'string' || !bg.startsWith('#')) return '#ffffff';
+          const r = parseInt(bg.slice(1, 3), 16);
+          const g = parseInt(bg.slice(3, 5), 16);
+          const b = parseInt(bg.slice(5, 7), 16);
+          return (r * 299 + g * 587 + b * 114) / 1000 >= 128 ? '#09090b' : '#ffffff';
+        },
         font: { weight: 'bold', size: 12 },
         formatter: (value: number) => `${value}%`
       },

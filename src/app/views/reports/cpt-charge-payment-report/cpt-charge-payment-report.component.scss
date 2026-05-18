@@ -107,21 +107,31 @@
 }
 
 .total-card {
-  border: 1px solid #e5e7eb;
-  border-radius: 14px;
-  padding: 0.9rem;
-  background: #f9fafb;
+  background: var(--rm-surface);
+  border: 1px solid var(--rm-border);
+  border-radius: var(--rm-radius-lg);
+  box-shadow: var(--rm-shadow-xs);
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
 }
 
 .total-label {
-  font-size: 0.8rem;
-  color: #6b7280;
-  margin-bottom: 0.35rem;
+  font-size: var(--rm-font-xs);
+  font-weight: 500;
+  color: var(--rm-text-2);
+  letter-spacing: 0.01em;
+  line-height: 1.4;
 }
 
 .total-value {
-  font-size: 1.05rem;
+  font-size: 1.5rem;
   font-weight: 700;
+  color: var(--rm-text);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
 }
 
 .card-title-row {
@@ -163,13 +173,13 @@
 .report-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.84rem;
+  font-size: 11px;
 }
 
 .report-table th,
 .report-table td {
-  border-bottom: 1px solid #e5e7eb;
-  padding: 0.55rem 0.6rem;
+  border-bottom: 1px solid var(--rm-divider, #f2f4f7);
+  padding: 0.25rem 0.6rem;
   white-space: nowrap;
   vertical-align: middle;
 }
@@ -177,13 +187,23 @@
 .report-table thead th {
   position: sticky;
   top: 0;
-  background: #f8fafc;
-  z-index: 1;
+  background: var(--rm-table-head-bg, #f7f6f9) !important;
+  color: var(--rm-text-2, #71717a);
+  font-size: 0.65rem;
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--rm-border, #eaecf0);
+  z-index: 1;
 }
 
+.report-table tbody tr:nth-child(odd) td  { background: #ffffff; }
+.report-table tbody tr:nth-child(even) td { background: var(--rm-table-head-bg, #f7f6f9); }
+
 .report-table tfoot th {
-  background: #f3f4f6;
+  background: var(--rm-table-head-bg, #f7f6f9) !important;
+  font-weight: 600;
+  border-top: 1px solid var(--rm-border, #eaecf0);
   position: sticky;
   bottom: 0;
 }

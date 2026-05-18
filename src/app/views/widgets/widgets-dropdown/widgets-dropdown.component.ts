@@ -140,7 +140,7 @@ export class WidgetsDropdownComponent implements OnInit, AfterContentInit {
       .subscribe(data => {
         const labels = data.map(d => d.month);
         const percentages = data.map(d => d.firstPassRatePct);
-        this.firstPassChartData = { labels, datasets: [{ label: 'First Pass %', backgroundColor: 'rgba(9,9,11,0.06)', borderColor: '#09090b', borderWidth: 1.5, pointBackgroundColor: '#09090b', pointRadius: 2, pointHoverRadius: 4, data: percentages }] };
+        this.firstPassChartData = { labels, datasets: [{ label: 'First Pass %', backgroundColor: 'rgba(255,255,255,0.15)', borderColor: 'rgba(255,255,255,0.9)', borderWidth: 1.5, pointBackgroundColor: '#ffffff', pointRadius: 2, pointHoverRadius: 4, data: percentages }] };
         const last = percentages.slice(-1)[0] || 0;
         const prev = percentages.slice(-2)[0] ?? last;
         this.firstPassRate = last;
@@ -154,7 +154,7 @@ export class WidgetsDropdownComponent implements OnInit, AfterContentInit {
       .subscribe(data => {
         const labels = data.map(d => d.month);
         const percentages = data.map(d => d.firstPassRatePct);
-        this.cleanPassChartData = { labels, datasets: [{ label: 'Clean Pass %', backgroundColor: 'rgba(9,9,11,0.06)', borderColor: '#09090b', borderWidth: 1.5, pointBackgroundColor: '#09090b', pointRadius: 2, pointHoverRadius: 4, data: percentages }] };
+        this.cleanPassChartData = { labels, datasets: [{ label: 'Clean Pass %', backgroundColor: 'rgba(255,255,255,0.15)', borderColor: 'rgba(255,255,255,0.9)', borderWidth: 1.5, pointBackgroundColor: '#ffffff', pointRadius: 2, pointHoverRadius: 4, data: percentages }] };
         const last = percentages.slice(-1)[0] || 0;
         const prev = percentages.slice(-2)[0] ?? last;
         this.cleanPassRate = last;
@@ -176,8 +176,8 @@ export class WidgetsDropdownComponent implements OnInit, AfterContentInit {
         datasets: [{
           label: 'Avg Days to Adjudication',
           data: values,
-          backgroundColor: 'rgba(9,9,11,0.12)',
-          borderColor: '#09090b',
+          backgroundColor: 'rgba(255,255,255,0.2)',
+          borderColor: 'rgba(255,255,255,0.9)',
           borderWidth: 1,
           barPercentage: 0.7
         }]

@@ -22,7 +22,7 @@ body,
 .c-wrapper {
   font-family: var(--rm-font) !important;
   color: var(--rm-text);
-  background-color: var(--rm-bg);
+  background-color: #fff;
 }
 
 // 3. Browsers do NOT inherit font-family for form/interactive elements —
@@ -224,6 +224,7 @@ c-card {
     opacity: 0.4;
     cursor: not-allowed;
     pointer-events: auto;
+    border-color: var(--rm-border-strong) !important;
   }
 }
 
@@ -380,15 +381,15 @@ c-card {
 .btn-outline-info,
 .btn-outline-warning {
   --cui-btn-bg:                  transparent !important;
-  --cui-btn-border-color:        var(--rm-border) !important;
+  --cui-btn-border-color:        var(--rm-border-strong) !important;
   --cui-btn-color:               var(--rm-text) !important;
   --cui-btn-hover-bg:            var(--rm-hover) !important;
-  --cui-btn-hover-border-color:  var(--rm-border-strong) !important;
+  --cui-btn-hover-border-color:  var(--rm-text) !important;
   --cui-btn-hover-color:         var(--rm-text) !important;
   --cui-btn-active-bg:           var(--rm-active) !important;
-  --cui-btn-active-border-color: var(--rm-border-strong) !important;
+  --cui-btn-active-border-color: var(--rm-text) !important;
   --cui-btn-active-color:        var(--rm-text) !important;
-  border-color: var(--rm-border) !important;
+  border-color: var(--rm-border-strong) !important;
   color: var(--rm-text) !important;
   background: transparent !important;
 
@@ -602,58 +603,55 @@ c-card {
 
 .table {
   color: var(--rm-text);
-  font-size: var(--rm-font-md);
+  font-size: 11px;
   border-color: var(--rm-border);
 
+  // ── Header ──────────────────────────────────────────────
   thead th,
   thead td {
-    background: var(--rm-surface);
+    background: var(--rm-table-head-bg) !important;
     color: var(--rm-text-2);
     font-size: var(--rm-font-xs);
-    font-weight: 500;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
     border-bottom: 1px solid var(--rm-border);
-    padding: 0.65rem 0.75rem;
+    padding: 0.55rem 0.75rem;
     white-space: nowrap;
     vertical-align: middle;
   }
 
+  // ── Body — alternating stripes ───────────────────────────
+  tbody tr:nth-child(odd) td  { background-color: #ffffff; }
+  tbody tr:nth-child(even) td { background-color: var(--rm-table-head-bg); }
+
   tbody td {
-    padding: 0.75rem 0.75rem;
+    padding: 0.1rem 0.75rem;
     vertical-align: middle;
     border-bottom: 1px solid var(--rm-divider);
     color: var(--rm-text);
+    font-size: 11px;
   }
 
-  tbody tr:hover td {
-    background: var(--rm-hover);
+  tbody tr:last-child td { border-bottom: none; }
+
+  // ── Hover (overrides stripe) ─────────────────────────────
+  tbody tr:hover td { background: var(--rm-hover) !important; }
+
+  // ── Blue links inside table ──────────────────────────────
+  a, .linklike, button.linklike {
+    color: #2563eb !important;
+    text-decoration-color: rgba(37, 99, 235, 0.35);
   }
 
-  tbody tr:last-child td {
-    border-bottom: none;
-  }
-
-  &.table-striped tbody tr:nth-of-type(odd) td {
-    background-color: transparent;
-  }
-
-  &.table-hover tbody tr:hover td {
-    background: var(--rm-hover);
-  }
-
-  // Dense variant — for data-heavy grids (AR aging, compact reports)
+  // ── Dense variant ────────────────────────────────────────
   &.table-sm thead th,
   &.table-sm thead td {
-    padding: 0.45rem 0.6rem;
+    padding: 0.35rem 0.6rem;
     font-size: 0.6875rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--rm-text-3);
   }
 
-  &.table-sm tbody td {
-    padding: 0.35rem 0.6rem;
-  }
+  &.table-sm tbody td { padding: 0.1rem 0.6rem; }
 }
 
 // Progress bars — slim 6px, solid near-black fill (Untitled UI)
@@ -1381,7 +1379,7 @@ html body .card.bg-dark {
 // =========================================================
 
 .table thead tr {
-  background-color: var(--rm-surface) !important;
+  background-color: var(--rm-table-head-bg) !important;
 }
 
 // =========================================================
@@ -1468,4 +1466,13 @@ a {
         line-height: 27px;
     padding-left: 10px;
   }
+}
+
+
+.sidebar-nav .nav-group-items .nav-link {
+    font-weight:  100 !important;
+    font-size: 12px;
+    line-height: 11px;
+   
+    margin: 0 auto;
 }

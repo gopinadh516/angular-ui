@@ -6,11 +6,11 @@
 }
 
 ::ng-deep table.claim-table thead {
-  background-color: var(--rm-surface, #ffffff) !important;
+  background-color: var(--rm-table-head-bg) !important;
 }
 
 ::ng-deep table.claim-table thead th {
-  background-color: var(--rm-surface, #ffffff) !important;
+  background-color: var(--rm-table-head-bg) !important;
   color: var(--rm-text-2, #71717a) !important;
   font-size: 0.6625rem;
   font-weight: 600;
@@ -74,7 +74,7 @@ td.bluec    { background-color: rgba(99, 102, 241, 0.04) !important; color: #373
   color: inherit !important;
   text-decoration: none;
 }
-.linklike { background:none; border:0; color:var(--rm-text, #09090b); cursor:pointer; text-decoration:underline; text-decoration-color: var(--rm-border-strong, #d1d5db); text-underline-offset: 2px; padding:0; font:inherit; }
+.linklike { background:none; border:0; color:#2563eb; cursor:pointer; text-decoration:underline; text-decoration-color: rgba(37,99,235,0.35); text-underline-offset: 2px; padding:0; font:inherit; }
 
 dialog.rs-modal { width: min(1000px, 96vw); max-width: 1000px; padding:0; border:0; border-radius:12px; }
 dialog.rs-modal::backdrop { background: rgba(0,0,0,.55); }
@@ -87,16 +87,23 @@ dialog.rs-modal::backdrop { background: rgba(0,0,0,.55); }
 
 /* 1) Claims table: tighter cells + sticky header */
 ::ng-deep table.claim-table > :not(caption) > * > * {
-  padding: 0.2rem 0.4rem;
+  padding: 0.1rem 0.4rem;
   line-height: 1.2;
+}
+::ng-deep table.claim-table thead th {
+  background-color: var(--rm-table-head-bg) !important;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+::ng-deep table.claim-table tbody tr:nth-child(odd) td {
+  background-color: #ffffff;
+}
+::ng-deep table.claim-table tbody tr:nth-child(even) td {
+  background-color: #f7f6f9;
 }
 ::ng-deep table.claim-table tbody tr {
   height: 32px;
-}
-::ng-deep table.claim-table thead th {
-  position: sticky;               /* header stays visible while scrolling */
-  top: 0;
-  z-index: 2;
 }
 
 /* 2) Claims table: align numeric columns (S2P, Charge, Adj, PR, Expected, Paid, Pend) */
@@ -127,7 +134,7 @@ dialog.rs-modal::backdrop { background: rgba(0,0,0,.55); }
 }
 
 /* 4) Slightly smaller linklike buttons in dense table */
-.linklike { font-size: 0.78rem; }
+.linklike { font-size: 11px; }
 
 /* 5) AR Aging grids in cards: compact + numeric alignment (right) */
 ::ng-deep .card .table.table-sm.align-middle.mb-0 {
@@ -485,7 +492,7 @@ dialog.rs-modal.rs-modal--sm {
   font-weight: 700;
   color: rgba(0, 0, 0, 0.70);
 
-  background: #ffffff;
+  background: var(--rm-table-head-bg);
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
@@ -727,7 +734,7 @@ dialog.rs-modal.rs-modal--sm {
    Filter toolbar — flat, no shadow (sits above table panel)
    ========================================================= */
 .ar-filter-card {
-  background: var(--rm-surface, #ffffff);
+  background: #f1f1f173;
   border: 1px solid var(--rm-border, #eaecf0);
   border-radius: 10px;
   box-shadow: none;
@@ -829,7 +836,7 @@ dialog.rs-modal.rs-modal--sm {
 ::ng-deep table.claim-table thead,
 ::ng-deep table.claim-table thead tr,
 ::ng-deep table.claim-table thead th {
-  background-color: var(--rm-surface, #ffffff) !important;
+  background-color: var(--rm-table-head-bg) !important;
   color: var(--rm-text-2, #71717a) !important;
 }
 
@@ -862,7 +869,7 @@ dialog.rs-modal.rs-modal--sm {
 ::ng-deep table.claim-table thead th.ar-followup-action-col,
 ::ng-deep table.claim-table thead th.ar-followup-notes-col,
 ::ng-deep table.claim-table thead th.ar-followup-count-col {
-  background-color: var(--rm-surface, #ffffff) !important;
+  background-color: var(--rm-table-head-bg) !important;
   color: var(--rm-text-2, #71717a) !important;
 }
 
@@ -925,7 +932,7 @@ dialog.rs-modal.rs-modal--sm {
 
 /* General table body compact style */
 ::ng-deep table.claim-table tbody td {
-  font-size: 0.78rem;
+  font-size: 11px;
   vertical-align: middle;
 }
 /* =========================================================

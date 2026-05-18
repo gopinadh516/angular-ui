@@ -1258,18 +1258,53 @@
 </div>
 
 <style>
-  #claimHoverCard.rev-claim-hover { font-size: 11.5px; line-height: 1.25; border: 0.5px solid var(--rm-border-strong, #d0d5dd) !important; background: var(--rm-surface, #ffffff); }
-  #claimHoverCard.rev-claim-hover .card-header { padding: .25rem .5rem; background: var(--rm-surface-2, #f9fafb); border-bottom-color: var(--rm-border, #eaecf0); }
+  /* ── Hover card — elevated layer using only theme tokens ── */
+  #claimHoverCard.rev-claim-hover {
+    font-size: 11.5px;
+    line-height: 1.25;
+    background: var(--rm-surface, #ffffff);
+    border: 1px solid var(--rm-border-strong, #d0d5dd) !important;
+    border-top: 3px solid var(--rm-text, #09090b) !important;
+    border-radius: var(--rm-radius-lg, 10px) !important;
+    box-shadow: 0 20px 40px -8px rgba(9,9,11,0.22), 0 8px 16px -4px rgba(9,9,11,0.14), 0 0 0 1px rgba(9,9,11,0.08) !important;
+  }
+
+  /* ── Header — surface-3 (darkest surface) to contrast white table rows ── */
+  #claimHoverCard.rev-claim-hover .card-header {
+    padding: .4rem .65rem;
+    background: var(--rm-surface-3, #f3f4f6);
+    border-bottom: 1px solid var(--rm-border-strong, #d0d5dd);
+    border-radius: calc(var(--rm-radius-lg, 10px) - 1px) calc(var(--rm-radius-lg, 10px) - 1px) 0 0 !important;
+  }
   #claimHoverCard.rev-claim-hover .header-line { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  #claimHoverCard.rev-claim-hover .hdr-item { color: var(--rm-text, #09090b); }
-  #claimHoverCard.rev-claim-hover .hdr-name { font-weight: 700; }
-  #claimHoverCard.rev-claim-hover .card-body { padding: .35rem .5rem; background: var(--rm-surface, #ffffff); }
-  #claimHoverCard.rev-claim-hover .badge { font-size: 10.5px; padding: .15rem .35rem; display: inline-block; }
-  #claimHoverCard.rev-claim-hover .table-sm > :not(caption) > * > * { padding: .15rem .3rem; color: var(--rm-text, #09090b); }
-  #claimHoverCard.rev-claim-hover th { font-weight: 600; color: var(--rm-text-2, #71717a); }
+  #claimHoverCard.rev-claim-hover .hdr-item { color: var(--rm-text, #09090b); font-size: 11px; }
+  #claimHoverCard.rev-claim-hover .hdr-name { font-weight: 700; color: var(--rm-text, #09090b); }
+
+  /* ── Body ── */
+  #claimHoverCard.rev-claim-hover .card-body { padding: .5rem .65rem; background: var(--rm-surface, #ffffff); }
+
+  /* ── Badge ── */
+  #claimHoverCard.rev-claim-hover .badge { font-size: 10.5px; padding: .15rem .4rem; display: inline-block; }
+
+  /* ── Inner table — follows global table design ── */
+  #claimHoverCard.rev-claim-hover .table-sm > :not(caption) > * > * { padding: .2rem .35rem; color: var(--rm-text, #09090b); }
+  #claimHoverCard.rev-claim-hover thead th {
+    background: var(--rm-table-head-bg, #f7f6f9) !important;
+    color: var(--rm-text-2, #71717a) !important;
+    font-weight: 600;
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--rm-border, #eaecf0) !important;
+  }
+  #claimHoverCard.rev-claim-hover tbody tr:nth-child(odd) td  { background: var(--rm-surface, #ffffff) !important; }
+  #claimHoverCard.rev-claim-hover tbody tr:nth-child(even) td { background: var(--rm-table-head-bg, #f7f6f9) !important; }
+  #claimHoverCard.rev-claim-hover tbody tr:hover td { background: var(--rm-active, #f4f4f5) !important; }
+
+  /* ── Text helpers ── */
   #claimHoverCard.rev-claim-hover .nowrap-cell { white-space: nowrap; }
-  #claimHoverCard.rev-claim-hover .cpt-cell { white-space: normal; }
-  #claimHoverCard.rev-claim-hover .cpt-line { white-space: normal; }
-  #claimHoverCard.rev-claim-hover .cpt-code { font-weight: 600; color: var(--rm-text, #09090b); }
-  #claimHoverCard.rev-claim-hover .cpt-text { color: var(--rm-text-2, #71717a); font-weight: 400; white-space: normal; overflow-wrap: anywhere; word-break: break-word; }
+  #claimHoverCard.rev-claim-hover .cpt-cell  { white-space: normal; }
+  #claimHoverCard.rev-claim-hover .cpt-line  { white-space: normal; }
+  #claimHoverCard.rev-claim-hover .cpt-code  { font-weight: 600; color: var(--rm-text, #09090b); }
+  #claimHoverCard.rev-claim-hover .cpt-text  { color: var(--rm-text-2, #71717a); font-weight: 400; white-space: normal; overflow-wrap: anywhere; word-break: break-word; }
 </style>

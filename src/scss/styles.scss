@@ -173,7 +173,7 @@ body {
   --rev-border:       var(--rm-border);
   --rev-border-strong:var(--rm-border-strong);
   --rev-row-hover:    var(--rm-hover);
-  --rev-head-bg:      var(--rm-surface-2);
+  --rev-head-bg:      var(--rm-table-head-bg);
   --rev-accent:       var(--rm-info);
 }
 
@@ -224,41 +224,48 @@ body {
   border-spacing: 0;
   background: var(--rev-bg);
   color: var(--rev-text);
-  font-size: var(--rm-font-md);
+  font-size: 11px;
 
   thead th {
     position: sticky;
     top: 0;
     z-index: 1;
-    background: var(--rev-head-bg);
+    background: var(--rm-table-head-bg) !important;
     color: var(--rev-muted);
     font-weight: 600;
     font-size: var(--rm-font-xs);
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    padding: 0.6rem 0.75rem;
+    padding: 0.55rem 0.75rem;
     border-bottom: 1px solid var(--rev-border-strong);
     white-space: nowrap;
   }
 
+  tbody tr:nth-child(odd) td  { background-color: #ffffff; }
+  tbody tr:nth-child(even) td { background-color: var(--rm-table-head-bg); }
+
   tbody td {
-    padding: 0.75rem;
+    padding: 0.1rem 0.75rem;
     border-bottom: 1px solid var(--rev-border);
     vertical-align: middle;
-    height: 52px;
+    height: 36px;
+    font-size: 11px;
   }
 
-  tbody tr:last-child td {
-    border-bottom: none;
+  tbody tr:last-child td { border-bottom: none; }
+
+  tbody tr:hover td {
+    background: var(--rev-row-hover) !important;
   }
 
-  tbody tr:hover {
-    background: var(--rev-row-hover);
+  a, .rev-table-link {
+    color: #2563eb !important;
+    text-decoration-color: rgba(37, 99, 235, 0.35);
   }
 }
 
 .rev-table-link {
-  color: var(--rev-text);
+  color: #2563eb;
   font-weight: 500;
   text-decoration: none;
   cursor: pointer;
@@ -328,4 +335,40 @@ body.c-sidebar-hide .main,
 body.c-sidebar-hidden .main {
   margin-left: 0 !important;
   width: 100% !important;
+}
+
+
+// =========================================================
+// Summary / Total metric cards — global widget style
+// =========================================================
+
+.total-card,
+.summary-card {
+  background: var(--rm-surface);
+  border: 1px solid var(--rm-border);
+  border-radius: var(--rm-radius-lg);
+  box-shadow: var(--rm-shadow-xs);
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.total-label,
+.summary-label {
+  font-size: var(--rm-font-xs);
+  font-weight: 500;
+  color: var(--rm-text-2);
+  letter-spacing: 0.01em;
+  line-height: 1.4;
+}
+
+.total-value,
+.summary-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--rm-text);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
 }

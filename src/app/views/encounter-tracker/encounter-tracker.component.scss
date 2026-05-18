@@ -252,6 +252,7 @@
 .et-table {
   padding: 0;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 
   .et-header {
     display: flex;
@@ -268,6 +269,7 @@
     letter-spacing: 0.06em;
     color: var(--rm-text-2, #71717a);
     white-space: nowrap;
+    min-width: max-content;
   }
 
   .et-row {
@@ -277,6 +279,7 @@
     padding: 0.45rem 0.75rem;
     border-bottom: 1px solid var(--rm-divider, #f4f4f5);
     transition: background 0.1s ease;
+    min-width: max-content;
 
     &:last-child { border-bottom: 0; }
     &:hover { background: var(--rm-hover, #fafafa); }
@@ -288,19 +291,19 @@
     &.noshow     { background: rgba(220, 38, 38, 0.04); }
   }
 
-  // Column widths
-  .col { min-width: 0; font-size: 0.8rem; }
-  .col.time      { width: 90px; flex-shrink: 0; }
-  .col.patient   { flex: 1 1 180px; }
-  .col.mrn       { width: 100px; flex-shrink: 0; }
-  .col.physician { width: 160px; flex-shrink: 0; }
-  .col.type      { width: 110px; flex-shrink: 0; }
-  .col.room      { width: 80px; flex-shrink: 0; }
-  .col.status    { width: 150px; flex-shrink: 0; }
-  .col.t         { width: 110px; flex-shrink: 0; }
-  .col.dur       { width: 52px; flex-shrink: 0; text-align: center; color: var(--rm-text-2, #71717a); }
-  .col.notes     { flex: 1 1 160px; }
-  .col.actions   { width: 220px; flex-shrink: 0; }
+  // Column widths — flex-shrink: 0 prevents squeezing; explicit widths maintained
+  .col { flex-shrink: 0; font-size: 0.8rem; overflow: hidden; }
+  .col.time      { width: 90px; }
+  .col.patient   { width: 180px; }
+  .col.mrn       { width: 100px; }
+  .col.physician { width: 150px; }
+  .col.type      { width: 100px; }
+  .col.room      { width: 70px; }
+  .col.status    { width: 130px; }
+  .col.t         { width: 115px; }
+  .col.dur       { width: 48px; text-align: center; color: var(--rm-text-2, #71717a); }
+  .col.notes     { width: 180px; }
+  .col.actions   { width: 200px; flex-shrink: 0; }
 }
 
 // ── Shared form controls ───────────────────────────────────

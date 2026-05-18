@@ -9,6 +9,7 @@
   --rm-surface:        #ffffff;
   --rm-surface-2:      #f9fafb;
   --rm-surface-3:      #f3f4f6;
+  --rm-table-head-bg:  #f7f6f9;  // table thead background across all tables
 
   // ── Shadows ──────────────────────────────────────────
   --rm-shadow-xs:      0 1px 2px 0 rgba(16, 24, 40, 0.05);
@@ -74,9 +75,9 @@
   --rm-radius-pill:    999px;
 
   // ── Layout ───────────────────────────────────────────
-  --rm-sidebar-w:      220px;
+  --rm-sidebar-w:      180px;
   --rm-sidebar-narrow: 52px;
-  --rm-header-h:       60px;
+  --rm-header-h:       44px;
   --rm-footer-h:       48px;
 
   // ── CoreUI overrides (light) ──────────────────────────
@@ -163,6 +164,7 @@
   --rm-surface:        #18181b;
   --rm-surface-2:      #27272a;
   --rm-surface-3:      #3f3f46;
+  --rm-table-head-bg:  #27272a;
   --rm-border:         #27272a;
   --rm-border-strong:  #3f3f46;
   --rm-divider:        #27272a;
